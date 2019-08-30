@@ -1,10 +1,15 @@
+;==========================================================================
+; Criptologic para MSX 
+; Versao 1.0 
+; Manoel Neto 2019-08-30
+;==========================================================================
 WaitChar	equ &BB06
 PrintChar	equ &BB5A
 
 org &8000
-	call GetMsg 
-	call NewLine
-	call MessMsg
+	call GetMsg 		; obtem a mensagem do usuario
+	call NewLine		; pula uma linha
+	call MessMsg		; troca a mensagem
 	;call NewLine
 	;call WaitPlayer
 	;call ShowErroCount
@@ -12,21 +17,29 @@ ret
 
 GetMsg:
 	ld hl,Frase
+	ld b,0
 loopGM:
 	call waitChar
 	ld (hl),a
 	call PrintChar
 	inc hl
+	inc b
 	cp 13
 	ret z 
+	ld a,b
+	cp 14		
+	ret z
 jp loopGM
 
 MessMsg:
 	ld hl, Frase+13
+	ld b,0
 loopMM:
 	ld a,(hl)
 	call PrintChar
-	cp Frase-1
+	inc b
+	ld a,b
+	cp 14
 	ret z
 	dec hl
 jp loopMM
@@ -38,10 +51,10 @@ ShowErroCount:
 ret
 
 NewLine:
-	LD A, 13
-	CALL PrintChar
-	LD A, 10 
-	CALL PrintChar
+	ld a, 13
+	call PrintChar
+	ld a, 10 
+	call PrintChar
 ret
 
 Frase:
