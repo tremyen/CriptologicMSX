@@ -1,16 +1,23 @@
+PrintChar	equ &BB5A		
 org &8000
-	ld a,r
-	call DivByNine
+	ld a,9
+	call SorteiaAleatorio
+	ld a,(Resultado) 
+	call PrintChar	
 ret
 
-DivByNine:				
-	LD B,9			
-	LD D,0
-MATHDIVAGAIN:
-	SUB B 			; diminuimos b
-	INC D			; somamos o contador de divisoes
-	JR NC, MATHDIVAGAIN     ; se nao teve carry
-	DEC D			
-	LD A,D			; carrega o numemero de divisoes no resultado 
-	LD (&9000),A
+SorteiaAleatorio:				
+	ld d,0
+SubtracaoSucessiva:
+	sub 9 				
+	inc d				
+	jr nc, SubtracaoSucessiva     
+	dec d			
+	ld a,d
+	ld (Resultado),a
 ret
+
+Resultado:
+	db  0
+
+
