@@ -8,11 +8,8 @@ PrintChar	equ &BB5A
 
 org &8000
 	call GetMsg 		; obtem a mensagem do usuario
-	call NewLine		; pula uma linha
-	call MessMsg		; bagunca a mensagem
-	;call NewLine
-	;call WaitPlayer
-	;call ShowErroCount
+	call NovaLinha		; pula uma linha
+	call ZoaMSG		; bagunca a mensagem	
 ret
 
 GetMsg:
@@ -45,10 +42,11 @@ ValidaDuasLetras:
 	ret nc			; se a>=2 esta ok, retorna
 	call LimpaString	; senao limpa a string
 	jp loopGM		; volta para receber a string novamente
-MessMsg:
+
+ZoaMSG:
 	ld hl, Frase+13
 	ld b,0
-loopMM:
+loopZM:
 	ld a,(hl)
 	call PrintChar
 	inc b
@@ -56,13 +54,7 @@ loopMM:
 	cp 14
 	ret z
 	dec hl
-jp loopMM
-
-WaitPlayer:
-ret
-
-ShowErroCount:
-ret
+jp loopZM
 
 LimpaString:
 	ld hl,Frase 		; carrega o endereco de memoria da frase
@@ -80,7 +72,7 @@ FimLimpeza:
 	ld b,0			; zera o contador de letras
 ret
 
-NewLine:
+NovaLinha:
 	ld a, 13
 	call PrintChar
 	ld a, 10 
