@@ -1,9 +1,8 @@
 PrintChar	equ &BB5A		
 org &8000
-	ld a,9
+	ld a,r
 	call SorteiaAleatorio
-	ld a,(Resultado) 
-	call PrintChar	
+	call PegarPosicao
 ret
 
 SorteiaAleatorio:				
@@ -14,10 +13,8 @@ SubtracaoSucessiva:
 	jr nc, SubtracaoSucessiva     
 	dec d			
 	ld a,d
-	ld (Resultado),a
+	ld (&9000),a
 ret
 
-Resultado:
-	db  0
-
+PegarPosicao:
 
