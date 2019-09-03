@@ -1,8 +1,9 @@
 PrintChar	equ &BB5A		
 org &8000
-	ld a,r
+	ld a,1
 	call SorteiaAleatorio
 	call PegarPosicao
+	call printchar	
 ret
 
 SorteiaAleatorio:				
@@ -17,4 +18,12 @@ SubtracaoSucessiva:
 ret
 
 PegarPosicao:
+	ld a,(&9000)
+	ld b,a
+	ld a, Mensagem
+	inc b
+ret
+
+Mensagem:
+	db "0123456789ABCDE",0
 

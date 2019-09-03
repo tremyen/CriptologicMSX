@@ -5,6 +5,7 @@
 ;==========================================================================
 WaitChar	equ &BB06
 PrintChar	equ &BB5A
+NumAleatorio 	equ &9000
 
 org &8000
 	call GetMsg 		; obtem a mensagem do usuario
@@ -44,7 +45,10 @@ ValidaDuasLetras:
 	jp loopGM		; volta para receber a string novamente
 
 ZoaMSG:
-	ld hl, Frase+13
+	call SorteiaAleatorio
+	ld a,(NumAleatorio)  
+	ld hl,Frase
+	inc hl
 	ld b,0
 loopZM:
 	ld a,(hl)
@@ -55,6 +59,18 @@ loopZM:
 	ret z
 	dec hl
 jp loopZM
+
+SorteiaAleatorio:	
+	ld a,r			
+	ld d,0
+SubtracaoSucessiva:
+	sub 9 				
+	inc d				
+	jr nc, SubtracaoSucessiva     
+	dec d			
+	ld a,d
+	ld (NumAleatorio),a
+ret
 
 LimpaString:
 	ld hl,Frase 		; carrega o endereco de memoria da frase
