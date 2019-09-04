@@ -14,6 +14,7 @@ SortearDenovo:
 	call Validar
 	call GuardarPosicao
 	call Embaralhar
+	ld a,(ContadorSorteios)	
 	cp 15
 	jp z,Fim
 	inc a
