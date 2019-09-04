@@ -3,14 +3,15 @@
 ; Versao 1.0 
 ; Manoel Neto 2019-08-30
 ;==========================================================================
-WaitChar	equ &BB06
-PrintChar	equ &BB5A
-NumAleatorio 	equ &9000
-
+WaitChar	equ &BB06 	; funcao da bios que aguarda uma entrada
+PrintChar	equ &BB5A	; funcao que imprime um caracter
+NumAleatorio 	equ &9000	; VARIAVEL PARA NUMERO SORTEADO
+SorteioAtual 	equ &9001	; VARIAVEL PARA CONTAR O SORTEIO
 org &8000
 	call GetMsg 		; obtem a mensagem do usuario
 	call NovaLinha		; pula uma linha
-	call ZoaMSG		; bagunca a mensagem	
+	call ZoaMSG		; bagunca a mensagem
+	call ImprimeBagunca	; imprime a mensagem baguncada	
 ret
 
 GetMsg:
@@ -45,20 +46,10 @@ ValidaDuasLetras:
 	jp loopGM		; volta para receber a string novamente
 
 ZoaMSG:
-	call SorteiaAleatorio
-	ld a,(NumAleatorio)  
-	ld hl,Frase
-	inc hl
-	ld b,0
-loopZM:
-	ld a,(hl)
-	call PrintChar
-	inc b
-	ld a,b
-	cp 14
-	ret z
-	dec hl
-jp loopZM
+	call SorteiaAleatorio	; sorteia um numero entre 1 e 14
+	call Validar		; testa se esse numero ja foi sorteado
+	call GuardarPosicao	; guarda esse numero na matriz de sorteios
+ret
 
 SorteiaAleatorio:	
 	ld a,r			
@@ -71,6 +62,42 @@ SubtracaoSucessiva:
 	ld a,d
 	ld (NumAleatorio),a
 ret
+
+Validar:
+	ld c,d
+	ld b,0
+	ld hl,NumerosSorteados+13
+	ld a,(NumAleatorio)  
+	cpdr 
+	jp z,ZoaMSG
+ret
+
+GuardarPosicao:
+	ld hl,NumerosSorteados 	; pega o endereco da matriz de sorteio
+	ld a,(NumAleatorio)  	; pega o numero sorteado
+	ld (hl),a		; 
+	
+		ld hl,FraseEmbaralhada	
+
+	ld hl,FraseEmbaralhada	
+	ld (hl), 
+	
+ret
+
+ImprimeBagunca:
+	ld hl,FraseEmbaralhada
+	ld b,0
+ProximoCaracter:
+	ld a,(hl)
+	call PrintChar
+	inc hl
+	inc b
+	ld a,b
+	cp 14
+	ret z
+	jp ProximoCaracter
+ret 
+
 
 LimpaString:
 	ld hl,Frase 		; carrega o endereco de memoria da frase
@@ -97,4 +124,8 @@ ret
 
 Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+FraseEmbaralhada:
+	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+NumerosSorteados:
+	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
