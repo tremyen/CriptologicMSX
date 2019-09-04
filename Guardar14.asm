@@ -10,6 +10,7 @@ SortearDenovo:
 	call Validar
 	call GuardarPosicao
 	call ImprimirPosicao
+ret
 
 SortearNumero:	
 	ld a,r			
@@ -24,6 +25,8 @@ SubtracaoSucessiva:
 ret
 
 Validar:
+	ld c,d
+	ld b,0
 	ld hl,NumerosSorteados+13
 	ld a,(NumAleatorio)  
 	cpdr 
@@ -31,12 +34,25 @@ Validar:
 ret
 
 GuardarPosicao:
-	ld a,(NumAleatorio)
+	ld hl,NumerosSorteados 
 	ld (hl),a 
 ret 
 
 ImprimirPosicao:
-	ld a,(NumAleatorio)
+	ld hl,Frase	
+	ld a,(NumAleatorio) 
+	cp 1
+	jp z,Imprime
+	ld b,a 	
+AcharPosicao:
+	inc hl
+	dec b
+	ld a,b
+	cp 0
+	jp z,Imprime
+	jp AcharPosicao	
+Imprime:
+	ld a,(hl)
 	call PrintChar
 ret
 
