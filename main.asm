@@ -11,18 +11,18 @@ TamanhoFrase 	equ &9002	; Variavel para contar o tamanho da entrada
 CharDigitado	equ &9003	; Variavel para Caracter digitado
 
 org &8000
-	call GetMsg 		; obtem a mensagem do usuario
+	call PegarMensagem	; obtem a mensagem do usuario
 	call NovaLinha		; pula uma linha
 	call ZoaMSG		; bagunca a mensagem
 	call ImprimeBagunca	; imprime a mensagem baguncada	
 ret
 
-GetMsg:
+PegarMensagem:
 	call LimpaString	; limpa a string a cada execucao
 	ld hl,Frase		; carrega o endereco de memoria onde
 				; a frase sera armazenada
 	ld b,0			; zera o contador de letras
-loopGM:
+LoopMensagem:
 	call WaitChar		; chama rotina da bios para ler um 
 				; caracter
 	ld (hl),a		; guarda o ascii desse caracter no 
@@ -41,7 +41,7 @@ loopGM:
 	ld (TamanhoFrase),a	; guarda o tamanho da frase digitada
 	cp 14			; compara o contador com 14
 	ret z			; se A-14 = 0 vc ja digitou 14 letras
-	jp loopGM
+	jp LoopMensagem
 
 ValidaDuasLetras:		
 	ld a,b			; prepara o contador para comparar
