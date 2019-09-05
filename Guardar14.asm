@@ -3,13 +3,13 @@
 ; ============================================================================
 WaitChar		equ &BB06
 PrintChar		equ &BB5A
-NumAleatorio 		equ &B0F0
-ContadorSorteios	equ &B0F1
-CharGravar		equ &B0F2
-TamanhoFrase		equ &B0F3
+NumAleatorio 		equ &B110
+ContadorSorteios	equ &B111
+CharGravar		equ &B112
+TamanhoFrase		equ &B113
 
 org &8000
-	ld a,14
+	ld a,15
 	ld (TamanhoFrase),a
 	ld a,1	
 	ld (ContadorSorteios),a	
@@ -28,7 +28,9 @@ SortearDenovo:
 	ld (ContadorSorteios),a
 	jp SortearDenovo
 Fim: 
-	call Imprimir
+	call ImpEmbaralhada
+	call NovaLinha
+	call ImpFrase
 ret
 
 SortearNumero:	
@@ -42,7 +44,7 @@ DivPor9:
 	ld a,d
 	cp 0
 	jp nz,GravaAleatorio
-	inc a
+	ld a,15
 GravaAleatorio:
 	ld (NumAleatorio),a
 ret
@@ -51,7 +53,7 @@ Validar:
 	ld a,(TamanhoFrase)
 	ld c,a
 	ld b,0
-	ld hl,NumerosSorteados+13
+	ld hl,NumerosSorteados+14
 	ld a,(NumAleatorio)  
 	cpdr 
 	jp z,SortearDeNovo
@@ -103,26 +105,46 @@ AchouPosGravar:
 	ld (hl),a
 ret 
 
-Imprimir:
+ImpFrase:
 	ld b,1
-	ld hl,FraseEmbaralhada
-ProxChar:
+	ld hl,Frase
+	ld a,(TamanhoFrase)
+	ld c,a
+ProxCharFrase:
 	ld a,(hl) 
 	call PrintChar
 	inc hl
 	inc b
 	ld a,b
-	
+	cp c
+	ret z
+	jp ProxCharFrase
 
-	cp 15
-	jp z,Imprimiu
-	jp ProxChar
-Imprimiu:
+ImpEmbaralhada:
+	ld b,1
+	ld hl,FraseEmbaralhada
+	ld a,(TamanhoFrase)
+	ld c,a
+ProxCharEmb:
+	ld a,(hl) 
+	call PrintChar
+	inc hl
+	inc b
+	ld a,b
+	cp c
+	ret z
+	jp ProxCharEmb
+
+NovaLinha:
+	ld a, 13
+	call PrintChar
+	ld a, 10 
+	call PrintChar
 ret
 	
 Frase:
-	db '1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
+	db '1','2','3','4','5','6','7','8','9','A','B','C','D','E','F',255
 FraseEmbaralhada:
-	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,255
 NumerosSorteados:
 	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
