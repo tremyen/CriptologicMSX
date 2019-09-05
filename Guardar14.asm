@@ -1,4 +1,6 @@
-; sortear 14 numeros aleatorios entre 1 e 14 sem repeticao
+; ============================================================================
+; Sortear 14 numeros aleatorios entre 1 e 14 sem repeticao
+; ============================================================================
 WaitChar		equ &BB06
 PrintChar		equ &BB5A
 NumAleatorio 		equ &9000
@@ -94,8 +96,8 @@ ret
 Imprimir:
 	ld b,1
 	ld hl,FraseEmbaralhada
-	ld a,(hl) 
 ProxChar:
+	ld a,(hl) 
 	call PrintChar
 	inc hl
 	inc b
