@@ -4,9 +4,9 @@
 ; Validar o numero de caracteres durante a digitacao
 ; Imprimir a mensagem vindo da memoria para teste
 ;=============================================================================
-WaitChar	equ &BB06 	; funcao da bios que aguarda uma entrada
-PrintChar	equ &BB5A	; funcao da bios que imprime um caracter
-TamanhoFrase 	equ &9000	; Variavel para contar o tamanho da entrada
+WaitChar	equ &BB06 	; Funcao da bios que aguarda uma entrada
+PrintChar	equ &BB5A	; Funcao da bios que imprime um caracter
+TamanhoFrase 	equ &9000	; Variavel => contar o tamanho da entrada
 
 org &8000
 	call PegarMensagem	; Obtem a mensagem do usuario

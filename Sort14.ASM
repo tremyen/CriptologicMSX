@@ -1,23 +1,23 @@
 ;=========================================================================================
 ; Sortear 14 numeros aleatorios entre 1 e 15 
-; Jogar o resultado para a variavel NumAleatorio =>(&B110)
+; Jogar o resultado para a variavel NumAleatorio =>(9001)
 ; Validar se esse numero ja foi sorteado
-; Jogar o resultado para a matriz de numeros sorteados =>(NumSorteados)
-; Converter o numero em seu codigo Hexadeciaml =>(&B111)
-; Imprimir o numero
-; Fazer 250 lancamentos para teste dos limites 
+; Jogar o resultado para a matriz de numeros sorteados =>(NumerosSorteados)
+; Converter o numero em seu codigo Hexadeciaml =>(&9002)
+; Imprimir o char convertido
+; Fazer 14 lancamentos para teste dos limites 
 ;=========================================================================================
-PrintChar		equ &BB5A
+PrintChar		equ &BB5A	; Funcao que imprime um caracter
 TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido
 NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
 
 org &8000
-	ld a,1
-	ld (NumSorteios), a
-	ld a,14
-	ld (TamanhoFrase), a
+	ld a,0
+	ld (NumSorteios),a		; Primeiro sorteio
+	ld a,14				; serao 14 sorteios sem repeticao
+	ld (TamanhoFrase),a		; para nosso teste a frase tem 14 letras
 
 SortearDeNovo:
 	call SortearNumero		; Sorteei o numero em NumAleatorio
@@ -57,11 +57,11 @@ ret
 ValidarJaFoi:
 	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
 	ld hl,NumerosSorteados		; pega o endereco da matriz	
-AcharFimFrase:				; Comeca o loop para chegar no fim da frase
-	inc hl				; proxima posicao
-	dec a				; controla se chegamos no fim
+AcharFimFrase:				; Comeca o loop para chegar no fim da frase	
 	cp 0				; se andamos todo o tam. da entrada
 	jp z,AcheiFimFrase		; achamos o endereco final da entrada
+	inc hl				; proxima posicao
+	dec a				; controla se chegamos no fim
 	jp AcharFimFrase		; senao continuamos procurando	
 AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
 	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
@@ -75,12 +75,12 @@ AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
 GravarNaMatriz:
 	ld hl,NumerosSorteados
 	ld a,(NumSorteios)
-	cp 1
+	cp 0
 	jp z,AcheiPosMat
 AcharPosMat:
 	inc hl
 	dec a
-	cp 1
+	cp 0
 	jp z,AcheiPosMat
 	jp AcharPosMat
 AcheiPosMat:
@@ -213,4 +213,4 @@ ImprimeEspaco:
 ret
 
 NumerosSorteados:
-	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
