@@ -3,21 +3,26 @@
 ; ============================================================================
 WaitChar		equ &BB06
 PrintChar		equ &BB5A
-NumAleatorio 		equ &9000
-ContadorSorteios	equ &9001
-CharGravar		equ &9002
+NumAleatorio 		equ &B0F0
+ContadorSorteios	equ &B0F1
+CharGravar		equ &B0F2
+TamanhoFrase		equ &B0F3
 
 org &8000
-	ld a,1
-	ld (ContadorSorteios),a
+	ld a,14
+	ld (TamanhoFrase),a
+	ld a,1	
+	ld (ContadorSorteios),a	
 SortearDenovo:
 	ld a,(ContadorSorteios)	
 	call SortearNumero
 	call Validar
 	call GuardarPosicao
 	call Embaralhar
+	ld a,(TamanhoFrase)
+	ld b,a
 	ld a,(ContadorSorteios)	
-	cp 15
+	cp b
 	jp z,Fim
 	inc a
 	ld (ContadorSorteios),a
@@ -35,11 +40,16 @@ DivPor9:
 	jr nc, DivPor9     
 	dec d			
 	ld a,d
+	cp 0
+	jp nz,GravaAleatorio
+	inc a
+GravaAleatorio:
 	ld (NumAleatorio),a
 ret
 
 Validar:
-	ld c,d
+	ld a,(TamanhoFrase)
+	ld c,a
 	ld b,0
 	ld hl,NumerosSorteados+13
 	ld a,(NumAleatorio)  
@@ -102,6 +112,8 @@ ProxChar:
 	inc hl
 	inc b
 	ld a,b
+	
+
 	cp 15
 	jp z,Imprimiu
 	jp ProxChar
