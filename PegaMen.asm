@@ -10,6 +10,7 @@ TamanhoFrase 	equ &9000	; Variavel para contar o tamanho da entrada
 
 org &8000
 	call PegarMensagem	; Obtem a mensagem do usuario
+	call Novalinha		; Pula uma Linha
 	call ImprimirMensagem   ; Imprime a mensagem entrada
 ret
 
@@ -51,7 +52,7 @@ LoopImprime:
 	ld a,b			; prepara para comparacao
 	cp c			; compara a com c
 	ret z			; se sao iguais a string acabou
-jp LoopImprime
+	jp LoopImprime
 
 LimpaString:
 	ld hl,Frase 		; carrega o endereco de memoria da frase
@@ -67,6 +68,13 @@ InicioLimpeza:
 FimLimpeza:
 	ld hl,Frase		; prepara HL com o endereco da frase
 	ld b,0			; zera o contador de letras
+ret
+
+NovaLinha:
+	ld a, 13
+	call PrintChar
+	ld a, 10 
+	call PrintChar
 ret
 	
 
