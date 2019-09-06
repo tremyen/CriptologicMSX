@@ -3,12 +3,19 @@
 ; LIMPAR A MATRIZ
 ; LIMPAR AS STRINGS 
 ; =========================================================================================
+PrintChar		equ &BB5A	; Funcao que imprime um caracter
 TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido
 NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
 
 org &8000
+	call LimpaMem
+	ld hl,Frase
+	call PrintString
+ret
+
+LimpaMem:
 	; ================
 	; Zera Numericos
 	; ================
@@ -47,6 +54,22 @@ LimpaFrase:
 	inc hl
 	jp LimpaFrase	
 LimpouFrase:
+
+ret
+
+; ========================================================================================
+; Imprime uma string terminada em 255
+; HL => Endereco da string
+; ========================================================================================
+PrintString:
+	ld a,(hl)
+	cp 255
+	jp z,EndString
+	call PrintChar
+	inc hl
+	jp PrintString	
+EndString:
+ret
 
 Frase:
 	db "0123456789ABCDE",255
