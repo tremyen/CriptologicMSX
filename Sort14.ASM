@@ -1,10 +1,10 @@
 ;=========================================================================================
-; Sortear 14 numeros aleatorios entre 1 e 15 
+; Sortear 15 numeros aleatorios entre 1 e 15 (1-F)
 ; Jogar o resultado para a variavel NumAleatorio =>(9001)
-; Validar se esse numero ja foi sorteado
+; Validar se esse numero ja foi sorteado => (ValidarJaFoi)
 ; Jogar o resultado para a matriz de numeros sorteados =>(NumerosSorteados)
 ; Converter o numero em seu codigo Hexadeciaml =>(&9002)
-; Imprimir o char convertido
+; Imprimir o char convertido => ImprimeChar
 ; Fazer 14 lancamentos para teste dos limites 
 ;=========================================================================================
 PrintChar		equ &BB5A	; Funcao que imprime um caracter
@@ -16,7 +16,7 @@ NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
 org &8000
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
-	ld a,14				; serao 14 sorteios sem repeticao
+	ld a,15				; serao 14 sorteios sem repeticao
 	ld (TamanhoFrase),a		; para nosso teste a frase tem 14 letras
 
 SortearDeNovo:
@@ -64,7 +64,8 @@ AcharFimFrase:				; Comeca o loop para chegar no fim da frase
 	dec a				; controla se chegamos no fim
 	jp AcharFimFrase		; senao continuamos procurando	
 AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
-	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
+	ld a,(TamanhoFrase)		; pega o tamanho da entrada 	
+	inc a
 	ld c,a				; prepara parte baixa do loop de CPDR 
 	ld b,0				; prepara parte alta do loop de CPDR	
 	ld a,(NumAleatorio)  		; pega o numero aleatorio para a pesquisa na matriz
@@ -213,4 +214,4 @@ ImprimeEspaco:
 ret
 
 NumerosSorteados:
-	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,255

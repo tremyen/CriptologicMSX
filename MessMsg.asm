@@ -25,5 +25,5 @@ PegarPosicao:
 ret
 
 Mensagem:
-	db "0123456789ABCDE",0
+	db "0123456789ABCDE",255
 
