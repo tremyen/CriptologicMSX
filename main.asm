@@ -9,6 +9,7 @@ TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido
 NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
+DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
 
 ;=========================================================================================
 ; INICIO DO PROGRAMA
@@ -49,6 +50,7 @@ LimpaMem:
 	ld (TamanhoFrase),a
 	ld (NumAleatorio),a
 	ld (NumSorteios),a
+	ld (DivisorIdeal),a
 	ld hl,NumSorteados		; Zera Matriz
 	call ZerarMatriz		
 	ld a,' ' 			; Limpa Caracteres
@@ -98,37 +100,64 @@ jp PegarMensagem
 SortearNumeros:
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
+	call AcharDivIdeal		; achar o divisor ideal para a entrada do
+					; jogador 1
 SortearDeNovo:
 	call SortearNumero		; Sorteei o numero em NumAleatorio
-	jp ValidarJaFoi			; Valida se ja foi sorteado
+	jp ValidarMaiorN		; O numero nao pode ser maior que a entrada
+ValidadoMaiorN:
+	jp ValidarJafoi			; O Numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
-	ld a,(TamanhoFrase)		; carrga o contador de sorteios
+	call ConvNumChar 		; Converte o numero em digito 1-F
+	ld a,(TamanhoFrase)		; carrega o contador de sorteios
 	ld c,a				; so irei sortear de acordo com a entrada
 	ld a,(NumSorteios)		; Pega o numero de sorteios
 	inc a				; Aumenta numero de sorteios
 	cp c				; testa se eh ultimo sorteio
-	jp z,FimSorteios		; Acabou
+	jp z,FimSorteio			; Acabou
 	ld (NumSorteios),a		; Grava o numero de sorteios
 	jp SortearDeNovo		; faz de novo
-:FimSorteios
+FimSorteio:
 ret
 
-SortearNumero:	
+AcharDivIdeal:
+	ld a,(TamanhoFrase)		; pegar o tamanho da frase
+	ld b,a				; usar o tamanho da frase como divisor			
+	ld a,128			; Dividir 128 pelo tamanho da frase
+	ld d,0				; contador de subtracao sucessivas
+DivPorTamanho:
+	sub b 				; comeca a divisao pelo tamanho da frase
+	inc d				; aumenta o acumulador
+	jr nc, DivPorTamanho   		; repete enquanto nao tem "vai um"
+	dec d				; elimina o resto
+	ld a,d				; nesse momento D tem o divisior ideal	
+	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal	
+ret
+
+SortearNumero:
+	ld a,(DivisorIdeal)		; carrega o divisor ideal		
+	ld b,a				; carrega o divisor ideal
 	ld a,r				; registrador r fornece um aleatorio entre 1 e 128
 	ld d,0				; contador de subtracao sucessivas
-DivPor9:
-	sub 9 				; comeca a divisao por nove
+DividirPorIdeal:
+	sub b 				; comeca a divisao pelo divisor ideal
 	inc d				; aumenta o acumulador
-	jr nc, DivPor9     		; repete enquanto nao tem "vai um"
+	jr nc, DividirPorIdeal 		; repete enquanto nao tem "vai um"
 	dec d				; elimina o resto
-	ld a,d				; prepara a comparacao
-	cp 0				; verifica se o numero sorteado foi zero
-	jp nz,GravaAleatorio		; se nao foi grava o numero
-	ld a,15				; o zero sera tratado como 15
+	ld a,d				; prepara gravacao do numero
 GravaAleatorio:
 	ld (NumAleatorio),a		; grava na variavel
 ret
+
+ValidarMaiorN:
+	ld a,(TamanhoFrase)
+	inc a
+	ld b,a
+	ld a,(NumAleatorio)
+	cp b
+	jp ValidadoMaiorN
+	jp SortearDeNovo
 
 ValidarJaFoi:
 	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
@@ -147,7 +176,7 @@ AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
 	ld a,(NumAleatorio)  		; pega o numero aleatorio para a pesquisa na matriz
 	cpdr 				; procura a matriz ate achar A
 	jp z,SortearDeNovo		; Achou! Precisamos sortear de novo!
-	jp ValidadoJaFoi		; Nao achou, podemos continuar.
+	jp ValidadoJaFoi
 
 GravarNaMatriz:
 	ld hl,NumSorteados
@@ -415,6 +444,6 @@ MsgUsuario1:
 MsgUsuario2:
 	db "Voce Digitou: ",13
 MsgUsuario3:
-	db "Esta e a ordem para embaralhar: ",13
+	db "Ordem para embaralhar: ",13
 Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
