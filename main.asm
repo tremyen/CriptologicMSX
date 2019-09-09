@@ -444,6 +444,6 @@ MsgUsuario1:
 MsgUsuario2:
 	db "Voce Digitou: ",13
 MsgUsuario3:
-	db "Ordem para embaralhar: ",13
+	db "Embaralhar: ",13
 Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
