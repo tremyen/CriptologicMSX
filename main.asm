@@ -16,9 +16,6 @@ DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
 ;=========================================================================================
 org &8000
 	call LimpaMem		; Limpa a memoria a cada execucao
-	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
-	call PrintString	; Imprime a mensagem
-	ld hl,Frase		; Carrega o endereco da frase
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
 	ld hl,MsgUsuario2	; Carrega a segunda mensagem para o usuario
@@ -70,6 +67,8 @@ PegarMensagem:
 	call LimpaString	; limpa a string a cada execucao
 	ld hl,Frase		; Pegar a frase limpa 
 	ld b,0			; zera o contador de letras
+	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
+	call PrintString	; Imprime a mensagem
 LoopMensagem:
 	call WaitChar		; ler um caracter
 	ld (hl),a		; guarda o ascii desse caracter
@@ -151,12 +150,12 @@ GravaAleatorio:
 ret
 
 ValidarMaiorN:
-	ld a,(TamanhoFrase)
-	inc a
-	ld b,a
-	ld a,(NumAleatorio)
-	cp b
-	jp ValidadoMaiorN
+	ld a,(TamanhoFrase)		; pegar o tamanho da frase
+	inc a				; temos de comparar com A < 
+	ld b,a				; guarda tamanho frase+1
+	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
+	cp b				; A < TamFrase+1 ?
+	jp c,ValidadoMaiorN		; A < TamFrase+1 ?
 	jp SortearDeNovo
 
 ValidarJaFoi:
