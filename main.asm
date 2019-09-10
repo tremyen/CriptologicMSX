@@ -187,7 +187,7 @@ ret
 ; Gravar letra na frase embaralhada
 ;=========================================================================================
 Embaralhar:
-	ld hl,MsgUsuario4		; Carrega a quarta mensagem para o usuario
+	ld hl,MsgUsuario3		; Carrega a quarta mensagem para o usuario
 	call PrintString		; imprime a mensagem
 	ld a,0				; prepara primeira passada
 	ld (ContEmbaralha),a		; zera o contador de embaralhamento
@@ -259,7 +259,7 @@ ret
 ; Altera => A,B,HL 
 ;=========================================================================================
 ImprimeSorteios:
-	ld hl,MsgUsuario3		; Carrega a terceira mensagem para o usuario
+	ld hl,MsgUsuario2		; Carrega mensagem para o usuario
 	call PrintString		; Imprime a mensagem
 	ld a,(TamanhoFrase)		; Pega o tamanho da frase
 	ld b,a				; Guarda como contador de loop
@@ -510,10 +510,8 @@ NumSorteados:
 MsgUsuario1:
 	db "Entre sua mensagem:",13
 MsgUsuario2:
-	db "Voce Digitou:",13
-MsgUsuario3:
 	db "Embaralhar:",13
-MsgUsuario4:
+MsgUsuario3:
 	db "Frase Embaralhada:",13
 Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
