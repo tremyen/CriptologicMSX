@@ -64,11 +64,11 @@ ret
 ; Altera => HL,B,A
 ;=============================================================================
 PegarMensagem:
+	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
+	call PrintString	; Imprime a mensagem
 	call LimpaString	; limpa a string a cada execucao
 	ld hl,Frase		; Pegar a frase limpa 
 	ld b,0			; zera o contador de letras
-	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
-	call PrintString	; Imprime a mensagem
 LoopMensagem:
 	call WaitChar		; ler um caracter
 	ld (hl),a		; guarda o ascii desse caracter
