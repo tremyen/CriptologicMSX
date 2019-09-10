@@ -1,5 +1,5 @@
 ; ========================================================================================
-; Pegar uma mensagem de no minimo 2 caracteres e no maximo 14 caracteres
+; Pegar uma frase de no minimo 2 caracteres e no maximo 14 caracteres
 ; ========================================================================================
 ; Receber a mensagem na area de memoria frase => (PegarMensagem)
 ; Validar o numero de caracteres durante a digitacao => (ValidaDuasLetras)
@@ -30,9 +30,10 @@ PegarFrase:
 	call NovaLinha		; Pula uma Linha
 	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
 	call PrintString	; Imprime a mensagem
-	call LimpaString	; limpa a string a cada execucao
-	ld hl,Frase		; carrega o endereco da frase
-	ld b,0			; zera o contador de letras
+	ld hl,Frase		; Carrega o endereco da frase
+	call LimpaString	; Limpar a Frase
+	ld hl,Frase		; Carrega o endereco da frase
+	ld b,0			; Zera o contador de letras
 LoopFrase:
 	call KM_WAIT_CHAR	; ler um caracter
 	ld (hl),a		; guarda o ascii desse caracter
@@ -48,7 +49,7 @@ LoopFrase:
 	jp LoopFrase		; pega o proximo
 ValidaDuasLetras:		
 	ld a,(TamanhoFrase)	; prepara o contador para comparar
-	cp 3			; compara com 3, pois o enter eh um caracter
+	cp 2			; compara com 2 letras
 	ret nc			; se a >= 2 esta ok, retorna
 	call LimpaString	; senao limpa a string
 jp PegarFrase			; e pega a mensagem novamente
@@ -60,17 +61,15 @@ ImprimirFrase:			; vamos imprimir a mensagem da memoria
 	ld hl,Frase		; Carrega a frase
 	call PrintString	; Imprime a frase
 ret
-	
 
-; ========================================================================================
+; =========================================================================================
 ; FUNCOES GERAIS
-; ========================================================================================
+; =========================================================================================
 
 ; =========================================================================================
 ; Inicializar as variaveis com zero
-; Limpar a Matriz
-; Limpar as strings
-; Altera => A,HL
+; Nao tem parametros
+; Altera => A,HL,(TamanhoFrase),(Frase)
 ; =========================================================================================
 LimpaMem:
 	ld a, 0				; Zera Numericos

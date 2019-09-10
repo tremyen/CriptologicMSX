@@ -38,9 +38,8 @@ ret
 
 ; =========================================================================================
 ; Inicializar as variaveis com zero
-; Limpar a Matriz
-; Limpar as strings
-; Altera => A,HL
+; Nao usa parametros
+; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,CharConvertido
 ; =========================================================================================
 LimpaMem:
 	ld a, 0				; Zera Numericos
