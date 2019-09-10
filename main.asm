@@ -16,6 +16,9 @@ NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido
 NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
 DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
+PosSorteada		equ &9005	; Variavel => Posicao Sorteada
+LetraAtual		equ &9006	; Variavel => Letra na posicao sorteada
+ContEmbaralha		equ &9007	; Variavel => Contador de embaralhamento
 
 ;=========================================================================================
 ; INICIO DO PROGRAMA
@@ -24,16 +27,15 @@ org &8000
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
-	ld hl,MsgUsuario2	; Carrega a segunda mensagem para o usuario
-	call PrintString	; Imprime a mensagem
-	ld hl,Frase		; Carrega a frase digitada
-	call PrintString	; Imprime a frase
 	call SortearNumeros	; Sortear os numeros para embaralhar a frase
+	call ImprimeSorteios	; Imprime numeros sorteados
 	call NovaLinha		; Pula uma linha
-	ld hl,MsgUsuario3	; Carrega a terceira mensagem para o usuario
-	call PrintString	; imprime a mensagem
-	call ImprimeSorteios	; Imprime a mensagem
+	call Embaralhar		; Embaralha a frase
+	ld hl,FraseEmbaralhada	; Carrega a frase embaralhada
+	call PrintString	; imprime 
+	call NovaLinha		; Pula uma linha	
 ret
+
 ;=========================================================================================
 ; FIM DO PROGRAMA
 ;=========================================================================================
@@ -41,25 +43,6 @@ ret
 ;=========================================================================================
 ; INICIO DAS FUNCOES DO PROGRAMA
 ;=========================================================================================
-
-; =========================================================================================
-; Inicializar as variaveis com zero
-; Nao usa parametros
-; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,CharConvertido
-; =========================================================================================
-LimpaMem:
-	ld a, 0				; Zera Numericos
-	ld (TamanhoFrase),a
-	ld (NumAleatorio),a
-	ld (NumSorteios),a
-	ld (DivisorIdeal),a
-	ld hl,NumSorteados		; Zera Matriz
-	call ZerarMatriz		
-	ld a,' ' 			; Limpa Caracteres
-	ld (CharConvertido), a		
-	ld hl,Frase 			; Limpa Strings
-	call LimpaString		
-ret
 
 ; ============================================================================
 ; Pegar uma mensagem de no minimo 2 caracteres e no maximo 14
@@ -162,7 +145,6 @@ ValidarMaiorN:
 	cp b				; A < TamFrase+1 ?
 	jp c,ValidadoMaiorN		; A < TamFrase+1 ?
 	jp SortearDeNovo
-
 ValidarJaFoi:
 	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
 	ld hl,NumSorteados		; pega o endereco da matriz	
@@ -199,39 +181,142 @@ AcheiPosMat:
 ret
 
 ;=========================================================================================
+; Embaralhar Frase
+; Pegar o numero sorteado 
+; Pegar letra relativa ao numero sorteado
+; Gravar letra na frase embaralhada
+;=========================================================================================
+Embaralhar:
+	ld hl,MsgUsuario4		; Carrega a quarta mensagem para o usuario
+	call PrintString		; imprime a mensagem
+	ld a,0				; prepara primeira passada
+	ld (ContEmbaralha),a		; zera o contador de embaralhamento
+GravarProxima:	
+	call AcharPosSort		; achar a posicao sorteada 
+	call AcharLetra			; acha a letra dessa passada
+	call GravarLetra		; gravar a letra dessa passada
+	ld a,(TamanhoFrase)
+	ld b,a
+	ld a,(ContEmbaralha)		
+	cp b				; se pegamos todos
+	jp z,GravouTudo			; gravamos tudo 
+	inc a 				; senao vamos para a proxima
+	ld (ContEmbaralha),a		; e guardamos no contador
+	jp GravarProxima		; pega a proxima
+GravouTudo:
+ret
+
+AcharPosSort:
+	ld a,(ContEmbaralha)
+	ld hl,NumSorteados
+LoopAcharPosSort:
+	cp 0
+	jp z,AchouPosSort
+	dec a
+	inc hl
+	jp LoopAcharPosSort
+AchouPosSort:
+	ld a,(hl)
+	ld (PosSorteada),a
+ret
+
+AcharLetra:
+	ld a,(PosSorteada)
+	dec a 				; enderecos comecam com 0
+	ld hl,Frase
+LoopAcharLetra:
+	cp 0
+	jp z,AchouLetra			
+	dec a
+	inc hl
+	jp LoopAcharLetra
+AchouLetra:
+	ld a,(hl)
+	ld (LetraAtual),a
+ret
+
+GravarLetra:
+	ld a,(ContEmbaralha)
+	ld b,a
+	ld a,0
+	ld hl,FraseEmbaralhada
+LoopGravarLetra:
+	cp b
+	jp z,AchouPosGravar			
+	inc hl
+	inc a	
+	jp LoopGravarLetra
+AchouPosGravar:
+	ld a,(LetraAtual)
+	ld (hl),a
+	inc hl
+	ld (hl),13
+ret
+
+;=========================================================================================
 ; Imprimir os numeros sorteados 
 ; Imprimir a matriz de numeros sorteados
 ; Altera => A,B,HL 
 ;=========================================================================================
 ImprimeSorteios:
+	ld hl,MsgUsuario3		; Carrega a terceira mensagem para o usuario
+	call PrintString		; Imprime a mensagem
 	ld a,(TamanhoFrase)		; Pega o tamanho da frase
 	ld b,a				; Guarda como contador de loop
 	ld hl,NumSorteados		; Inicia com o endereco da matriz
 ProxNum:
 	ld a,(hl)			; Le o primeiro numero
 	call ConvNumChar		; Converte o numero no seu ascii
-	call ImprimeChar		; Imprime o caracter convertido
-	call ImprimeEspaco		; Imprime um espaco
+	ld a,(CharConvertido)		; Carrega o caracter convertido
+	call PrintChar			; Imprime	
+	ld a, ' '			; Carrega um espaco
+	call PrintChar			; Imprime um espaco		
 	dec b				; Incrementa o contador de loop
 	ld a,b				; prepara o contador para comparacao
 	cp 0				; Testa se e o fim dos sorteios
-	jp z,FimImpSorteio		; Finaliza
-	inc hl				; Incrementa o ponteiro de endereco
+	jp z,FimImpSorteio		; Imprimiu todos
+	inc hl				; Prepara o proximo endereco
 	jp ProxNum			; Pega o proximo	
 FimImpSorteio:	
 ret	
 
-;=========================================================================================
+; =========================================================================================
 ; FIM DAS FUNCOES DO PROGRAMA
-;=========================================================================================
+; =========================================================================================
 
-;=========================================================================================
+; =========================================================================================
 ; INICIO DAS FUNCOES GERAIS
-;=========================================================================================
+; =========================================================================================
+
+; =========================================================================================
+; Inicializar as variaveis com zero
+; Nao usa parametros
+; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,PosSorteada,
+; 	    LetraAtual,ContEmbaralha,NumSorteados,CharConvertido,Frase,FraseEmbaralhada
+; =========================================================================================
+LimpaMem:
+	ld a, 0				; Zera Numericos
+	ld (TamanhoFrase),a
+	ld (NumAleatorio),a
+	ld (NumSorteios),a
+	ld (DivisorIdeal),a
+	ld (PosSorteada),a
+	ld (LetraAtual),a
+	ld (ContEmbaralha),a
+	ld hl,NumSorteados		; Zera Matriz
+	call ZerarMatriz		
+	ld a,' ' 			; Limpa Caracteres
+	ld (CharConvertido), a		
+	ld hl,Frase 			; Limpa Strings
+	call LimpaString		
+	ld hl,FraseEmbaralhada
+	call LimpaString
+ret
 
 ; ========================================================================================
 ; Imprime uma Nova linha
 ; Nao usa parametros
+; Altera => A
 ; ========================================================================================
 NovaLinha:
 	ld a, 13
@@ -409,27 +494,6 @@ QuinzeF:
 	ld (CharConvertido),a
 ret
 
-; ========================================================================================
-; Imprime o caracter convertido
-; ALTERA => A
-; ========================================================================================
-ImprimeChar:
-	ld a,(CharConvertido)
-	call PrintChar
-ret
-; ========================================================================================
-
-; ========================================================================================
-; ImprimeEspaco
-; Imprime um espaco
-; Sem Parametros
-; ALTERA => A
-; ========================================================================================
-ImprimeEspaco:
-	ld a, ' '
-	call PrintChar
-ret
-
 ;=========================================================================================
 ; FIM DAS FUNCOES GERAIS
 ;=========================================================================================
@@ -444,10 +508,14 @@ NumSorteados:
 ; STRINGS
 ;=========================================================================================
 MsgUsuario1:
-	db "Entre sua mensagem: ",13
+	db "Entre sua mensagem:",13
 MsgUsuario2:
-	db "Voce Digitou: ",13
+	db "Voce Digitou:",13
 MsgUsuario3:
-	db "Embaralhar: ",13
+	db "Embaralhar:",13
+MsgUsuario4:
+	db "Frase Embaralhada:",13
 Frase:
-	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
+	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
+FraseEmbaralhada:
+	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13

@@ -21,6 +21,7 @@ org &8000
 	call LimpaMem
 	ld a,14
 	ld (TamanhoFrase),a
+Embaralhar:
 	ld a,0				; prepara primeira passada
 	ld (ContEmbaralha),a		; zera o contador de embaralhamento
 GravarProxima:	
