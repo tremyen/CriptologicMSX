@@ -3,8 +3,14 @@
 ; Versao 1.0 
 ; Manoel Neto 2019-09-09
 ;=========================================================================================
+; ========================================================================================
+; BIOS
+; ========================================================================================
 WaitChar		equ &BB06 	; Funcao => Aguarda uma entrada
 PrintChar		equ &BB5A	; Funcao => Imprime um caracter
+; ========================================================================================
+; VARIAVEIS
+; ========================================================================================
 TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido

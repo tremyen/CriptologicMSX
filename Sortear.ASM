@@ -1,20 +1,31 @@
 ;=========================================================================================
-; Sortear numeros aleatorios entre 1 e N 
+; Sortear X numeros aleatorios entre 1 e N 
+; X deve ser igual ao tamanho da frase do jogador 1
 ; N deve ser igual ao tamanho da frase do jogador 1
-; Validar se o numero nao e maior que N => (ValidarMaiorN)
-; Validar se esse numero ja foi sorteado => (ValidarJaFoi)
+; Validar se o numero sorteado nao eh maior que N => (ValidarMaiorN)
+; Validar se o numero sorteado ja foi sorteado => (ValidarJaFoi)
 ; Jogar o resultado para a variavel NumAleatorio =>(9001)
 ; Jogar o resultado para a matriz de numeros sorteados =>(NumerosSorteados)
 ; Converter o numero em seu codigo Hexadeciaml =>(&9002)
 ; Imprimir o char convertido => ImprimeChar
 ;=========================================================================================
+; ========================================================================================
+; BIOS
+; ========================================================================================
 PrintChar		equ &BB5A	; Funcao que imprime um caracter
+
+; ========================================================================================
+; VARIAVEIS
+; ========================================================================================
 TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 NumAleatorio 		equ &9001	; Variavel => Numero sorteado
 CharConvertido 		equ &9002	; Variavel => Caracter Convertido
 NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
 DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
 
+; ========================================================================================
+; INICIO PROGRAMA
+; ========================================================================================
 org &8000
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
