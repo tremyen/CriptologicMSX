@@ -45,7 +45,8 @@ GravouTudo:
 	ld hl,MsgUsuario2
 	call PrintString	
 	ld hl,FraseEmbaralhada		; imprime a frase embaralhada
-	call PrintString	
+	call PrintString
+	call NovaLinha	
 ret
 
 AcharPosSort:
@@ -156,7 +157,7 @@ ret
 ; STRINGS
 ;=========================================================================================	
 Frase:
-	db "0123456789ABCD",13
+	db "123456789ABCDE",13
 FraseEmbaralhada:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
 NumerosSorteados:
