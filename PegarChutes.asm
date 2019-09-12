@@ -15,7 +15,6 @@ PrintChar		equ &BB5A	; Funcao => Imprime um caracter
 TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
 CaracterTestar		equ &9008	; Variavel => Guarda o caracter para testar
 ContTeste		equ &9009	; Variavel => Conta o teste atual
-ContPosicao		equ &9009	; Variavel => Conta a posicao a ser testada
 ContErros		equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
 ; =========================================================================================
 ; INICIO DO PROGRAMA
@@ -67,7 +66,7 @@ AcharPosicaoTeste:
 	cp 0
 	jp z,AchouTeste
 	inc hl
-	dec a
+	dec a					; proximo teste
 	jp AcharPosicaoTeste	
 AchouTeste:
 	ld a,(hl)
@@ -82,7 +81,6 @@ AchouTeste:
 	call PrintString
 	call Novalinha 
 	jp LoopPegaChar
-
 ImprimirErros:
 	ld hl,MsgUsuario5
 	call PrintString
@@ -184,7 +182,6 @@ NovaLinha:
 	ld a, 10 
 	call PrintChar
 ret
-; ========================================================================================
 
 ; =========================================================================================
 ; FIM DAS FUNCOES GERAIS
