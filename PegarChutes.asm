@@ -35,6 +35,7 @@ EstaCorreto:
 	call PrintString
 	call NovaLinha	
 	ld a,(TamanhoFrase)
+	dec a
 	ld b,a
 	ld a,(ContTeste)
 	cp b
@@ -62,14 +63,11 @@ ret
 TestarCorreto:
 	ld hl,Frase	
 	ld a,(ContTeste)			; Conta o teste
-	ld b,a
+AcharPosicaoTeste:
 	cp 0
 	jp z,AchouTeste
-AcharPosicaoTeste:
 	inc hl
-	inc a
-	cp b
-	jp z,AchouTeste
+	dec a
 	jp AcharPosicaoTeste	
 AchouTeste:
 	ld a,(hl)
@@ -83,11 +81,17 @@ AchouTeste:
 	ld hl,MsgUsuario3
 	call PrintString
 	call Novalinha 
-jp LoopPegaChar
+	jp LoopPegaChar
 
 ImprimirErros:
+	ld hl,MsgUsuario5
+	call PrintString
+	call Novalinha
+	ld hl,MsgUsuario6
+	call PrintString
 	ld a,(ContErros)
-	call PrintChar
+	call PrintNumber
+	call Novalinha
 ret
 	
 ; =========================================================================================
@@ -112,6 +116,67 @@ EndString:
 ret
 
 ; ========================================================================================
+; Imprime uma Numero
+; A => Numero a ser impresso
+; Altera => A,HL
+; ========================================================================================
+
+PrintNumber:
+	push hl			
+	ld a,e
+	ld hl,Centenas
+	ld (hl),&00
+	ld hl,Dezenas
+	ld (hl),&00
+	ld hl,Unidades
+	ld (hl),&00
+ContaCentenas:
+	ld d,&64
+	ld hl,Centenas
+ProximaCentena:
+	sub d
+	jr c,ContarDezenas
+	inc (hl)
+jr ProximaCentena
+
+ContarDezenas:
+	add d
+	ld d,&0a
+	ld hl,Dezenas
+ProximaDezena:
+	sub d
+	jr c,ContaUnidades
+	inc (hl)
+jr ProximaDezena
+
+ContaUnidades:
+	add d
+	ld (Unidades),a
+	ld d,0
+
+ImprimeCentenas:
+	ld a,(Centenas)
+	cp &00
+	jr z,ImprimeDezenas
+	add a,&30		
+	call PrintChar
+	ld d,1
+ImprimeDezenas:
+	ld a,(Dezenas)
+	add d
+	cp &00
+	jr z,ImprimeUnidades
+	sub d
+	ld d,1
+	add a,&30		
+	call PrintChar
+ImprimeUnidades:
+	ld a,(Unidades)
+	add a,&30		
+	call PrintChar
+ret
+
+; ========================================================================================
 ; Imprime uma Nova linha
 ; Nao usa parametros
 ; Altera => A
@@ -127,6 +192,17 @@ ret
 ; =========================================================================================
 ; FIM DAS FUNCOES GERAIS
 ; =========================================================================================
+
+; =========================================================================================
+; NUMEROS
+; =========================================================================================
+Centenas:
+	defb &00
+Dezenas:
+	defb &00
+Unidades:
+	defb &00
+
 ; =========================================================================================
 ; STRINGS
 ; =========================================================================================
@@ -138,5 +214,9 @@ MsgUsuario3:
 	db "Esta Errado.",13
 MsgUsuario4:
 	db "Contador de erro:",13
+MsgUsuario5:
+	db "Parabens! Acertou tudo!",13
+MsgUsuario6:
+	db "Erros:",13
 Frase:
 	db "1234567890",13
