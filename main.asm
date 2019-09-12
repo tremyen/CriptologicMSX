@@ -1,6 +1,6 @@
 ;=========================================================================================
-; Criptologic para MSX 
-; Versao 1.0 
+; Criptologic para Z80
+; Versao 1.0
 ; Manoel Neto 2019-09-09
 ;=========================================================================================
 ; ========================================================================================
@@ -32,8 +32,8 @@ org &8000
 	call NovaLinha		; Pula uma linha
 	call Embaralhar		; Embaralha a frase
 	ld hl,FraseEmbaralhada	; Carrega a frase embaralhada
-	call PrintString	; imprime 
-	call NovaLinha		; Pula uma linha	
+	call PrintString	; imprime
+	call NovaLinha		; Pula uma linha
 ret
 
 ;=========================================================================================
@@ -55,7 +55,7 @@ PegarMensagem:
 	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
 	call PrintString	; Imprime a mensagem
 	call LimpaString	; limpa a string a cada execucao
-	ld hl,Frase		; Pegar a frase limpa 
+	ld hl,Frase		; Pegar a frase limpa
 	ld b,0			; zera o contador de letras
 LoopMensagem:
 	call WaitChar		; ler um caracter
@@ -63,18 +63,18 @@ LoopMensagem:
 	call PrintChar		; imprime o caracter
 	inc hl			; proximo endereco
 	inc b			; aumenta o contador de letras
-	cp 13			; compara o carcter entrado com o ENTER(13)				
-	jp z,ValidaDuasLetras	; se a frase terminou por enter 
+	cp 13			; compara o carcter entrado com o ENTER(13)
+	jp z,ValidaDuasLetras	; se a frase terminou por enter
 	ld a,b			; prepara o contador para comparar
 	ld (TamanhoFrase),a	; guarda o tamanho da frase digitada
 	cp 14			; compara o contador com 14
 	ret z			; se A-14 = 0 vc ja digitou 14 letras
 	jp LoopMensagem		; pega o proximo
-ValidaDuasLetras:		
+ValidaDuasLetras:
 	ld a,(TamanhoFrase)	; prepara o contador para comparar
 	cp 3			; compara com 3, pois o enter eh um caracter
-	ret nc			; se a >= 2 esta ok, retorna	
-jp PegarMensagem	
+	ret nc			; se a >= 2 esta ok, retorna
+jp PegarMensagem
 
 ;=========================================================================================
 ; Sortear numeros aleatorios entre 1 e o tamanho da frase
@@ -110,7 +110,7 @@ ret
 
 AcharDivIdeal:
 	ld a,(TamanhoFrase)		; pegar o tamanho da frase
-	ld b,a				; usar o tamanho da frase como divisor			
+	ld b,a				; usar o tamanho da frase como divisor
 	ld a,128			; Dividir 128 pelo tamanho da frase
 	ld d,0				; contador de subtracao sucessivas
 DivPorTamanho:
@@ -118,12 +118,12 @@ DivPorTamanho:
 	inc d				; aumenta o acumulador
 	jr nc, DivPorTamanho   		; repete enquanto nao tem "vai um"
 	dec d				; elimina o resto
-	ld a,d				; nesse momento D tem o divisior ideal	
-	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal	
+	ld a,d				; nesse momento D tem o divisior ideal
+	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal
 ret
 
 SortearNumero:
-	ld a,(DivisorIdeal)		; carrega o divisor ideal		
+	ld a,(DivisorIdeal)		; carrega o divisor ideal
 	ld b,a				; carrega o divisor ideal
 	ld a,r				; registrador r fornece um aleatorio entre 1 e 128
 	ld d,0				; contador de subtracao sucessivas
@@ -139,26 +139,26 @@ ret
 
 ValidarMaiorN:
 	ld a,(TamanhoFrase)		; pegar o tamanho da frase
-	inc a				; temos de comparar com A < 
+	inc a				; temos de comparar com A <
 	ld b,a				; guarda tamanho frase+1
 	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
 	cp b				; A < TamFrase+1 ?
 	jp c,ValidadoMaiorN		; A < TamFrase+1 ?
 	jp SortearDeNovo
 ValidarJaFoi:
-	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
-	ld hl,NumSorteados		; pega o endereco da matriz	
-AcharFimFrase:				; Comeca o loop para chegar no fim da frase	
+	ld a,(TamanhoFrase)		; pega o tamnaho da entrada
+	ld hl,NumSorteados		; pega o endereco da matriz
+AcharFimFrase:				; Comeca o loop para chegar no fim da frase
 	cp 0				; se andamos todo o tam. da entrada
 	jp z,AcheiFimFrase		; achamos o endereco final da entrada
 	inc hl				; proxima posicao
 	dec a				; controla se chegamos no fim
-	jp AcharFimFrase		; senao continuamos procurando	
+	jp AcharFimFrase		; senao continuamos procurando
 AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
-	ld a,(TamanhoFrase)		; pega o tamanho da entrada 	
+	ld a,(TamanhoFrase)		; pega o tamanho da entrada
 	inc a
-	ld c,a				; prepara parte baixa do loop de CPDR 
-	ld b,0				; prepara parte alta do loop de CPDR	
+	ld c,a				; prepara parte baixa do loop de CPDR
+	ld b,0				; prepara parte alta do loop de CPDR
 	ld a,(NumAleatorio)  		; pega o numero aleatorio para a pesquisa na matriz
 	cpdr 				; procura a matriz ate achar A
 	jp z,SortearDeNovo		; Achou! Precisamos sortear de novo!
@@ -182,7 +182,7 @@ ret
 
 ;=========================================================================================
 ; Embaralhar Frase
-; Pegar o numero sorteado 
+; Pegar o numero sorteado
 ; Pegar letra relativa ao numero sorteado
 ; Gravar letra na frase embaralhada
 ;=========================================================================================
@@ -191,15 +191,15 @@ Embaralhar:
 	call PrintString		; imprime a mensagem
 	ld a,0				; prepara primeira passada
 	ld (ContEmbaralha),a		; zera o contador de embaralhamento
-GravarProxima:	
-	call AcharPosSort		; achar a posicao sorteada 
+GravarProxima:
+	call AcharPosSort		; achar a posicao sorteada
 	call AcharLetra			; acha a letra dessa passada
 	call GravarLetra		; gravar a letra dessa passada
 	ld a,(TamanhoFrase)
 	ld b,a
-	ld a,(ContEmbaralha)		
+	ld a,(ContEmbaralha)
 	cp b				; se pegamos todos
-	jp z,GravouTudo			; gravamos tudo 
+	jp z,GravouTudo			; gravamos tudo
 	inc a 				; senao vamos para a proxima
 	ld (ContEmbaralha),a		; e guardamos no contador
 	jp GravarProxima		; pega a proxima
@@ -226,7 +226,7 @@ AcharLetra:
 	ld hl,Frase
 LoopAcharLetra:
 	cp 0
-	jp z,AchouLetra			
+	jp z,AchouLetra
 	dec a
 	inc hl
 	jp LoopAcharLetra
@@ -242,9 +242,9 @@ GravarLetra:
 	ld hl,FraseEmbaralhada
 LoopGravarLetra:
 	cp b
-	jp z,AchouPosGravar			
+	jp z,AchouPosGravar
 	inc hl
-	inc a	
+	inc a
 	jp LoopGravarLetra
 AchouPosGravar:
 	ld a,(LetraAtual)
@@ -254,9 +254,9 @@ AchouPosGravar:
 ret
 
 ;=========================================================================================
-; Imprimir os numeros sorteados 
+; Imprimir os numeros sorteados
 ; Imprimir a matriz de numeros sorteados
-; Altera => A,B,HL 
+; Altera => A,B,HL
 ;=========================================================================================
 ImprimeSorteios:
 	ld hl,MsgUsuario2		; Carrega mensagem para o usuario
@@ -268,17 +268,17 @@ ProxNum:
 	ld a,(hl)			; Le o primeiro numero
 	call ConvNumChar		; Converte o numero no seu ascii
 	ld a,(CharConvertido)		; Carrega o caracter convertido
-	call PrintChar			; Imprime	
+	call PrintChar			; Imprime
 	ld a, ' '			; Carrega um espaco
-	call PrintChar			; Imprime um espaco		
+	call PrintChar			; Imprime um espaco
 	dec b				; Incrementa o contador de loop
 	ld a,b				; prepara o contador para comparacao
 	cp 0				; Testa se e o fim dos sorteios
 	jp z,FimImpSorteio		; Imprimiu todos
 	inc hl				; Prepara o proximo endereco
-	jp ProxNum			; Pega o proximo	
-FimImpSorteio:	
-ret	
+	jp ProxNum			; Pega o proximo
+FimImpSorteio:
+ret
 
 ; =========================================================================================
 ; FIM DAS FUNCOES DO PROGRAMA
@@ -304,11 +304,11 @@ LimpaMem:
 	ld (LetraAtual),a
 	ld (ContEmbaralha),a
 	ld hl,NumSorteados		; Zera Matriz
-	call ZerarMatriz		
+	call ZerarMatriz
 	ld a,' ' 			; Limpa Caracteres
-	ld (CharConvertido), a		
+	ld (CharConvertido), a
 	ld hl,Frase 			; Limpa Strings
-	call LimpaString		
+	call LimpaString
 	ld hl,FraseEmbaralhada
 	call LimpaString
 ret
@@ -321,7 +321,7 @@ ret
 NovaLinha:
 	ld a, 13
 	call PrintChar
-	ld a, 10 
+	ld a, 10
 	call PrintChar
 ret
 ; ========================================================================================
@@ -337,7 +337,7 @@ PrintString:
 	jp z,EndString
 	call PrintChar
 	inc hl
-	jp PrintString	
+	jp PrintString
 EndString:
 ret
 ; ========================================================================================
