@@ -36,7 +36,6 @@ org &8000
 	call NovaLinha		; Pula uma linha
 	call PegarChuteJogador	; Pegar os chutes do jogador
 ret
-
 ;=========================================================================================
 ; FIM DO PROGRAMA
 ;=========================================================================================
@@ -45,13 +44,13 @@ ret
 ; INICIO DAS FUNCOES DO PROGRAMA
 ;=========================================================================================
 
-; ============================================================================
+; ========================================================================================
 ; Pegar uma mensagem de no minimo 2 caracteres e no maximo 14
-; Receber a mensagem
-; Validar o numero de caracteres durante a digitacao
-; HL => Endereco da Frase
+; ========================================================================================
+; Nao usa parametros
+; ========================================================================================
 ; Altera => HL,B,A
-;=============================================================================
+; ========================================================================================
 PegarMensagem:
 	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
 	call PrintString	; Imprime a mensagem
@@ -77,24 +76,22 @@ ValidaDuasLetras:
 	ret nc			; se a >= 2 esta ok, retorna
 jp PegarMensagem
 
-;=========================================================================================
+; ========================================================================================
 ; Sortear numeros aleatorios entre 1 e o tamanho da frase
-; Jogar o resultado para a variavel NumAleatorio =>(9001)
-; Validar se esse numero ja foi sorteado => (ValidarJaFoi)
-; Jogar o resultado para a matriz de numeros sorteados =>(NumerosSorteados)
-; Imprimir a matriz de numeros sorteados
+; ========================================================================================
+; Nao usa parametros
+; ========================================================================================
 ; Altera => A,C,D,HL,NumSorteios,NumAleatorio
-;=========================================================================================
+; ========================================================================================
 SortearNumeros:
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
-	call AcharDivIdeal		; achar o divisor ideal para a entrada do
-					; jogador 1
+	call AcharDivIdeal		; achar o divisor ideal para a frase
 SortearDeNovo:
 	call SortearNumero		; Sorteei o numero em NumAleatorio
 	jp ValidarMaiorN		; O numero nao pode ser maior que a entrada
 ValidadoMaiorN:
-	jp ValidarJafoi			; O Numero nao pode se repetir
+	jp ValidarJafoi			; O numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
 	call ConvNumChar 		; Converte o numero em digito 1-F
@@ -182,12 +179,13 @@ AcheiPosMat:
 	ld (hl),a
 ret
 
-;=========================================================================================
-; Embaralhar Frase
-; Pegar o numero sorteado
-; Pegar letra relativa ao numero sorteado
-; Gravar letra na frase embaralhada
-;=========================================================================================
+; ========================================================================================
+; Embaralhar a Frase
+; ========================================================================================
+; Nao usa parametros
+; ========================================================================================
+; Altera => HL,A,B,ContaEmbaralha,PosSorteada,LetraAtual
+; ========================================================================================
 Embaralhar:
 	ld hl,MsgUsuario3		; Carrega a quarta mensagem para o usuario
 	call PrintString		; imprime a mensagem
@@ -261,12 +259,13 @@ ImprimirFraseEmbaralhada:
 	call PrintString	; imprime
 ret
 
-
-;=========================================================================================
+; ========================================================================================
 ; Imprimir os numeros sorteados
-; Imprimir a matriz de numeros sorteados
+; ========================================================================================
+; Nao usa parametros
+; ========================================================================================
 ; Altera => A,B,HL
-;=========================================================================================
+; ========================================================================================
 ImprimeSorteios:
 	ld hl,MsgUsuario2		; Carrega mensagem para o usuario
 	call PrintString		; Imprime a mensagem
@@ -291,11 +290,10 @@ ret
 
 ; =========================================================================================
 ; Pegar os chutes do jogador 2
-; =========================================================================================
-; Pegar chute e gravar => (CaracterTestar)
-; Testar se o caracter esta na posicao atual (TestarCorreto)
-; Testar se o jogador acertou toda a entrada
-; Imprimir a mensagem de acertou e o contador de erros
+; ========================================================================================= 
+; Nao usa parametros
+; ========================================================================================= 
+; Altera => A,ContTeste,ContErros,HL,B,CaracterTestar
 ; =========================================================================================
 PegarChuteJogador:
         ld a,0
@@ -374,6 +372,7 @@ ret
 ; Inicializar as variaveis com zero
 ; =========================================================================================
 ; Nao usa parametros
+; =========================================================================================
 ; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,PosSorteada,
 ; 	    LetraAtual,ContEmbaralha,ContTeste,ContErros,NumSorteados,CharConvertido,
 ;	    CaracterTestar,Frase,FraseEmbaralhada
@@ -408,6 +407,7 @@ ret
 ; Imprime uma Nova linha
 ; ========================================================================================
 ; Nao usa parametros
+; ========================================================================================
 ; Altera => A
 ; ========================================================================================
 NovaLinha:
@@ -422,6 +422,7 @@ ret
 ; Imprime uma string terminada em ENTER(13)
 ; ========================================================================================
 ; HL => Endereco da string
+; ========================================================================================
 ; Altera => A,HL
 ; ========================================================================================
 PrintString:
@@ -439,6 +440,7 @@ ret
 ; Imprime um Numero
 ; ========================================================================================
 ; A => Numero a ser impresso (8 bits, 255)
+; ========================================================================================
 ; Altera => A,HL,D
 ; ========================================================================================
 PrintNumber:
@@ -497,7 +499,9 @@ ret
 
 ; ========================================================================================
 ; Limpa uma string terminada em ENTER(13)
+; ========================================================================================
 ; HL => Endereco da string
+; ========================================================================================
 ; Altera => A, HL
 ; ========================================================================================
 LimpaString:
@@ -510,10 +514,14 @@ LimpaString:
 	jp LimpaString
 LimpouString:
 ret
+; ========================================================================================
 
 ; ========================================================================================
 ; Zerar uma Matriz terminada em 255
+; ========================================================================================
 ; HL => Endereco da Matriz
+; ========================================================================================
+; ALTERA => A,HL
 ; ========================================================================================
 ZerarMatriz:
 	ld a,(hl)
@@ -525,14 +533,14 @@ ZerarMatriz:
 	jp ZerarMatriz
 ZerouMatriz:
 ret
-
 ; ========================================================================================
 
 ; ========================================================================================
-; ConvNumChar
 ; Converter um numero de 0 a 15 em seu digito hexadecimal
+; ========================================================================================
 ; A => Numero a ser convertido
-; ALTERA => A
+; ========================================================================================
+; ALTERA => A,CharConvertido
 ; ========================================================================================
 ConvNumChar:
 	cp 0
@@ -646,7 +654,6 @@ QuinzeF:
 	ld a,'F'
 	ld (CharConvertido),a
 ret
-
 ;=========================================================================================
 ; FIM DAS FUNCOES GERAIS
 ;=========================================================================================
