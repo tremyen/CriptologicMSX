@@ -82,10 +82,10 @@ AchouTeste:
 	call Novalinha 
 	jp LoopPegaChar
 ImprimirErros:
-	ld hl,MsgUsuario5
+	ld hl,MsgUsuario4
 	call PrintString
 	call Novalinha
-	ld hl,MsgUsuario6
+	ld hl,MsgUsuario5
 	call PrintString
 	ld a,(ContErros)
 	call PrintNumber
@@ -114,9 +114,9 @@ EndString:
 ret
 
 ; ========================================================================================
-; Imprime uma Numero
-; A => Numero a ser impresso
-; Altera => A,HL
+; Imprime um Numero
+; A => Numero a ser impresso (8 bits, 255)
+; Altera => A,HL,D
 ; ========================================================================================
 PrintNumber:
 	ld hl,Centenas
@@ -200,17 +200,15 @@ Unidades:
 ; =========================================================================================
 ; STRINGS
 ; =========================================================================================
-MsgUsuario1:
-	db "Entre um caracter:",13
-MsgUsuario2:
-	db "Esta Correto!",13
-MsgUsuario3:
-	db "Esta Errado.",13
 MsgUsuario4:
-	db "Contador de erro:",13
+	db "Entre um caracter:",13
 MsgUsuario5:
-	db "Parabens! Acertou tudo!",13
+	db "Esta Correto!",13
 MsgUsuario6:
+	db "Esta Errado.",13
+MsgUsuario7:
+	db "Parabens! Acertou tudo!",13
+MsgUsuario8:
 	db "Erros:",13
 Frase:
 	db "1234567890",13

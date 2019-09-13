@@ -1,13 +1,14 @@
 ;=========================================================================================
 ; Criptologic para Z80
-; Versao 1.0
+;=========================================================================================
+; Versao 0.1 (Prototipo)
 ; Manoel Neto 2019-09-09
 ;=========================================================================================
 ; ========================================================================================
 ; BIOS
 ; ========================================================================================
-WaitChar		equ &BB06 	; Funcao => Aguarda uma entrada
-PrintChar		equ &BB5A	; Funcao => Imprime um caracter
+KM_WAIT_CHAR		equ &BB06 	; Funcao => Aguarda uma entrada
+TXT_OUTPUT		equ &BB5A	; Funcao => Imprime um caracter
 ; ========================================================================================
 ; VARIAVEIS
 ; ========================================================================================
@@ -19,7 +20,9 @@ DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
 PosSorteada		equ &9005	; Variavel => Posicao Sorteada
 LetraAtual		equ &9006	; Variavel => Letra na posicao sorteada
 ContEmbaralha		equ &9007	; Variavel => Contador de embaralhamento
-
+CaracterTestar		equ &9008	; Variavel => Guarda o caracter para testar
+ContTeste		equ &9009	; Variavel => Conta o teste atual
+ContErros		equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
 ;=========================================================================================
 ; INICIO DO PROGRAMA
 ;=========================================================================================
@@ -27,13 +30,11 @@ org &8000
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
-	call SortearNumeros	; Sortear os numeros para embaralhar a frase
-	call ImprimeSorteios	; Imprime numeros sorteados
+	call SortearNumeros	; Sortear os numeros para embaralhar a frase	
 	call NovaLinha		; Pula uma linha
 	call Embaralhar		; Embaralha a frase
-	ld hl,FraseEmbaralhada	; Carrega a frase embaralhada
-	call PrintString	; imprime
 	call NovaLinha		; Pula uma linha
+	call PegarChuteJogador	; Pegar os chutes do jogador
 ret
 
 ;=========================================================================================
@@ -58,9 +59,9 @@ PegarMensagem:
 	ld hl,Frase		; Pegar a frase limpa
 	ld b,0			; zera o contador de letras
 LoopMensagem:
-	call WaitChar		; ler um caracter
+	call KM_WAIT_CHAR	; ler um caracter
 	ld (hl),a		; guarda o ascii desse caracter
-	call PrintChar		; imprime o caracter
+	call TXT_OUTPUT		; imprime o caracter
 	inc hl			; proximo endereco
 	inc b			; aumenta o contador de letras
 	cp 13			; compara o carcter entrado com o ENTER(13)
@@ -106,6 +107,7 @@ ValidadoJaFoi:
 	ld (NumSorteios),a		; Grava o numero de sorteios
 	jp SortearDeNovo		; faz de novo
 FimSorteio:
+	call ImprimeSorteios		; Imprime numeros sorteados
 ret
 
 AcharDivIdeal:
@@ -204,6 +206,7 @@ GravarProxima:
 	ld (ContEmbaralha),a		; e guardamos no contador
 	jp GravarProxima		; pega a proxima
 GravouTudo:
+	call ImprimirFraseEmbaralhada
 ret
 
 AcharPosSort:
@@ -253,6 +256,12 @@ AchouPosGravar:
 	ld (hl),13
 ret
 
+ImprimirFraseEmbaralhada:
+	ld hl,FraseEmbaralhada	; Carrega a frase embaralhada
+	call PrintString	; imprime
+ret
+
+
 ;=========================================================================================
 ; Imprimir os numeros sorteados
 ; Imprimir a matriz de numeros sorteados
@@ -268,9 +277,9 @@ ProxNum:
 	ld a,(hl)			; Le o primeiro numero
 	call ConvNumChar		; Converte o numero no seu ascii
 	ld a,(CharConvertido)		; Carrega o caracter convertido
-	call PrintChar			; Imprime
+	call TXT_OUTPUT			; Imprime
 	ld a, ' '			; Carrega um espaco
-	call PrintChar			; Imprime um espaco
+	call TXT_OUTPUT			; Imprime um espaco
 	dec b				; Incrementa o contador de loop
 	ld a,b				; prepara o contador para comparacao
 	cp 0				; Testa se e o fim dos sorteios
@@ -278,6 +287,79 @@ ProxNum:
 	inc hl				; Prepara o proximo endereco
 	jp ProxNum			; Pega o proximo
 FimImpSorteio:
+ret
+
+; =========================================================================================
+; Pegar os chutes do jogador 2
+; =========================================================================================
+; Pegar chute e gravar => (CaracterTestar)
+; Testar se o caracter esta na posicao atual (TestarCorreto)
+; Testar se o jogador acertou toda a entrada
+; Imprimir a mensagem de acertou e o contador de erros
+; =========================================================================================
+PegarChuteJogador:
+        ld a,0
+	ld (ContTeste),a
+	ld (ContErros),a
+LoopPegaChar:
+	call PegarEntrada
+	jp TestarCorreto
+EstaCorreto:
+	ld hl,MsgUsuario5
+	call PrintString
+	call NovaLinha	
+	ld a,(TamanhoFrase)
+	dec a
+	ld b,a
+	ld a,(ContTeste)
+	cp b
+	jp z,Acertou
+	inc a
+	ld (ContTeste),a
+	jp LoopPegaChar	
+Acertou:
+	call ImprimirErros
+ret
+
+PegarEntrada:
+	ld hl,MsgUsuario4
+	call PrintString
+	call KM_WAIT_CHAR
+	ld (CaracterTestar),a
+	call NovaLinha
+ret
+
+TestarCorreto:
+	ld hl,Frase	
+	ld a,(ContTeste)			; Conta o teste
+AcharPosicaoTeste:
+	cp 0
+	jp z,AchouTeste
+	inc hl
+	dec a					; proximo teste
+	jp AcharPosicaoTeste	
+AchouTeste:
+	ld a,(hl)
+	ld b,a
+	ld a,(CaracterTestar)
+	cp b
+	jp z,EstaCorreto	
+	ld a,(ContErros)
+	inc a
+	ld (ContErros),a
+	ld hl,MsgUsuario6
+	call PrintString
+	call Novalinha 
+	jp LoopPegaChar
+ImprimirErros:
+	ld hl,MsgUsuario7
+	call PrintString
+	call Novalinha
+	ld hl,MsgUsuario8
+	call PrintString
+	ld a,(ContErros)
+	call PrintNumber
+	call Novalinha
 ret
 
 ; =========================================================================================
@@ -290,12 +372,15 @@ ret
 
 ; =========================================================================================
 ; Inicializar as variaveis com zero
+; =========================================================================================
 ; Nao usa parametros
 ; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,PosSorteada,
-; 	    LetraAtual,ContEmbaralha,NumSorteados,CharConvertido,Frase,FraseEmbaralhada
+; 	    LetraAtual,ContEmbaralha,ContTeste,ContErros,NumSorteados,CharConvertido,
+;	    CaracterTestar,Frase,FraseEmbaralhada
 ; =========================================================================================
 LimpaMem:
-	ld a, 0				; Zera Numericos
+	; ========== Zera Numericos ==========
+	ld a, 0				
 	ld (TamanhoFrase),a
 	ld (NumAleatorio),a
 	ld (NumSorteios),a
@@ -303,11 +388,17 @@ LimpaMem:
 	ld (PosSorteada),a
 	ld (LetraAtual),a
 	ld (ContEmbaralha),a
-	ld hl,NumSorteados		; Zera Matriz
+	ld (ContTeste),a
+	ld (ContErros),a
+	; ========== Zera Matrizes ==========
+	ld hl,NumSorteados		
 	call ZerarMatriz
-	ld a,' ' 			; Limpa Caracteres
-	ld (CharConvertido), a
-	ld hl,Frase 			; Limpa Strings
+	; ========== Zera Caracteres ==========
+	ld a,' ' 			
+	ld (CharConvertido),a
+	ld (CaracterTestar),a
+	; ========== Zera Strings ==========
+	ld hl,Frase 			
 	call LimpaString
 	ld hl,FraseEmbaralhada
 	call LimpaString
@@ -315,19 +406,21 @@ ret
 
 ; ========================================================================================
 ; Imprime uma Nova linha
+; ========================================================================================
 ; Nao usa parametros
 ; Altera => A
 ; ========================================================================================
 NovaLinha:
 	ld a, 13
-	call PrintChar
+	call TXT_OUTPUT
 	ld a, 10
-	call PrintChar
+	call TXT_OUTPUT
 ret
 ; ========================================================================================
 
 ; ========================================================================================
 ; Imprime uma string terminada em ENTER(13)
+; ========================================================================================
 ; HL => Endereco da string
 ; Altera => A,HL
 ; ========================================================================================
@@ -335,10 +428,70 @@ PrintString:
 	ld a,(hl)
 	cp 13
 	jp z,EndString
-	call PrintChar
+	call TXT_OUTPUT
 	inc hl
 	jp PrintString
 EndString:
+ret
+; ========================================================================================
+
+; ========================================================================================
+; Imprime um Numero
+; ========================================================================================
+; A => Numero a ser impresso (8 bits, 255)
+; Altera => A,HL,D
+; ========================================================================================
+PrintNumber:
+	ld hl,Centenas
+	ld (hl),&00
+	ld hl,Dezenas
+	ld (hl),&00
+	ld hl,Unidades
+	ld (hl),&00
+ContaCentenas:
+	ld d,&64
+	ld hl,Centenas
+ProximaCentena:
+	sub d
+	jr c,ContarDezenas
+	inc (hl)
+jr ProximaCentena
+
+ContarDezenas:
+	add d
+	ld d,&0a
+	ld hl,Dezenas
+ProximaDezena:
+	sub d
+	jr c,ContaUnidades
+	inc (hl)
+jr ProximaDezena
+
+ContaUnidades:
+	add d
+	ld (Unidades),a
+	ld d,0
+
+ImprimeCentenas:
+	ld a,(Centenas)
+	cp &00
+	jr z,ImprimeDezenas
+	add a,&30		
+	call TXT_OUTPUT
+	ld d,1
+ImprimeDezenas:
+	ld a,(Dezenas)
+	add d
+	cp &00
+	jr z,ImprimeUnidades
+	sub d
+	ld d,1
+	add a,&30		
+	call TXT_OUTPUT
+ImprimeUnidades:
+	ld a,(Unidades)
+	add a,&30		
+	call TXT_OUTPUT
 ret
 ; ========================================================================================
 
@@ -498,6 +651,16 @@ ret
 ; FIM DAS FUNCOES GERAIS
 ;=========================================================================================
 
+; =========================================================================================
+; NUMEROS
+; =========================================================================================
+Centenas:
+	defb &00
+Dezenas:
+	defb &00
+Unidades:
+	defb &00
+
 ;=========================================================================================
 ; MATRIZES
 ;=========================================================================================
@@ -513,6 +676,16 @@ MsgUsuario2:
 	db "Embaralhar:",13
 MsgUsuario3:
 	db "Frase Embaralhada:",13
+MsgUsuario4:
+	db "Entre um caracter:",13
+MsgUsuario5:
+	db "Esta Correto!",13
+MsgUsuario6:
+	db "Esta Errado.",13
+MsgUsuario7:
+	db "Parabens! Acertou tudo!",13
+MsgUsuario8:
+	db "Erros:",13
 Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
 FraseEmbaralhada:
