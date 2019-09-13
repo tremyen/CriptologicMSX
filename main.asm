@@ -1,31 +1,31 @@
-;=========================================================================================
+; ========================================================================================
 ; Criptologic para Z80
-;=========================================================================================
+; ========================================================================================
 ; Versao 0.1 (Prototipo)
 ; Manoel Neto 2019-09-09
-;=========================================================================================
+; ========================================================================================
 ; ========================================================================================
 ; BIOS
 ; ========================================================================================
-KM_WAIT_CHAR		equ &BB06 	; Funcao => Aguarda uma entrada
-TXT_OUTPUT		equ &BB5A	; Funcao => Imprime um caracter
+KM_WAIT_CHAR	equ &BB06 	; Funcao => Aguarda uma entrada
+TXT_OUTPUT	equ &BB5A	; Funcao => Imprime um caracter
 ; ========================================================================================
 ; VARIAVEIS
 ; ========================================================================================
-TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
-NumAleatorio 		equ &9001	; Variavel => Numero sorteado
-CharConvertido 		equ &9002	; Variavel => Caracter Convertido
-NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
-DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
-PosSorteada		equ &9005	; Variavel => Posicao Sorteada
-LetraAtual		equ &9006	; Variavel => Letra na posicao sorteada
-ContEmbaralha		equ &9007	; Variavel => Contador de embaralhamento
-CaracterTestar		equ &9008	; Variavel => Guarda o caracter para testar
-ContTeste		equ &9009	; Variavel => Conta o teste atual
-ContErros		equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
-;=========================================================================================
+TamanhoFrase	equ &9000	; Variavel => Tamanho da entrada Jog 1
+NumAleatorio 	equ &9001	; Variavel => Numero sorteado
+CharConvertido	equ &9002	; Variavel => Caracter Convertido
+NumSorteios 	equ &9003	; Variavel => Numero de sorteios realizados
+DivisorIdeal	equ &9004	; Variavel => Divisor ideal de acordo com a frase
+PosSorteada	equ &9005	; Variavel => Posicao Sorteada
+LetraAtual	equ &9006	; Variavel => Letra na posicao sorteada
+ContEmbaralha	equ &9007	; Variavel => Contador de embaralhamento
+CaracterTestar	equ &9008	; Variavel => Guarda o caracter para testar
+ContTeste	equ &9009	; Variavel => Conta o teste atual
+ContErros	equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
+; ========================================================================================
 ; INICIO DO PROGRAMA
-;=========================================================================================
+; ========================================================================================
 org &8000
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
@@ -36,10 +36,6 @@ org &8000
 	call NovaLinha		; Pula uma linha
 	call PegarChuteJogador	; Pegar os chutes do jogador
 ret
-;=========================================================================================
-; FIM DO PROGRAMA
-;=========================================================================================
-
 ;=========================================================================================
 ; INICIO DAS FUNCOES DO PROGRAMA
 ;=========================================================================================
@@ -85,82 +81,82 @@ jp PegarMensagem
 ; ========================================================================================
 SortearNumeros:
 	ld a,0
-	ld (NumSorteios),a		; Primeiro sorteio
-	call AcharDivIdeal		; achar o divisor ideal para a frase
+	ld (NumSorteios),a	; Primeiro sorteio
+	call AcharDivIdeal	; achar o divisor ideal para a frase
 SortearDeNovo:
-	call SortearNumero		; Sorteei o numero em NumAleatorio
-	jp ValidarMaiorN		; O numero nao pode ser maior que a entrada
+	call SortearNumero	; Sorteei o numero em NumAleatorio
+	jp ValidarMaiorN	; O numero nao pode ser maior que a entrada
 ValidadoMaiorN:
-	jp ValidarJafoi			; O numero nao pode se repetir
+	jp ValidarJafoi		; O numero nao pode se repetir
 ValidadoJaFoi:
-	call GravarNaMatriz		; Grava o sorteio na matriz
-	call ConvNumChar 		; Converte o numero em digito 1-F
-	ld a,(TamanhoFrase)		; carrega o contador de sorteios
-	ld c,a				; so irei sortear de acordo com a entrada
-	ld a,(NumSorteios)		; Pega o numero de sorteios
-	inc a				; Aumenta numero de sorteios
-	cp c				; testa se eh ultimo sorteio
-	jp z,FimSorteio			; Acabou
-	ld (NumSorteios),a		; Grava o numero de sorteios
-	jp SortearDeNovo		; faz de novo
+	call GravarNaMatriz	; Grava o sorteio na matriz
+	call ConvNumChar 	; Converte o numero em digito 1-F
+	ld a,(TamanhoFrase)	; carrega o contador de sorteios
+	ld c,a			; so irei sortear de acordo com a entrada
+	ld a,(NumSorteios)	; Pega o numero de sorteios
+	inc a			; Aumenta numero de sorteios
+	cp c			; testa se eh ultimo sorteio
+	jp z,FimSorteio		; Acabou
+	ld (NumSorteios),a	; Grava o numero de sorteios
+	jp SortearDeNovo	; faz de novo
 FimSorteio:
-	call ImprimeSorteios		; Imprime numeros sorteados
+	call ImprimeSorteios	; Imprime numeros sorteados
 ret
 
 AcharDivIdeal:
-	ld a,(TamanhoFrase)		; pegar o tamanho da frase
-	ld b,a				; usar o tamanho da frase como divisor
-	ld a,128			; Dividir 128 pelo tamanho da frase
-	ld d,0				; contador de subtracao sucessivas
+	ld a,(TamanhoFrase)	; pegar o tamanho da frase
+	ld b,a			; usar o tamanho da frase como divisor
+	ld a,128		; Dividir 128 pelo tamanho da frase
+	ld d,0			; contador de subtracao sucessivas
 DivPorTamanho:
-	sub b 				; comeca a divisao pelo tamanho da frase
-	inc d				; aumenta o acumulador
-	jr nc, DivPorTamanho   		; repete enquanto nao tem "vai um"
-	dec d				; elimina o resto
-	ld a,d				; nesse momento D tem o divisior ideal
-	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal
+	sub b 			; comeca a divisao pelo tamanho da frase
+	inc d			; aumenta o acumulador
+	jr nc, DivPorTamanho 	; repete enquanto nao tem "vai um"
+	dec d			; elimina o resto
+	ld a,d			; nesse momento D tem o divisior ideal
+	ld (DivisorIdeal),a	; nesse momento A tem o divisior ideal
 ret
 
 SortearNumero:
-	ld a,(DivisorIdeal)		; carrega o divisor ideal
-	ld b,a				; carrega o divisor ideal
-	ld a,r				; registrador r fornece um aleatorio entre 1 e 128
-	ld d,0				; contador de subtracao sucessivas
+	ld a,(DivisorIdeal)	; carrega o divisor ideal
+	ld b,a			; carrega o divisor ideal
+	ld a,r			; registrador r fornece um aleatorio entre 1 e 128
+	ld d,0			; contador de subtracao sucessivas
 DividirPorIdeal:
-	sub b 				; comeca a divisao pelo divisor ideal
-	inc d				; aumenta o acumulador
-	jr nc, DividirPorIdeal 		; repete enquanto nao tem "vai um"
-	dec d				; elimina o resto
-	ld a,d				; prepara gravacao do numero
+	sub b 			; comeca a divisao pelo divisor ideal
+	inc d			; aumenta o acumulador
+	jr nc,DividirPorIdeal 	; repete enquanto nao tem "vai um"
+	dec d			; elimina o resto
+	ld a,d			; prepara gravacao do numero
 GravaAleatorio:
-	ld (NumAleatorio),a		; grava na variavel
+	ld (NumAleatorio),a	; grava na variavel
 ret
 
 ValidarMaiorN:
-	ld a,(TamanhoFrase)		; pegar o tamanho da frase
-	inc a				; temos de comparar com A <
-	ld b,a				; guarda tamanho frase+1
-	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
-	cp b				; A < TamFrase+1 ?
-	jp c,ValidadoMaiorN		; A < TamFrase+1 ?
+	ld a,(TamanhoFrase)	; pegar o tamanho da frase
+	inc a			; temos de comparar com A <
+	ld b,a			; guarda tamanho frase+1
+	ld a,(NumAleatorio)	; pega o numero aleatorio para comparacao
+	cp b			; A < TamFrase+1 ?
+	jp c,ValidadoMaiorN	; A < TamFrase+1 ?
 	jp SortearDeNovo
 ValidarJaFoi:
-	ld a,(TamanhoFrase)		; pega o tamnaho da entrada
-	ld hl,NumSorteados		; pega o endereco da matriz
-AcharFimFrase:				; Comeca o loop para chegar no fim da frase
-	cp 0				; se andamos todo o tam. da entrada
-	jp z,AcheiFimFrase		; achamos o endereco final da entrada
-	inc hl				; proxima posicao
-	dec a				; controla se chegamos no fim
-	jp AcharFimFrase		; senao continuamos procurando
-AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
-	ld a,(TamanhoFrase)		; pega o tamanho da entrada
+	ld a,(TamanhoFrase)	; pega o tamnaho da entrada
+	ld hl,NumSorteados	; pega o endereco da matriz
+AcharFimFrase:			; Comeca o loop para chegar no fim da frase
+	cp 0			; se andamos todo o tam. da entrada
+	jp z,AcheiFimFrase	; achamos o endereco final da entrada
+	inc hl			; proxima posicao
+	dec a			; controla se chegamos no fim
+	jp AcharFimFrase	; senao continuamos procurando
+AcheiFimFrase:			; nesse momento temos hl apontando para o lugar certo
+	ld a,(TamanhoFrase)	; pega o tamanho da entrada
 	inc a
-	ld c,a				; prepara parte baixa do loop de CPDR
-	ld b,0				; prepara parte alta do loop de CPDR
-	ld a,(NumAleatorio)  		; pega o numero aleatorio para a pesquisa na matriz
-	cpdr 				; procura a matriz ate achar A
-	jp z,SortearDeNovo		; Achou! Precisamos sortear de novo!
+	ld c,a			; prepara parte baixa do loop de CPDR
+	ld b,0			; prepara parte alta do loop de CPDR
+	ld a,(NumAleatorio)  	; pega o numero aleatorio para a pesquisa na matriz
+	cpdr 			; procura a matriz ate achar A
+	jp z,SortearDeNovo	; Achou! Precisamos sortear de novo!
 	jp ValidadoJaFoi
 
 GravarNaMatriz:
@@ -187,22 +183,22 @@ ret
 ; Altera => HL,A,B,ContaEmbaralha,PosSorteada,LetraAtual
 ; ========================================================================================
 Embaralhar:
-	ld hl,MsgUsuario3		; Carrega a quarta mensagem para o usuario
-	call PrintString		; imprime a mensagem
-	ld a,0				; prepara primeira passada
-	ld (ContEmbaralha),a		; zera o contador de embaralhamento
+	ld hl,MsgUsuario3	; Carrega a quarta mensagem para o usuario
+	call PrintString	; imprime a mensagem
+	ld a,0			; prepara primeira passada
+	ld (ContEmbaralha),a	; zera o contador de embaralhamento
 GravarProxima:
-	call AcharPosSort		; achar a posicao sorteada
-	call AcharLetra			; acha a letra dessa passada
-	call GravarLetra		; gravar a letra dessa passada
+	call AcharPosSort	; achar a posicao sorteada
+	call AcharLetra		; acha a letra dessa passada
+	call GravarLetra	; gravar a letra dessa passada
 	ld a,(TamanhoFrase)
 	ld b,a
 	ld a,(ContEmbaralha)
-	cp b				; se pegamos todos
-	jp z,GravouTudo			; gravamos tudo
-	inc a 				; senao vamos para a proxima
-	ld (ContEmbaralha),a		; e guardamos no contador
-	jp GravarProxima		; pega a proxima
+	cp b			; se pegamos todos
+	jp z,GravouTudo		; gravamos tudo
+	inc a 			; senao vamos para a proxima
+	ld (ContEmbaralha),a	; e guardamos no contador
+	jp GravarProxima	; pega a proxima
 GravouTudo:
 	call ImprimirFraseEmbaralhada
 ret
@@ -223,7 +219,7 @@ ret
 
 AcharLetra:
 	ld a,(PosSorteada)
-	dec a 				; enderecos comecam com 0
+	dec a 			; enderecos comecam com 0
 	ld hl,Frase
 LoopAcharLetra:
 	cp 0
@@ -255,8 +251,8 @@ AchouPosGravar:
 ret
 
 ImprimirFraseEmbaralhada:
-	ld hl,FraseEmbaralhada	; Carrega a frase embaralhada
-	call PrintString	; imprime
+	ld hl,FraseEmbaralhada		; Carrega a frase embaralhada
+	call PrintString		; imprime
 ret
 
 ; ========================================================================================
@@ -654,9 +650,9 @@ QuinzeF:
 	ld a,'F'
 	ld (CharConvertido),a
 ret
-;=========================================================================================
+; =========================================================================================
 ; FIM DAS FUNCOES GERAIS
-;=========================================================================================
+; =========================================================================================
 
 ; =========================================================================================
 ; NUMEROS
@@ -668,15 +664,15 @@ Dezenas:
 Unidades:
 	defb &00
 
-;=========================================================================================
+; ========================================================================================
 ; MATRIZES
-;=========================================================================================
+; ========================================================================================
 NumSorteados:
 	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,255
 
-;=========================================================================================
+; ========================================================================================
 ; STRINGS
-;=========================================================================================
+; ========================================================================================
 MsgUsuario1:
 	db "Entre sua mensagem:",13
 MsgUsuario2:
