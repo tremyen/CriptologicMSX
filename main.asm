@@ -22,7 +22,7 @@ LetraAtual	equ &9006	; Variavel => Letra na posicao sorteada
 ContEmbaralha	equ &9007	; Variavel => Contador de embaralhamento
 CaracterTestar	equ &9008	; Variavel => Guarda o caracter para testar
 ContTeste	equ &9009	; Variavel => Conta o teste atual
-ContErros	equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
+ContErros	equ &900A 	; Variavel => Conta os erros (Nao e 9010)!
 ; ========================================================================================
 ; INICIO DO PROGRAMA
 ; ========================================================================================
@@ -30,7 +30,7 @@ org &8000
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
-	call SortearNumeros	; Sortear os numeros para embaralhar a frase	
+	call SortearNumeros	; Sortear os numeros para embaralhar a frase
 	call NovaLinha		; Pula uma linha
 	call Embaralhar		; Embaralha a frase
 	call NovaLinha		; Pula uma linha
@@ -286,9 +286,9 @@ ret
 
 ; =========================================================================================
 ; Pegar os chutes do jogador 2
-; ========================================================================================= 
+; =========================================================================================
 ; Nao usa parametros
-; ========================================================================================= 
+; =========================================================================================
 ; Altera => A,ContTeste,ContErros,HL,B,CaracterTestar
 ; =========================================================================================
 PegarChuteJogador:
@@ -301,7 +301,7 @@ LoopPegaChar:
 EstaCorreto:
 	ld hl,MsgUsuario5
 	call PrintString
-	call NovaLinha	
+	call NovaLinha
 	ld a,(TamanhoFrase)
 	dec a
 	ld b,a
@@ -310,7 +310,7 @@ EstaCorreto:
 	jp z,Acertou
 	inc a
 	ld (ContTeste),a
-	jp LoopPegaChar	
+	jp LoopPegaChar
 Acertou:
 	call ImprimirErros
 ret
@@ -324,26 +324,26 @@ PegarEntrada:
 ret
 
 TestarCorreto:
-	ld hl,Frase	
+	ld hl,Frase
 	ld a,(ContTeste)			; Conta o teste
 AcharPosicaoTeste:
 	cp 0
 	jp z,AchouTeste
 	inc hl
 	dec a					; proximo teste
-	jp AcharPosicaoTeste	
+	jp AcharPosicaoTeste
 AchouTeste:
 	ld a,(hl)
 	ld b,a
 	ld a,(CaracterTestar)
 	cp b
-	jp z,EstaCorreto	
+	jp z,EstaCorreto
 	ld a,(ContErros)
 	inc a
 	ld (ContErros),a
 	ld hl,MsgUsuario6
 	call PrintString
-	call Novalinha 
+	call Novalinha
 	jp LoopPegaChar
 ImprimirErros:
 	ld hl,MsgUsuario7
@@ -375,7 +375,7 @@ ret
 ; =========================================================================================
 LimpaMem:
 	; ========== Zera Numericos ==========
-	ld a, 0				
+	ld a, 0
 	ld (TamanhoFrase),a
 	ld (NumAleatorio),a
 	ld (NumSorteios),a
@@ -386,14 +386,14 @@ LimpaMem:
 	ld (ContTeste),a
 	ld (ContErros),a
 	; ========== Zera Matrizes ==========
-	ld hl,NumSorteados		
+	ld hl,NumSorteados
 	call ZerarMatriz
 	; ========== Zera Caracteres ==========
-	ld a,' ' 			
+	ld a,' '
 	ld (CharConvertido),a
 	ld (CaracterTestar),a
 	; ========== Zera Strings ==========
-	ld hl,Frase 			
+	ld hl,Frase
 	call LimpaString
 	ld hl,FraseEmbaralhada
 	call LimpaString
@@ -474,7 +474,7 @@ ImprimeCentenas:
 	ld a,(Centenas)
 	cp &00
 	jr z,ImprimeDezenas
-	add a,&30		
+	add a,&30
 	call TXT_OUTPUT
 	ld d,1
 ImprimeDezenas:
@@ -484,11 +484,11 @@ ImprimeDezenas:
 	jr z,ImprimeUnidades
 	sub d
 	ld d,1
-	add a,&30		
+	add a,&30
 	call TXT_OUTPUT
 ImprimeUnidades:
 	ld a,(Unidades)
-	add a,&30		
+	add a,&30
 	call TXT_OUTPUT
 ret
 ; ========================================================================================
@@ -693,3 +693,4 @@ Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
 FraseEmbaralhada:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
+ 

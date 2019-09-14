@@ -4,39 +4,39 @@
 ; Versao 0.1 (Prototipo)
 ; Manoel Neto 2019-09-09
 ; =============================================================================
-__VERSION:  equ 0
-__RELEASE:  equ 1
-makeROM:
-romSize:    equ 16384       ; o tamanho que a ROM deve ter
-romArea:    equ &4000       ; minha ROM começa aqui
-ramArea:    equ &E000       ; inicio da área de variáveis
-org romArea
-db "AB"                     ; identifica como ROM
-dw Main                     ; endereço de execução
-db "AM01"                   ; string de identificação
-db __VERSION+48
-db __RELEASE+65
-ds 6,0
+ramArea:    equ &C000                  ; inicio da área de variáveis
+org &4000
+db "AB"
+dw Main
+db 00,00,00,00,00
 ; =============================================================================
 ; BIOS
 ; =============================================================================
-CHGET           equ &009F   ; Funcao => Aguarda uma entrada
-CHPUT           equ &00A2   ; Funcao => Imprime um caracter
+CHGET             equ &009F   ; Funcao => Aguarda uma entrada
+CHPUT             equ &00A2   ; Funcao => Imprime um caracter
 ; =============================================================================
 ; VARIAVEIS
 ; =============================================================================
-TamanhoFrase 		equ &E001   ; Variavel => Tamanho da entrada Jog 1
-NumAleatorio 		equ &E002   ; Variavel => Numero sorteado
-CharConvertido 	equ &E003	  ; Variavel => Caracter Convertido
-NumSorteios 		equ &E004	  ; Variavel => Numero de sorteios realizados
-DivisorIdeal 		equ &E005	  ; Variavel => Divisor ideal de acordo com a frase
-PosSorteada     equ &E006	  ; Variavel => Posicao Sorteada
-LetraAtual      equ &E007	  ; Variavel => Letra na posicao sorteada
-ContEmbaralha		equ &E008	  ; Variavel => Contador de embaralhamento
-CaracterTestar	equ &E009	  ; Variavel => Guarda o caracter para testar
-ContTeste       equ &E00A	  ; Variavel => Conta o teste atual
-ContErros       equ &E00B	  ; Variavel => Conta os erros (Nao e 9010)!
-
+TamanhoFrase:     equ ramArea
+NumAleatorio:     equ ramArea+1
+CharConvertido:   equ ramArea+2
+NumSorteios:      equ ramArea+3
+DivisorIdeal:     equ ramArea+4
+PosSorteada:      equ ramArea+5
+LetraAtual:       equ ramArea+6
+ContEmbaralha:    equ ramArea+7
+CaracterTestar:   equ ramArea+8
+ContTeste:        equ ramArea+9
+ContErros:        equ ramArea+10
+Centenas:         equ ramArea+11
+Dezenas:          equ ramArea+12
+Unidades:         equ ramArea+13
+NumSorteados:     equ ramArea+14
+Frase:            equ ramArea+29
+FraseEmbaralhada: equ ramArea+44
+; =============================================================================
+; Inicio do PROGRAMA
+; =============================================================================
 Main:
   call LimpaMem             ; Limpa a memoria a cada execucao
   call PegarMensagem        ; Obtem a mensagem do usuario
@@ -47,9 +47,6 @@ Main:
   call NovaLinha            ; Pula uma linha
   call PegarChuteJogador	  ; Pegar os chutes do jogador
 ret
-; =============================================================================
-; FIM DO PROGRAMA
-; =============================================================================
 ;==============================================================================
 ; INICIO DAS FUNCOES DO PROGRAMA
 ;==============================================================================
@@ -367,9 +364,6 @@ ImprimirErros:
 	call NovaLinha
 ret
 ; =============================================================================
-; FIM DAS FUNCOES DO PROGRAMA
-; =============================================================================
-; =============================================================================
 ; INICIO DAS FUNCOES GERAIS
 ; =============================================================================
 ; =============================================================================
@@ -586,95 +580,63 @@ ret
 Um:
 	ld a,'1'
 	ld (CharConvertido),a
-
 ret
 Dois:
 	ld a,'2'
 	ld (CharConvertido),a
-
 ret
 Tres:
 	ld a,'3'
 	ld (CharConvertido),a
-
 ret
 Quatro:
 	ld a,'4'
 	ld (CharConvertido),a
-
 ret
 Cinco:
 	ld a,'5'
 	ld (CharConvertido),a
-
 ret
 Seis:
 	ld a,'6'
 	ld (CharConvertido),a
-
 ret
 Sete:
 	ld a,'7'
 	ld (CharConvertido),a
-
 ret
 Oito:
 	ld a,'8'
 	ld (CharConvertido),a
-
 ret
 Nove:
 	ld a,'9'
 	ld (CharConvertido),a
-
 ret
 DezA:
 	ld a,'A'
 	ld (CharConvertido),a
-
 ret
 OnzeB:
 	ld a,'B'
 	ld (CharConvertido),a
-
 ret
 Dozec:
 	ld a,'C'
 	ld (CharConvertido),a
-
 ret
 TrezeD:
 	ld a,'D'
 	ld (CharConvertido),a
-
 ret
 QuatorzeE:
 	ld a,'E'
 	ld (CharConvertido),a
-
 ret
 QuinzeF:
 	ld a,'F'
 	ld (CharConvertido),a
 ret
-; =============================================================================
-; FIM DAS FUNCOES GERAIS
-; =============================================================================
-
-; =============================================================================
-; NUMEROS
-; =============================================================================
-Centenas:
-	defb &00
-Dezenas:
-	defb &00
-Unidades:
-	defb &00
-; =============================================================================
-; MATRIZES
-; =============================================================================
-NumSorteados:
-	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,255
 ; =============================================================================
 ; STRINGS
 ; =============================================================================
@@ -694,11 +656,6 @@ MsgUsuario7:
 	db "Parabens! Acertou tudo!",13
 MsgUsuario8:
 	db "Erros:",13
-Frase:
-	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
-FraseEmbaralhada:
-	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
-
-romPad:
-  ds romSize-(romPad-romArea),0
-end
+; ============================= PAD PARA 32k ==================================
+org &C000 ; PAD para 32K
+; ============================= PAD PARA 32k ==================================
