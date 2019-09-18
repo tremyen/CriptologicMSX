@@ -7,6 +7,7 @@
 ; ========================================================================================
 ; BIOS
 ; ========================================================================================
+SCR_MODE_CLEAR  equ &BC14	; Funcao => Limpar a tela 
 KM_WAIT_CHAR	equ &BB06 	; Funcao => Aguarda uma entrada
 TXT_OUTPUT	equ &BB5A	; Funcao => Imprime um caracter
 ; ========================================================================================
@@ -27,6 +28,7 @@ ContErros	equ &900A 	; Variavel => Conta os erros (Nao e 9010)!
 ; INICIO DO PROGRAMA
 ; ========================================================================================
 org &8000
+	call SCR_MODE_CLEAR	; Limpa a tela 
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
@@ -365,6 +367,16 @@ ret
 ; =========================================================================================
 
 ; =========================================================================================
+; Limpar a tela
+; =========================================================================================
+; Nao usa parametros
+; =========================================================================================
+; Altera => A,HL,TamanhoFrase,NumAleatorio,NumSorteios,DivisorIdeal,PosSorteada,
+; 	    LetraAtual,ContEmbaralha,ContTeste,ContErros,NumSorteados,CharConvertido,
+;	    CaracterTestar,Frase,FraseEmbaralhada
+; =========================================================================================
+
+; =========================================================================================
 ; Inicializar as variaveis com zero
 ; =========================================================================================
 ; Nao usa parametros
@@ -404,13 +416,15 @@ ret
 ; ========================================================================================
 ; Nao usa parametros
 ; ========================================================================================
-; Altera => A
+; Nada
 ; ========================================================================================
 NovaLinha:
-	ld a, 13
-	call TXT_OUTPUT
-	ld a, 10
-	call TXT_OUTPUT
+	push af
+		ld a, 13
+		call TXT_OUTPUT
+		ld a, 10
+		call TXT_OUTPUT
+	pop af
 ret
 ; ========================================================================================
 
