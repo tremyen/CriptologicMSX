@@ -4,19 +4,18 @@
 ; Versao 0.1 (Prototipo)
 ; Manoel Neto 2019-09-09
 ; =============================================================================
-ramArea:    equ &C000                  ; inicio da área de variáveis
-org &4000
-db "AB"
-dw Main
-db 00,00,00,00,00
 ; =============================================================================
-; BIOS
+; BIBLIOTECAS
 ; =============================================================================
-CHGET             equ &009F   ; Funcao => Aguarda uma entrada
-CHPUT             equ &00A2   ; Funcao => Imprime um caracter
+include "library/msx1bios.asm"
+include "library/msx1variables.asm"
+include "library/msx1hooks.asm"
 ; =============================================================================
 ; VARIAVEIS
 ; =============================================================================
+romSize:          equ 8192                    ; o tamanho que a ROM deve ter
+romArea:          equ 0x4000                  ; minha ROM começa aqui
+ramArea:          equ 0xe000                  ; inicio da área de variáveis
 TamanhoFrase:     equ ramArea
 NumAleatorio:     equ ramArea+1
 CharConvertido:   equ ramArea+2
@@ -34,6 +33,10 @@ Unidades:         equ ramArea+13
 NumSorteados:     equ ramArea+14
 Frase:            equ ramArea+29
 FraseEmbaralhada: equ ramArea+44
+org romArea
+  db "AB"
+  dw Main
+  db 00,00,00,00,00
 ; =============================================================================
 ; Inicio do PROGRAMA
 ; =============================================================================
@@ -657,5 +660,7 @@ MsgUsuario7:
 MsgUsuario8:
 	db "Erros:",13
 ; ============================= PAD PARA 32k ==================================
-org &C000 ; PAD para 32K
+romPad:
+  ds romSize-(romPad-romArea),0
+  end
 ; ============================= PAD PARA 32k ==================================
