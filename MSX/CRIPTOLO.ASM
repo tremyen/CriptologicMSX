@@ -117,17 +117,17 @@ FimSorteio:
 ret
 
 AcharDivIdeal:
-	ld a,(TamanhoFrase)		; pegar o tamanho da frase
-	ld b,a				; usar o tamanho da frase como divisor
-	ld a,128			; Dividir 128 pelo tamanho da frase
-	ld d,0				; contador de subtracao sucessivas
+	ld a,(TamanhoFrase)	 ; pegar o tamanho da frase
+	ld b,a				       ; usar o tamanho da frase como divisor
+	ld a,128			       ; Dividir 128 pelo tamanho da frase
+	ld d,0				       ; contador de subtracao sucessivas
 DivPorTamanho:
-	sub b 				; comeca a divisao pelo tamanho da frase
-	inc d				; aumenta o acumulador
-	jr nc, DivPorTamanho   		; repete enquanto nao tem "vai um"
-	dec d				; elimina o resto
-	ld a,d				; nesse momento D tem o divisior ideal
-	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal
+	sub b                   ; comeca a divisao pelo tamanho da frase
+	inc d				            ; aumenta o acumulador
+	jr nc, DivPorTamanho   	; repete enquanto nao tem "vai um"
+	dec d				            ; elimina o resto
+	ld a,d				          ; nesse momento D tem o divisior ideal
+	ld (DivisorIdeal),a		  ; nesse momento A tem o divisior ideal
 ret
 
 SortearNumero:
