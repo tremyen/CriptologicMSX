@@ -1,8 +1,8 @@
-;
+; ======================================================================
 ; MSX1-BIOS ROUTINES
 ; Version 0.1
-;
-CHKRAM:		equ 0x0000			; Partida (boot) 
+; ======================================================================
+CHKRAM:		equ 0x0000			; Partida (boot)
 RDSLT:		equ 0x000C			; Lê dado de qualquer slot
 WRSLT:		equ 0x0014			; Escreve dado em qualquer slot
 CALSLT:		equ 0x001C			; Chama rotina em qualquer slot
@@ -24,7 +24,7 @@ LDIRMV:		equ 0x0059			; Copia bloco da VRAM para a RAM
 LDIRVM:		equ 0x005C			; Copia bloco da RAM para a VRAM
 CHGMOD:		equ 0x005F			; Altera modo do VDP
 CHGCLR:		equ 0x0062			; Altera cores do VDP
-NMI:		equ 0x0066			; Manipulador da NMI
+NMI:		  equ 0x0066			; Manipulador da NMI
 CLRSPR:		equ 0x0069			; Limpa todos os sprites
 INITXT:		equ 0x006C			; Inicializa VDP em modo texto 40x24
 INIT32:		equ 0x006F			; Inicializa VDP em modo texto 32x24
@@ -47,8 +47,8 @@ PINLIN:		equ 0x00AE			; Lê uma linha do console
 INLIN:		equ 0x00B1			; Lê uma linha do console
 QINLIN:		equ 0x00B4			; Lê uma linha do console
 BREAKX:		equ 0x00B7			; Verifica Ctrl+Stop
-BEEP:		equ 0x00C0			; Emite beep
-CLS:		equ 0x00C3			; Limpa tela
+BEEP:     equ 0x00C0			; Emite beep
+CLS:	 	  equ 0x00C3			; Limpa tela
 POSIT:		equ 0x00C6			; Posiciona cursor
 ERAFNK:		equ 0x00CC			; Apaga a linha das teclas de função
 DSPFNK:		equ 0x00CF			; Mostra a linha das teclas de função
@@ -64,12 +64,12 @@ TAPOON:		equ 0x00EA			; Aciona saída de fita
 TAPOUT:		equ 0x00ED			; Escreve na saída de fita
 TAPOOF:		equ 0x00F0			; Desliga saída de fita
 STMOTR:		equ 0x00F3			; Controla motor da unidade de fita
-LFTQ:		equ 0x00F6			; Verifica espaço em fila musical
-PUTQ:		equ 0x00F9			; Coloca byte em fila musical
+LFTQ:		  equ 0x00F6			; Verifica espaço em fila musical
+PUTQ:		  equ 0x00F9			; Coloca byte em fila musical
 RIGHTC:		equ 0x00FC			; Move endereço de pixel à direita
 LEFTC:		equ 0x00FF			; Move endereço de pixel à esquerda
-UPC:		equ 0x0102			; Move endereço de pixel acima
-TUPC:		equ 0x0105			; Testa e move endereço de pixel acima
+UPC:		  equ 0x0102			; Move endereço de pixel acima
+TUPC:		  equ 0x0105			; Testa e move endereço de pixel acima
 DOWNC:		equ 0x0108			; Move endereço de pixel abaixo
 TDOWNC:		equ 0x010B			; Testa e Move endereço de pixel abaixo
 SCALXY:		equ 0x010E			; "Clipa" coordenadas gráficas
@@ -78,7 +78,7 @@ FETCHC:		equ 0x0114			; Obtém endereço físico do pixel atual
 STOREC:		equ 0x0117			; Armazena endereço físico do pixel atual
 SETATR:		equ 0x011A			; Muda cor de desenho
 READC:		equ 0x011D			; Lê atributo do pixel atual
-SETC:		equ 0x0120			; Muda atributo do pixel atual
+SETC:		  equ 0x0120			; Muda atributo do pixel atual
 NSETCX:		equ 0x0123			; Muda atributo de uma sequência de pixels
 CHGCAP:		equ 0x0132			; Altera LED do CAPS LOCK
 CHGSND:		equ 0x0135			; Altera o estado do click do teclado

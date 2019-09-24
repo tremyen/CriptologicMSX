@@ -1,37 +1,26 @@
-PrintChar equ &00A2
-
+; =======================================================================
+; Teste de chamadas de funcoes gerais
+; Manoel Neto 2019-0923
+; =======================================================================
 org &4000
 db "AB"
-dw Main
+dw ProgramStart
 db 00,00,00,00,00
 
-Main:
-  call &006f
-  ld a,32
-  ld (&F3B0),a          ; Variavel de sistema LineLenght (LINELEN)
+ProgramStart:
+  call ClearScreen
+  call InitTxt32Col
   ld hl, Message
   call PrintString
+  call NewLine
+  ld a,100
+  call PrintNumber
   DI
   Halt
 
-NewLine:
-  push af
-    ld a,13
-    call PrintChar
-    ld a,10
-    call PrintChar
-  pop af
-ret
-
-PrintString:
-  ld a,(hl)
-  cp 13
-  ret z
-  inc hl
-  call PrintChar
-jr PrintString
+  include "library\CZLibrary.asm"
 
 Message:
-  db "Ola Mundo Cartucho!",13
+  db "Ola Mundo!",13
 
 org &C000 ; PAD para 32K

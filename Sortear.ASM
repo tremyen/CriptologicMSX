@@ -1,13 +1,12 @@
 ;=========================================================================================
-; Sortear X numeros aleatorios entre 1 e N 
+; Sortear X numeros aleatorios entre 0 e X 
 ; X deve ser igual ao tamanho da frase do jogador 1
-; N deve ser igual ao tamanho da frase do jogador 1
-; Validar se o numero sorteado nao eh maior que N => (ValidarMaiorN)
-; Validar se o numero sorteado ja foi sorteado => (ValidarJaFoi)
-; Jogar o resultado para a variavel NumAleatorio =>(9001)
-; Jogar o resultado para a matriz de numeros sorteados =>(NumerosSorteados)
-; Converter o numero em seu codigo Hexadeciaml =>(&9002)
-; Imprimir o char convertido => ImprimeChar
+; Validar se o numero sorteado nao eh maior que N 	=> (ValidarMaiorN)
+; Validar se o numero sorteado ja foi sorteado 	  	=> (ValidarJaFoi)
+; Jogar o resultado para a variavel NumAleatorio  	=> (9001)
+; Jogar o resultado para a matriz de numeros sorteados 	=> (NumerosSorteados)
+; Converter o numero em seu codigo Hexadeciaml 		=> (9002)
+; Imprimir o char convertido 				=> ImprimeChar
 ;=========================================================================================
 ; ========================================================================================
 ; BIOS
@@ -27,9 +26,10 @@ DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
 ; INICIO PROGRAMA
 ; ========================================================================================
 org &8000
+	call LimpaMem
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
-	ld a,5				; Tamanho da frase do jogador 1
+	ld a,14 			; Tamanho da frase do jogador 1
 	ld (TamanhoFrase),a		; 
 	call AcharDivIdeal		; achar o divisor ideal para a entrada do
 					; jogador 1
@@ -71,7 +71,7 @@ ret
 SortearNumero:
 	ld a,(DivisorIdeal)		; carrega o divisor ideal		
 	ld b,a				; carrega o divisor ideal
-	ld a,r				; registrador r fornece um aleatorio entre 1 e 128
+	ld a,r				; Gera um aleatorio entre 0 e 127
 	ld d,0				; contador de subtracao sucessivas
 DividirPorIdeal:
 	sub b 				; comeca a divisao pelo divisor ideal
@@ -84,17 +84,17 @@ GravaAleatorio:
 ret
 
 ValidarMaiorN:
-	ld a,(TamanhoFrase)
-	inc a
-	ld b,a
-	ld a,(NumAleatorio)
-	cp b
-	jp ValidadoMaiorN
-	jp SortearDeNovo
+	ld a,(TamanhoFrase)		; pegar o tamanho da frase
+	ld b,a				; guarda tamanho frase
+	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
+	cp b				; A < TamFrase ?
+	jp c,ValidadoMaiorN		; A < TamFrase ?
+jp SortearDeNovo
+
 
 ValidarJaFoi:
 	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
-	ld hl,NumerosSorteados		; pega o endereco da matriz	
+	ld hl,MatSorteados		; pega o endereco da matriz	
 AcharFimFrase:				; Comeca o loop para chegar no fim da frase	
 	cp 0				; se andamos todo o tam. da entrada
 	jp z,AcheiFimFrase		; achamos o endereco final da entrada
@@ -112,7 +112,7 @@ AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
 	jp ValidadoJaFoi
 
 GravarNaMatriz:
-	ld hl,NumerosSorteados
+	ld hl,MatSorteados
 	ld a,(NumSorteios)
 	cp 0
 	jp z,AcheiPosMat
@@ -246,10 +246,92 @@ ImprimeChar:
 	call PrintChar
 ret
 
-ImprimeEspaco:
-	ld a, ' '
-	call PrintChar
+; =========================================================================================
+; FUNCOES GERAIS
+; =========================================================================================
+
+; =========================================================================================
+; Inicializar as variaveis com zero
+; =========================================================================================
+; Nao tem parametros
+; =========================================================================================
+; Altera => A,HL,(TamanhoFrase),(Frase)
+; =========================================================================================
+LimpaMem:
+	; ========== Zera Numericos ==========
+	xor a
+	ld (TamanhoFrase),a
+	ld (NumAleatorio),a
+	ld (CharConvertido),a
+	ld (NumSorteios),a
+	ld (DivisorIdeal),a	 	
+	; ========== Zera Strings ==========
+	ld hl,Frase 			
+	call LimpaString
+	; ========== Zera Matrizes ==========
+	ld hl,MatSorteados
+	call ZerarMatriz		
 ret
 
-NumerosSorteados:
-	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,255
+; ========================================================================================
+; Limpa uma string terminada em ENTER(13)
+; ========================================================================================
+; HL => Endereco da string
+; ========================================================================================
+; Altera => A, HL
+; ========================================================================================
+LimpaString:
+	ld a,(hl)
+	cp 13
+	jp z,LimpouString
+	ld a,' '
+	ld (hl),a
+	inc hl
+	jp LimpaString
+LimpouString:
+ret
+
+; ========================================================================================
+; Zerar uma Matriz terminada em 255
+; ========================================================================================
+; HL => Endereco da Matriz
+; ========================================================================================
+; ALTERA => A,HL
+; ========================================================================================
+ZerarMatriz:
+	ld a,(hl)
+	cp 255
+	jp z,ZerouMatriz
+	ld a,254
+	ld (hl),a
+	inc hl
+	jp ZerarMatriz
+ZerouMatriz:
+ret
+
+; ========================================================================================
+; Imprimir um espaco
+; ========================================================================================
+; Nao usa parametros 
+; ========================================================================================
+; ALTERA => nada
+; ========================================================================================
+ImprimeEspaco:
+	push af 
+		ld a, ' '
+		call PrintChar
+	pop af
+ret
+
+; ========================================================================================
+; MATRIZES
+; ========================================================================================
+MatSorteados:
+	db 254,254,254,254,254,254,254,254,254,254,254,254,254,254,255
+
+; ========================================================================================
+; STRINGS
+; ========================================================================================
+Frase:
+	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
+
