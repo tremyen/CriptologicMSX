@@ -1,6 +1,8 @@
 ; ========================================================================================
-; Pegar uma frase de no minimo 2 caracteres e no maximo 14 caracteres
+; PegarFrase.asm 
 ; ========================================================================================
+; Manoel Neto 2019-09-25
+; Pegar uma frase de no minimo 2 caracteres e no maximo 14 caracteres
 ; Receber a mensagem na area de memoria frase => (PegarMensagem)
 ; Validar o numero de caracteres durante a digitacao => (ValidaDuasLetras)
 ; Guardar o tamanho da frase digitada => (TamanhoFrase)
@@ -22,9 +24,9 @@ PegarFrase:
 	call Home		; Bota o cursor na posicao inicial
 	ld hl,MsgUsuario1	; Carrega a primeira Mensagem para o usuario
 	call PrintString	; Imprime a mensagem
-	ld hl,Frase		; Carrega o endereco da frase
+	ld hl,StrFrase		; Carrega o endereco da frase
 	call LimpaString	; Limpar a Frase
-	ld hl,Frase		; Carrega o endereco da frase
+	ld hl,StrFrase		; Carrega o endereco da frase
 	ld b,0			; Zera o contador de letras
 LoopFrase:
 	call KM_WAIT_CHAR	; ler um caracter
@@ -50,7 +52,7 @@ ImprimirFrase:			; vamos imprimir a mensagem da memoria
 	call Novalinha		; Pula uma Linha
 	ld hl,MsgUsuario2	; Carrega a segunda mensagem para o usuario
 	call PrintString	; Imprime a mensagem
-	ld hl,Frase		; Carrega a frase
+	ld hl,StrFrase		; Carrega a frase
 	call PrintString	; Imprime a frase
 ret
 
@@ -59,5 +61,3 @@ ret
 ; ========================================================================================
 read "Library.asm"
 read "Strings.asm"
-
-
