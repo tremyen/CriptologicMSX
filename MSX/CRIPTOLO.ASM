@@ -27,8 +27,9 @@ org romArea
 startCode:
 	call LimpaMem					; Limpa a memoria a cada execucao
 	call PegarFrase				; Obtem a mensagem do usuario
-	call Sortear					; sortear os numeros aleatorios
+	call Sortear					; Sortear os numeros aleatorios
 	call Embaralhar				; Embaralha a frase
+	call PegarChute				; Pegar os chutes do jogador 2
 loopInfinito:
 	jp loopInfinito
 ret
@@ -36,6 +37,7 @@ ret
 include "PegarFrase.asm"
 include "Sortear.asm"
 include "EmbFrase.asm"
+include "PegarChutes.asm"
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================

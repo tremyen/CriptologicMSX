@@ -12,3 +12,17 @@ MsgUsuario3:
 		db "Sorteados  :",13
 MsgUsuario4:
 		db "Embaralhado:",13
+MsgUsuario5:
+	db "Entre um caracter:",13
+MsgUsuario6:
+	db "Esta Correto!",13
+MsgUsuario7:
+	db "Esta Errado.",13
+MsgUsuario8:
+	db "Parabens! Acertou tudo!",13
+MsgUsuario9:
+	db "Erros:",13
+MsgUsuario10:
+		db "Chutes     :",13
+LimpaLinha:
+	db "                                ",13
