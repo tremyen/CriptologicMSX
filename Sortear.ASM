@@ -9,29 +9,17 @@
 ; Imprimir o char convertido 				=> ImprimeChar
 ; Somar um a cada elemento da matriz			=> Somar um
 ;=========================================================================================
-; ========================================================================================
-; BIOS
-; ========================================================================================
-TXT_OUTPUT		equ &BB5A	; Funcao => Imprime um caracter
-
-; ========================================================================================
-; VARIAVEIS
-; ========================================================================================
-TamanhoFrase 		equ &9000	; Variavel => Tamanho da entrada Jog 1
-NumAleatorio 		equ &9001	; Variavel => Numero sorteado
-CharConvertido 		equ &9002	; Variavel => Caracter Convertido
-NumSorteios 		equ &9003	; Variavel => Numero de sorteios realizados
-DivisorIdeal 		equ &9004	; Variavel => Divisor ideal de acordo com a frase
+read "Variaveis.asm"
 
 ; ========================================================================================
 ; INICIO PROGRAMA
 ; ========================================================================================
 org &8000
-	call LimpaMem
-	ld a,0
-	ld (NumSorteios),a		; Primeiro sorteio
-	ld a,14  			; Tamanho da frase do jogador 1
-	ld (TamanhoFrase),a		; 
+	call LimpaMem			; Limpar a memoria 
+	xor a				; ld a,0 so que mais rapido
+	ld (NumSorteios),a		; zera contador de sorteios
+	ld a,9  			; Tamanho da frase do jogador 1
+	ld (NumTamFrase),a		; testar com 2, 9 e 14
 	call AcharDivIdeal		; achar o divisor ideal para a entrada do
 					; jogador 1
 SortearDeNovo:
@@ -41,7 +29,7 @@ ValidadoMaiorN:
 	jp ValidarJafoi			; O Numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
-	ld a,(TamanhoFrase)		; carrega o contador de sorteios
+	ld a,(NumTamFrase)		; carrega o contador de sorteios
 	ld c,a				; so irei sortear de acordo com a entrada
 	ld a,(NumSorteios)		; Pega o numero de sorteios
 	inc a				; Aumenta numero de sorteios
@@ -55,7 +43,7 @@ FimSorteio:
 ret
 
 AcharDivIdeal:
-	ld a,(TamanhoFrase)		; pegar o tamanho da frase
+	ld a,(NumTamFrase)		; pegar o tamanho da frase
 	ld b,a				; usar o tamanho da frase como divisor			
 	ld a,128			; Dividir 128 pelo tamanho da frase
 	ld d,0				; contador de subtracao sucessivas
@@ -65,11 +53,11 @@ DivPorTamanho:
 	jr nc, DivPorTamanho   		; repete enquanto nao tem "vai um"
 	dec d				; elimina o resto
 	ld a,d				; nesse momento D tem o divisior ideal	
-	ld (DivisorIdeal),a		; nesse momento A tem o divisior ideal	
+	ld (NumDivIdeal),a		; nesse momento A tem o divisior ideal	
 ret
 
 SortearNumero:
-	ld a,(DivisorIdeal)		; carrega o divisor ideal		
+	ld a,(NumDivIdeal)		; carrega o divisor ideal		
 	ld b,a				; carrega o divisor ideal
 	ld a,r				; Gera um aleatorio entre 0 e 127
 	ld d,0				; contador de subtracao sucessivas
@@ -84,7 +72,7 @@ GravaAleatorio:
 ret
 
 ValidarMaiorN:
-	ld a,(TamanhoFrase)		; pegar o tamanho da frase
+	ld a,(NumTamFrase)		; pegar o tamanho da frase
 	ld b,a				; guarda tamanho frase
 	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
 	cp b				; A < TamFrase ?
@@ -93,7 +81,7 @@ jp SortearDeNovo
 
 
 ValidarJaFoi:
-	ld a,(TamanhoFrase)		; pega o tamnaho da entrada 	
+	ld a,(NumTamFrase)		; pega o tamnaho da entrada 	
 	ld hl,MatSorteados		; pega o endereco da matriz	
 AcharFimFrase:				; Comeca o loop para chegar no fim da frase	
 	cp 0				; se andamos todo o tam. da entrada
@@ -102,7 +90,7 @@ AcharFimFrase:				; Comeca o loop para chegar no fim da frase
 	dec a				; controla se chegamos no fim
 	jp AcharFimFrase		; senao continuamos procurando	
 AcheiFimFrase:				; nesse momento temos hl apontando para o lugar certo
-	ld a,(TamanhoFrase)		; pega o tamanho da entrada 	
+	ld a,(NumTamFrase)		; pega o tamanho da entrada 	
 	inc a
 	ld c,a				; prepara parte baixa do loop de CPDR 
 	ld b,0				; prepara parte alta do loop de CPDR	
@@ -154,198 +142,11 @@ LoopImprimirMatriz:
 FimImprimirMatriz:
 ret
 
-
-; =========================================================================================
-; FUNCOES GERAIS
-; =========================================================================================
-
-; =========================================================================================
-; Inicializar as variaveis com zero
-; =========================================================================================
-; Nao tem parametros
-; =========================================================================================
-; Altera => A,HL,(TamanhoFrase),(Frase)
-; =========================================================================================
-LimpaMem:
-	; ========== Zera Numericos ==========
-	xor a
-	ld (TamanhoFrase),a
-	ld (NumAleatorio),a
-	ld (CharConvertido),a
-	ld (NumSorteios),a
-	ld (DivisorIdeal),a	 	
-	; ========== Zera Strings ==========
-	ld hl,Frase 			
-	call LimpaString
-	; ========== Zera Matrizes ==========
-	ld hl,MatSorteados
-	call ZerarMatriz		
-ret
-
 ; ========================================================================================
-; Limpa uma string terminada em ENTER(13)
+; FIM PROGRAMA
 ; ========================================================================================
-; HL => Endereco da string
-; ========================================================================================
-; Altera => A, HL
-; ========================================================================================
-LimpaString:
-	ld a,(hl)
-	cp 13
-	jp z,LimpouString
-	ld a,' '
-	ld (hl),a
-	inc hl
-	jp LimpaString
-LimpouString:
-ret
 
-; ========================================================================================
-; Zerar uma Matriz terminada em 255
-; ========================================================================================
-; HL => Endereco da Matriz
-; ========================================================================================
-; ALTERA => A,HL
-; ========================================================================================
-ZerarMatriz:
-	ld a,(hl)
-	cp 255
-	jp z,ZerouMatriz
-	ld a,255
-	ld (hl),a
-	inc hl
-	jp ZerarMatriz
-ZerouMatriz:
-ret
+read "Library.asm"
+read "Strings.asm"
 
-; ========================================================================================
-; Imprimir um espaco
-; ========================================================================================
-; Nao usa parametros 
-; ========================================================================================
-; ALTERA => nada
-; ========================================================================================
-ImprimeEspaco:
-	push af 
-		ld a, ' '
-		call TXT_OUTPUT
-	pop af
-ret
-
-; ========================================================================================
-; Converter um numero de 0 a 15 em seu digito hexadecimal
-; ========================================================================================
-; A => Numero a ser convertido
-; ========================================================================================
-; ALTERA => A
-; ========================================================================================
-ConvNumChar:
-	cp 0
-	jp z,Zero
-	cp 1
-	jp z,Um
-	cp 2
-	jp z,Dois
-	cp 3
-	jp z,Tres
-	cp 4
-	jp z,Quatro
-	cp 5
-	jp z,Cinco
-	cp 6
-	jp z,Seis
-	cp 7
-	jp z,Sete
-	cp 8
-	jp z,Oito
-	cp 9
-	jp z,Nove
-	cp 10
-	jp z,DezA
-	cp 11
-	jp z,OnzeB
-	cp 12
-	jp z,Dozec
-	cp 13
-	jp z,TrezeD
-	cp 14
-	jp z,QuatorzeE
-	cp 15
-	jp z,QuinzeF
-	ret
-Zero:
-	ld a,'0'
-ret
-
-Um:
-	ld a,'1'
-ret
-
-Dois:
-	ld a,'2'
-ret
-
-Tres:
-	ld a,'3'
-ret
-
-Quatro:
-	ld a,'4'
-ret
-
-Cinco:
-	ld a,'5'
-ret
-
-Seis:
-	ld a,'6'
-ret
-
-Sete:
-	ld a,'7'
-ret
-
-Oito:
-	ld a,'8'
-ret
-
-Nove:
-	ld a,'9'
-ret
-
-DezA:
-	ld a,'A'
-ret
-
-OnzeB:
-	ld a,'B'
-ret
-
-Dozec:
-	ld a,'C'
-ret
-
-TrezeD:
-	ld a,'D'
-ret
-
-QuatorzeE:
-	ld a,'E'
-ret
-
-QuinzeF:
-	ld a,'F'
-ret
-
-; ========================================================================================
-; MATRIZES
-; ========================================================================================
-MatSorteados:
-	db 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
-
-; ========================================================================================
-; STRINGS
-; ========================================================================================
-Frase:
-	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
 
