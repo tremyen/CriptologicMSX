@@ -63,14 +63,20 @@ ret
 ; Altera => A, HL
 ; =============================================================================
 LimpaString:
-	ld a,(hl)
+	ld b,0
+LoopLimpaString:
+	ld a,32
+	ld (hl),a
+	ld a,b
 	cp 13
 	jp z,LimpouString
-	ld a,' '
-	ld (hl),a
 	inc hl
-	jp LimpaString
+	inc b
+	jp LoopLimpaString
 LimpouString:
+	inc hl
+	ld a,13
+	ld (hl),a
 ret
 
 ; =============================================================================
@@ -114,14 +120,20 @@ ret
 ; ALTERA => A,HL
 ; =============================================================================
 ZerarMatriz:
-	ld a,(hl)
-	cp 255
-	jp z,ZerouMatriz
+	ld b,0
+LoopZerarMatriz:
 	ld a,255
 	ld (hl),a
+	ld a,b
+	cp 13
+	jp z,ZerouMatriz
 	inc hl
-	jp ZerarMatriz
+	inc b
+	jp LoopZerarMatriz
 ZerouMatriz:
+	inc hl
+	ld a,255
+	ld (hl),a
 ret
 
 ; =============================================================================
