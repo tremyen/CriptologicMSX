@@ -17,8 +17,8 @@ org romArea
 	db "AB"                     ; identifica como ROM
   dw startCode                ; endereço de execução
   db "CW01"                   ; string de identificação
-  db __VERSION+48
-  db __RELEASE+65
+  db __VERSION+48							; cria o identificador de versao
+  db __RELEASE+65							; cria o identificador da release
   ds 6,0
 
 ; =============================================================================

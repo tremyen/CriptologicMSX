@@ -1,8 +1,10 @@
 ; =============================================================================
-; Pegar os chutes do jogador 2
-; Pegar chute e gravar => (CaracterTestar)
-; Testar se o caracter esta na posicao atual (TestarCorreto)
-; Gravar letra na frase embaralhada
+; PegarChutes.asm
+; =============================================================================
+; Manoel Neto 2019-0925
+; Pegar chute e gravar 												=> (CaracterTestar)
+; Testar se o caracter esta na posicao atual 	=> (TestarCorreto)
+; Imprimir os erros 													=> (ImprimirErros)
 ; =============================================================================
 PegarChute:
 	call NovaLinha
@@ -72,6 +74,7 @@ AchouTeste:
 	ld (NumContErros),a
 	call CursorErrado
 	jp LoopPegaChar
+
 ImprimirErros:
 	ld h,1
 	ld l,10
