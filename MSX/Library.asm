@@ -47,13 +47,20 @@ LimpaMem:
 	ld (NumAleatorio),a
 	ld (NumSorteios),a
 	ld (NumDivIdeal),a
+	ld (NumPosSort),a
+	ld (NumContEmb),a
+	; ========== Zera Caracteres ==========
+	ld a,' '
+	ld (ChaLetraAtual),a
 	; ========== Zera Strings ==========
 	ld hl,StrFrase
+	call LimpaString
+	ld hl,StrEmbaralhada
 	call LimpaString
 	; ========== Zera Matrizes ==========
 	ld hl,MatSorteados
 	call ZerarMatriz
-ret
+ret	  
 
 ; =============================================================================
 ; Limpa uma string terminada em ENTER(13)

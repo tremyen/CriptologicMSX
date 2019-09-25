@@ -7,7 +7,7 @@
 ; ========================================================================================
 ; BIOS
 ; ========================================================================================
-SCR_MODE_CLEAR  equ &BC14	; Funcao => Limpar a tela 
+SCR_MODE_CLEAR  equ &BC14	; Funcao => Limpar a tela
 KM_WAIT_CHAR	equ &BB06 	; Funcao => Aguarda uma entrada
 TXT_OUTPUT	equ &BB5A	; Funcao => Imprime um caracter
 ; ========================================================================================
@@ -28,7 +28,7 @@ ContErros	equ &900A 	; Variavel => Conta os erros (Nao e 9010)!
 ; INICIO DO PROGRAMA
 ; ========================================================================================
 org &8000
-	call SCR_MODE_CLEAR	; Limpa a tela 
+	call SCR_MODE_CLEAR	; Limpa a tela
 	call LimpaMem		; Limpa a memoria a cada execucao
 	call PegarMensagem	; Obtem a mensagem do usuario
 	call NovaLinha		; Pula uma linha
@@ -707,4 +707,3 @@ Frase:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
 FraseEmbaralhada:
 	db 32,32,32,32,32,32,32,32,32,32,32,32,32,32,13
- 

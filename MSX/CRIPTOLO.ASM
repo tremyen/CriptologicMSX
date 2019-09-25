@@ -27,48 +27,15 @@ org romArea
 startCode:
 	call LimpaMem					; Limpa a memoria a cada execucao
 	call PegarFrase				; Obtem a mensagem do usuario
-	call ImprimirFrase   	; Imprime a mensagem entrada
+	call Sortear					; sortear os numeros aleatorios
+	call Embaralhar				; Embaralha a frase
 loopInfinito:
 	jp loopInfinito
 ret
 
-PegarFrase:
-	call LimparTela			  ; Limpar a tela
-	call Home							; Bota o cursor na posicao inicial
-	ld hl,MsgUsuario1			; Carrega a primeira Mensagem para o usuario
-	call PrintString			; Imprime a mensagem
-	ld hl,StrFrase				; Carrega o endereco da frase
-	call LimpaString			; Limpar a Frase
-	ld hl,StrFrase				; Carrega o endereco da frase
-	ld b,0								; Zera o contador de letras
-LoopFrase:
-	call CHGET						; ler um caracter
-	ld (hl),a							; guarda o ascii desse caracter
-	call CHPUT						; imprime o caracter
-	inc hl								; proximo endereco
-	inc b									; aumenta o contador de letras
-	cp 13									; compara o carcter entrado com o ENTER(13)
-	jp z,ValidaDuasLetras	; se a frase terminou por enter
-	ld a,b								; prepara o contador para comparar
-	ld (NumTamFrase),a		; guarda o tamanho da frase digitada
-	cp 14									; compara o contador com 14
-	ret z									; se A-14 = 0 vc ja digitou 14 letras
-	jp LoopFrase					; pega o proximo
-ValidaDuasLetras:
-	ld a,(NumTamFrase)		; prepara o contador para comparar
-	cp 2									; compara com 2 letras
-	ret nc								; se a >= 2 esta ok, retorna
-	call LimpaString			; senao limpa a string
-jp PegarFrase						; e pega a mensagem novamente
-
-ImprimirFrase:					; vamos imprimir a mensagem da memoria
-	call NovaLinha				; Pula uma Linha
-	ld hl,MsgUsuario2			; Carrega a segunda mensagem para o usuario
-	call PrintString			; Imprime a mensagem
-	ld hl,StrFrase				; Carrega a frase
-	call PrintString			; Imprime a frase
-ret
-
+include "PegarFrase.asm"
+include "Sortear.asm"
+include "EmbFrase.asm"
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
