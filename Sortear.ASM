@@ -1,5 +1,5 @@
 ;=========================================================================================
-; Sortear X numeros aleatorios entre 0 e X 
+; Sortear X numeros aleatorios entre 1 e X 
 ; X deve ser igual ao tamanho da frase do jogador 1
 ; Validar se o numero sorteado nao eh maior que N 	=> (ValidarMaiorN)
 ; Validar se o numero sorteado ja foi sorteado 	  	=> (ValidarJaFoi)
@@ -7,11 +7,12 @@
 ; Jogar o resultado para a matriz de numeros sorteados 	=> (NumerosSorteados)
 ; Converter o numero em seu codigo Hexadeciaml 		=> (9002)
 ; Imprimir o char convertido 				=> ImprimeChar
+; Somar um a cada elemento da matriz			=> Somar um
 ;=========================================================================================
 ; ========================================================================================
 ; BIOS
 ; ========================================================================================
-PrintChar		equ &BB5A	; Funcao que imprime um caracter
+TXT_OUTPUT		equ &BB5A	; Funcao => Imprime um caracter
 
 ; ========================================================================================
 ; VARIAVEIS
@@ -29,7 +30,7 @@ org &8000
 	call LimpaMem
 	ld a,0
 	ld (NumSorteios),a		; Primeiro sorteio
-	ld a,14 			; Tamanho da frase do jogador 1
+	ld a,14  			; Tamanho da frase do jogador 1
 	ld (TamanhoFrase),a		; 
 	call AcharDivIdeal		; achar o divisor ideal para a entrada do
 					; jogador 1
@@ -40,9 +41,6 @@ ValidadoMaiorN:
 	jp ValidarJafoi			; O Numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
-	call ConvNumChar 		; Converte o numero em digito 1-F
-	call ImprimeChar		; Imprime o caracter
-	call ImprimeEspaco		; Imprime um espaco
 	ld a,(TamanhoFrase)		; carrega o contador de sorteios
 	ld c,a				; so irei sortear de acordo com a entrada
 	ld a,(NumSorteios)		; Pega o numero de sorteios
@@ -52,6 +50,8 @@ ValidadoJaFoi:
 	ld (NumSorteios),a		; Grava o numero de sorteios
 	jp SortearDeNovo		; faz de novo
 FimSorteio:
+	call SomarUm			; soma um em cada elemento da matriz
+	call ImprimirMatriz		; Imprimir a Matriz
 ret
 
 AcharDivIdeal:
@@ -127,124 +127,33 @@ AcheiPosMat:
 	ld (hl),a
 ret	
 
-ConvNumChar:
-	ld a,(NumAleatorio)
-	cp 0
-	jp z,Zero
-	cp 1
-	jp z,Um
-	cp 2
-	jp z,Dois
-	cp 3
-	jp z,Tres
-	cp 4
-	jp z,Quatro
-	cp 5
-	jp z,Cinco
-	cp 6
-	jp z,Seis
-	cp 7
-	jp z,Sete
-	cp 8
-	jp z,Oito
-	cp 9
-	jp z,Nove
-	cp 10
-	jp z,DezA
-	cp 11
-	jp z,OnzeB
-	cp 12
-	jp z,Dozec
-	cp 13
-	jp z,TrezeD
-	cp 14
-	jp z,QuatorzeE
-	cp 15
-	jp z,QuinzeF
-	ret
-Zero:
-	ld a,'0'
-	ld (CharConvertido),a
-ret
-Um:
-	ld a,'1'
-	ld (CharConvertido),a
-
-ret
-Dois:
-	ld a,'2'
-	ld (CharConvertido),a
-
-ret
-Tres:
-	ld a,'3'
-	ld (CharConvertido),a
-
-ret
-Quatro:
-	ld a,'4'
-	ld (CharConvertido),a
-
-ret
-Cinco:
-	ld a,'5'
-	ld (CharConvertido),a
-
-ret
-Seis:
-	ld a,'6'
-	ld (CharConvertido),a
-
-ret
-Sete:
-	ld a,'7'
-	ld (CharConvertido),a
-
-ret
-Oito:
-	ld a,'8'
-	ld (CharConvertido),a
-
-ret
-Nove:
-	ld a,'9'
-	ld (CharConvertido),a
-
-ret
-DezA:
-	ld a,'A'
-	ld (CharConvertido),a
-
-ret
-OnzeB:
-	ld a,'B'
-	ld (CharConvertido),a
-
-ret
-Dozec:
-	ld a,'C'
-	ld (CharConvertido),a
-
-ret
-TrezeD:
-	ld a,'D'
-	ld (CharConvertido),a
-
-ret
-QuatorzeE:
-	ld a,'E'
-	ld (CharConvertido),a
-
-ret
-QuinzeF:
-	ld a,'F'
-	ld (CharConvertido),a
+SomarUm:
+	ld hl,MatSorteados
+LoopSomarUm:
+	ld a,(hl)
+	cp 255
+	jp z,FimSomarUm
+	inc a
+	ld (hl),a
+	inc hl
+	jp LoopSomarUm
+FimSomarUm:
 ret
 
-ImprimeChar:
-	ld a,(CharConvertido)
-	call PrintChar
+ImprimirMatriz
+	ld hl,MatSorteados
+LoopImprimirMatriz:
+	ld a,(hl)
+	cp 255
+	jp z,FimImprimirMatriz
+	call ConvNumChar 		; Converte o numero em digito 1-F
+	call TXT_OUTPUT			; Imprime o caracter
+	call ImprimeEspaco		; Imprime um espaco
+	inc hl
+	jp LoopImprimirMatriz
+FimImprimirMatriz:
 ret
+
 
 ; =========================================================================================
 ; FUNCOES GERAIS
@@ -302,7 +211,7 @@ ZerarMatriz:
 	ld a,(hl)
 	cp 255
 	jp z,ZerouMatriz
-	ld a,254
+	ld a,255
 	ld (hl),a
 	inc hl
 	jp ZerarMatriz
@@ -319,15 +228,120 @@ ret
 ImprimeEspaco:
 	push af 
 		ld a, ' '
-		call PrintChar
+		call TXT_OUTPUT
 	pop af
+ret
+
+; ========================================================================================
+; Converter um numero de 0 a 15 em seu digito hexadecimal
+; ========================================================================================
+; A => Numero a ser convertido
+; ========================================================================================
+; ALTERA => A
+; ========================================================================================
+ConvNumChar:
+	cp 0
+	jp z,Zero
+	cp 1
+	jp z,Um
+	cp 2
+	jp z,Dois
+	cp 3
+	jp z,Tres
+	cp 4
+	jp z,Quatro
+	cp 5
+	jp z,Cinco
+	cp 6
+	jp z,Seis
+	cp 7
+	jp z,Sete
+	cp 8
+	jp z,Oito
+	cp 9
+	jp z,Nove
+	cp 10
+	jp z,DezA
+	cp 11
+	jp z,OnzeB
+	cp 12
+	jp z,Dozec
+	cp 13
+	jp z,TrezeD
+	cp 14
+	jp z,QuatorzeE
+	cp 15
+	jp z,QuinzeF
+	ret
+Zero:
+	ld a,'0'
+ret
+
+Um:
+	ld a,'1'
+ret
+
+Dois:
+	ld a,'2'
+ret
+
+Tres:
+	ld a,'3'
+ret
+
+Quatro:
+	ld a,'4'
+ret
+
+Cinco:
+	ld a,'5'
+ret
+
+Seis:
+	ld a,'6'
+ret
+
+Sete:
+	ld a,'7'
+ret
+
+Oito:
+	ld a,'8'
+ret
+
+Nove:
+	ld a,'9'
+ret
+
+DezA:
+	ld a,'A'
+ret
+
+OnzeB:
+	ld a,'B'
+ret
+
+Dozec:
+	ld a,'C'
+ret
+
+TrezeD:
+	ld a,'D'
+ret
+
+QuatorzeE:
+	ld a,'E'
+ret
+
+QuinzeF:
+	ld a,'F'
 ret
 
 ; ========================================================================================
 ; MATRIZES
 ; ========================================================================================
 MatSorteados:
-	db 254,254,254,254,254,254,254,254,254,254,254,254,254,254,255
+	db 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 
 ; ========================================================================================
 ; STRINGS
