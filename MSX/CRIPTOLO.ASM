@@ -28,6 +28,8 @@ startCode:
 	call LimpaMem					; Limpa a memoria a cada execucao
 	call PegarFrase				; Obtem a mensagem do usuario
 	call ImprimirFrase   	; Imprime a mensagem entrada
+loopInfinito:
+	jp loopInfinito
 ret
 
 PegarFrase:
