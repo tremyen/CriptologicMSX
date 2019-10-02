@@ -8,17 +8,6 @@
 ; Guardar o tamanho da frase digitada => (TamanhoFrase)
 ; Imprimir a mensagem vindo da memoria para teste => (ImprimirMensagem)
 ; ========================================================================================
-read "Variaveis.asm"
-
-; ========================================================================================
-; INICIO PROGRAMA
-; ========================================================================================
-org &8000
-	call LimpaMem		; Limpa a memoria a cada execucao
-	call PegarFrase		; Obtem a mensagem do usuario
-	call ImprimirFrase   	; Imprime a mensagem entrada
-ret
-
 PegarFrase:
 	call SCR_MODE_CLEAR	; Limpar a tela 
 	call Home		; Bota o cursor na posicao inicial
@@ -55,9 +44,3 @@ ImprimirFrase:			; vamos imprimir a mensagem da memoria
 	ld hl,StrFrase		; Carrega a frase
 	call PrintString	; Imprime a frase
 ret
-
-; ========================================================================================
-; FIM PROGRAMA
-; ========================================================================================
-read "Library.asm"
-read "Strings.asm"

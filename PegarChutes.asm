@@ -4,11 +4,7 @@
 ; Testar se o caracter esta na posicao atual (TestarCorreto)
 ; Gravar letra na frase embaralhada
 ; =========================================================================================
-; =========================================================================================
-; BIOS
-; =========================================================================================
-WaitChar		equ &BB06 	; Funcao => Aguarda uma entrada
-PrintChar		equ &BB5A	; Funcao => Imprime um caracter
+read "Bios.asm"
 ; =========================================================================================
 ; VARIAVEIS
 ; =========================================================================================
@@ -21,8 +17,6 @@ ContErros		equ &900A 	; Variavel => Conta os erros (Nao e 9010)!
 ; =========================================================================================
 Org &8000
 PegarChuteJogador:
-	ld a,10
-	ld (TamanhoFrase),a
         ld a,0
 	ld (ContTeste),a
 	ld (ContErros),a
@@ -30,9 +24,9 @@ LoopPegaChar:
 	call PegarEntrada
 	jp TestarCorreto
 EstaCorreto:
-	ld hl,MsgUsuario2
+	ld hl,MsgUsuario5
 	call PrintString
-	call NovaLinha	
+	call NovaLinha
 	ld a,(TamanhoFrase)
 	dec a
 	ld b,a
@@ -41,135 +35,57 @@ EstaCorreto:
 	jp z,Acertou
 	inc a
 	ld (ContTeste),a
-	jp LoopPegaChar	
+	jp LoopPegaChar
 Acertou:
 	call ImprimirErros
 ret
-; =========================================================================================
-; FIM DO PROGRAMA
-; =========================================================================================
-; =========================================================================================
-; INICIO DAS FUNCOES DO PROGRAMA
-; =========================================================================================
+
 PegarEntrada:
-	ld hl,MsgUsuario1
+	ld hl,MsgUsuario4
 	call PrintString
-	call WaitChar
+	call KM_WAIT_CHAR
 	ld (CaracterTestar),a
 	call NovaLinha
 ret
 
 TestarCorreto:
-	ld hl,Frase	
+	ld hl,Frase
 	ld a,(ContTeste)			; Conta o teste
 AcharPosicaoTeste:
 	cp 0
 	jp z,AchouTeste
 	inc hl
 	dec a					; proximo teste
-	jp AcharPosicaoTeste	
+	jp AcharPosicaoTeste
 AchouTeste:
 	ld a,(hl)
 	ld b,a
 	ld a,(CaracterTestar)
 	cp b
-	jp z,EstaCorreto	
+	jp z,EstaCorreto
 	ld a,(ContErros)
 	inc a
 	ld (ContErros),a
-	ld hl,MsgUsuario3
-	call PrintString
-	call Novalinha 
-	jp LoopPegaChar
-ImprimirErros:
-	ld hl,MsgUsuario4
+	ld hl,MsgUsuario6
 	call PrintString
 	call Novalinha
-	ld hl,MsgUsuario5
+	jp LoopPegaChar
+ImprimirErros:
+	ld hl,MsgUsuario7
+	call PrintString
+	call Novalinha
+	ld hl,MsgUsuario8
 	call PrintString
 	ld a,(ContErros)
 	call PrintNumber
 	call Novalinha
 ret
+; =========================================================================================
+; FIM DO PROGRAMA
+; =========================================================================================
+read "Library.asm"
 	
-; =========================================================================================
-; FIM DAS FUNCOES DO PROGRAMA
-; =========================================================================================
-; =========================================================================================
-; INICIO DAS FUNCOES GERAIS
-; =========================================================================================
-; ========================================================================================
-; Imprime uma string terminada em ENTER(13)
-; HL => Endereco da string
-; Altera => A,HL
-; ========================================================================================
-PrintString:
-	ld a,(hl)
-	cp 13
-	jp z,EndString
-	call PrintChar
-	inc hl
-	jp PrintString	
-EndString:
-ret
 
-; ========================================================================================
-; Imprime um Numero
-; A => Numero a ser impresso (8 bits, 255)
-; Altera => A,HL,D
-; ========================================================================================
-PrintNumber:
-	ld hl,Centenas
-	ld (hl),&00
-	ld hl,Dezenas
-	ld (hl),&00
-	ld hl,Unidades
-	ld (hl),&00
-ContaCentenas:
-	ld d,&64
-	ld hl,Centenas
-ProximaCentena:
-	sub d
-	jr c,ContarDezenas
-	inc (hl)
-jr ProximaCentena
-
-ContarDezenas:
-	add d
-	ld d,&0a
-	ld hl,Dezenas
-ProximaDezena:
-	sub d
-	jr c,ContaUnidades
-	inc (hl)
-jr ProximaDezena
-
-ContaUnidades:
-	add d
-	ld (Unidades),a
-	ld d,0
-
-ImprimeCentenas:
-	ld a,(Centenas)
-	cp &00
-	jr z,ImprimeDezenas
-	add a,&30		
-	call PrintChar
-	ld d,1
-ImprimeDezenas:
-	ld a,(Dezenas)
-	add d
-	cp &00
-	jr z,ImprimeUnidades
-	sub d
-	ld d,1
-	add a,&30		
-	call PrintChar
-ImprimeUnidades:
-	ld a,(Unidades)
-	add a,&30		
-	call PrintChar
-ret
 
 ; ========================================================================================
 ; Imprime uma Nova linha
@@ -190,12 +106,6 @@ ret
 ; =========================================================================================
 ; NUMEROS
 ; =========================================================================================
-Centenas:
-	defb &00
-Dezenas:
-	defb &00
-Unidades:
-	defb &00
 
 ; =========================================================================================
 ; STRINGS

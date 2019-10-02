@@ -5,15 +5,6 @@
 ; Funcoes ASM de uso geral para o Amtrad CPC
 ; =========================================================================================
 
-; ========================================================================================
-; BIOS
-; ========================================================================================
-KM_WAIT_CHAR	equ &BB06 	; Funcao => Aguarda uma entrada
-SCR_MODE_CLEAR  equ &BC14	; Funcao => Limpar a tela 
-TXT_OUTPUT	equ &BB5A	; Funcao => Imprime um caracter
-TXT_SET_CURSOR 	equ &BB75	; Funcao => Localizar o curson (H=x,L=y)
-TXT_GET_CURSOR	equ &BB78	; Funcao => Retorna a posicao do cursor
-
 ; =========================================================================================
 ; Colocar o cursor na posicao inicial.
 ; =========================================================================================
@@ -42,9 +33,16 @@ LimpaMem:
 	ld (NumTamFrase),a
 	ld (NumAleatorio),a
 	ld (NumSorteios),a
-	ld (NumDivIdeal),a	 	
+	ld (NumDivIdeal),a	
+	ld (NumPosSort),a	
+	ld (NumContEmb),a	
+	; ========== Zera Caracteres ==========
+	ld a,' '
+	ld (ChaLetraAtual),a	
 	; ========== Zera Strings ==========
 	ld hl,StrFrase 			
+	call LimpaString
+	ld hl,StrFraseEmb 			
 	call LimpaString
 	; ========== Zera Matrizes ==========
 	ld hl,MatSorteados
@@ -238,3 +236,72 @@ ret
 QuinzeF:
 	ld a,'F'
 ret
+
+; ========================================================================================
+; Imprime um Numero
+; ========================================================================================
+; A => Numero a ser impresso (8 bits,255)
+; ========================================================================================
+; Altera => A,HL,D
+; ========================================================================================
+PrintNumber:
+	ld hl,Centenas
+	ld (hl),&00
+	ld hl,Dezenas
+	ld (hl),&00
+	ld hl,Unidades
+	ld (hl),&00
+ContaCentenas:
+	ld d,&64
+	ld hl,Centenas
+ProximaCentena:
+	sub d
+	jr c,ContarDezenas
+	inc (hl)
+jr ProximaCentena
+
+ContarDezenas:
+	add d
+	ld d,&0a
+	ld hl,Dezenas
+ProximaDezena:
+	sub d
+	jr c,ContaUnidades
+	inc (hl)
+jr ProximaDezena
+
+ContaUnidades:
+	add d
+	ld (Unidades),a
+	ld d,0
+
+ImprimeCentenas:
+	ld a,(Centenas)
+	cp &00
+	jr z,ImprimeDezenas
+	add a,&30		
+	call TXT_OUTPUT
+	ld d,1
+ImprimeDezenas:
+	ld a,(Dezenas)
+	add d
+	cp &00
+	jr z,ImprimeUnidades
+	sub d
+	ld d,1
+	add a,&30		
+	call TXT_OUTPUT
+ImprimeUnidades:
+	ld a,(Unidades)
+	add a,&30		
+	call TXT_OUTPUT
+ret
+
+Centenas:
+	defb &00
+Dezenas:
+	defb &00
+Unidades:
+	defb &00
+; ========================================================================================
+

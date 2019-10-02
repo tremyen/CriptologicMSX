@@ -12,23 +12,14 @@
 ; Imprimir o char convertido 				=> ImprimeChar
 ; Somar um a cada elemento da matriz			=> Somar um
 ;=========================================================================================
-read "Variaveis.asm"
-
-; ========================================================================================
-; INICIO PROGRAMA
-; ========================================================================================
-org &8000
-	call LimpaMem			; Limpar a memoria 
+Sortear:
 	xor a				; ld a,0 so que mais rapido
 	ld (NumSorteios),a		; zera contador de sorteios
-	ld a,9  			; Tamanho da frase do jogador 1
-	ld (NumTamFrase),a		; testar com 2, 9 e 14
-	call AcharDivIdeal		; achar o divisor ideal para a entrada do
-					; jogador 1
+	call AcharDivIdeal		; achar o divisor ideal 
 SortearDeNovo:
 	call SortearNumero		; Sorteei o numero em NumAleatorio
-	jp ValidarMaiorN		; O numero nao pode ser maior que a entrada
-ValidadoMaiorN:
+	jp ValidarMenorN		; O numero nao pode ser maior que a entrada
+ValidadoMenorN:
 	jp ValidarJafoi			; O Numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
@@ -74,12 +65,12 @@ GravaAleatorio:
 	ld (NumAleatorio),a		; grava na variavel
 ret
 
-ValidarMaiorN:
+ValidarMenorN:
 	ld a,(NumTamFrase)		; pegar o tamanho da frase
 	ld b,a				; guarda tamanho frase
 	ld a,(NumAleatorio)		; pega o numero aleatorio para comparacao
 	cp b				; A < TamFrase ?
-	jp c,ValidadoMaiorN		; A < TamFrase ?
+	jp c,ValidadoMenorN		; A < TamFrase ?
 jp SortearDeNovo
 
 
@@ -132,6 +123,7 @@ FimSomarUm:
 ret
 
 ImprimirMatriz
+	call NovaLinha
 	ld hl,MatSorteados
 LoopImprimirMatriz:
 	ld a,(hl)
@@ -144,12 +136,3 @@ LoopImprimirMatriz:
 	jp LoopImprimirMatriz
 FimImprimirMatriz:
 ret
-
-; ========================================================================================
-; FIM PROGRAMA
-; ========================================================================================
-
-read "Library.asm"
-read "Strings.asm"
-
-
