@@ -3,10 +3,10 @@
 ; ========================================================================================
 ; Manoel Neto 2019-09-25
 ; Pegar uma frase de no minimo 2 caracteres e no maximo 14 caracteres
-; Receber a mensagem na area de memoria frase => (PegarMensagem)
-; Validar o numero de caracteres durante a digitacao => (ValidaDuasLetras)
-; Guardar o tamanho da frase digitada => (TamanhoFrase)
-; Imprimir a mensagem vindo da memoria para teste => (ImprimirMensagem)
+; Receber a mensagem na area de memoria frase 		=> (PegarMensagem)
+; Validar o numero de caracteres durante a digitacao 	=> (ValidaDuasLetras)
+; Guardar o tamanho da frase digitada 			=> (TamanhoFrase)
+; Imprimir a mensagem vindo da memoria para teste 	=> (ImprimirMensagem)
 ; ========================================================================================
 PegarFrase:
 	call SCR_MODE_CLEAR	; Limpar a tela 
