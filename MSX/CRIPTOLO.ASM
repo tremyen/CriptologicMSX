@@ -1,16 +1,11 @@
 ; =============================================================================
-; PegarFrase.asm
+; Criptologic 1.0 para MSX
 ; =============================================================================
-; Manoel Neto 2019-09-25
-; Pegar uma frase de no minimo 2 caracteres e no maximo 14 caracteres
-; Receber a mensagem na area de memoria frase => (PegarMensagem)
-; Validar o numero de caracteres durante a digitacao => (ValidaDuasLetras)
-; Guardar o tamanho da frase digitada => (TamanhoFrase)
-; Imprimir a mensagem vindo da memoria para teste => (ImprimirMensagem)
+; Manoel Neto 2019-10-02
 ; =============================================================================
 __VERSION:  equ 1
 __RELEASE:  equ 1
-include "Bios.asm"
+include "BiosMSX.asm"
 include "Variaveis.asm"
 
 org romArea
@@ -36,7 +31,7 @@ ret
 
 include "PegarFrase.asm"
 include "Sortear.asm"
-include "EmbFrase.asm"
+include "Embaralhar.asm"
 include "PegarChutes.asm"
 ; =============================================================================
 ; FIM PROGRAMA
