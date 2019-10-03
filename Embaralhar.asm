@@ -31,48 +31,48 @@ GravouTudo:
 ret
 
 AcharPosSort:
-	ld a,(NumContEmb)
-	ld hl,MatSorteados
+	ld a,(NumContEmb)		; pegar o contador de embaralhamentos
+	ld hl,MatSorteados		; pegar a matriz com os sorteios
 LoopAcharPosSort:
-	cp 0
-	jp z,AchouPosSort
-	dec a
-	inc hl
-	jp LoopAcharPosSort
+	cp 0				; se o contador de embaralhamentos = 0
+	jp z,AchouPosSort		; achamos a posicao desse sorteio
+	dec a				; tentamos a proxima posicao
+	inc hl				; apontamos para o proximo numero
+	jp LoopAcharPosSort		; tentamos de novo 
 AchouPosSort:
-	ld a,(hl)
-	ld (NumPosSort),a
+	ld a,(hl)			; pegamos o numero 
+	ld (NumPosSort),a		; jogamos na variavel
 ret
 
 AcharLetra:
-	ld a,(NumPosSort)
+	ld a,(NumPosSort)		; pegamos a posicao sorteada
 	dec a 				; enderecos comecam com 0
-	ld hl,StrFrase
+	ld hl,StrFrase			; Vamos procurar essa posicao na frase
 LoopAcharLetra:
-	cp 0
-	jp z,AchouLetra			
-	dec a
-	inc hl
-	jp LoopAcharLetra
+	cp 0				; se a posicao eh zero, achamos
+	jp z,AchouLetra			; achou a letra	
+	dec a				; tentamos a proxima posicao
+	inc hl				; apontamos para a proxima letra
+	jp LoopAcharLetra		; tentamos de novo
 AchouLetra:
-	ld a,(hl)
-	ld (ChaLetraAtual),a
+	ld a,(hl)			; pegamos a letra 
+	ld (ChaLetraAtual),a		; carregamos a variavel 
 ret
 
 GravarLetra:
-	ld a,(NumContEmb)
-	ld b,a
-	ld a,0
-	ld hl,StrFraseEmb
+	ld a,(NumContEmb)		; pegamos a posicao do sorteio
+	ld b,a				; separamos para comparar
+	xor a				; zeramos o contador
+	ld hl,StrFraseEmb		; apontamos para escrever 
 LoopGravarLetra:
-	cp b
-	jp z,AchouPosGravar			
-	inc hl
-	inc a	
-	jp LoopGravarLetra
+	cp b				; eh a posicao para escrever
+	jp z,AchouPosGravar		; se for vamos gravar	
+	inc hl				; se nao for tentamos a proxima
+	inc a				; contamos essa posicao
+	jp LoopGravarLetra		; tentamos de novo 
 AchouPosGravar:
-	ld a,(ChaLetraAtual)
-	ld (hl),a
-	inc hl
-	ld (hl),13
+	ld a,(ChaLetraAtual)		; pegamos a letra guardada
+	ld (hl),a			; colocamos na posicao correta
+	inc hl				; vamos para proxima posicao
+	ld (hl),13			; finalizamos a string
 ret

@@ -6,6 +6,7 @@
 __VERSION:  equ 1
 __RELEASE:  equ 1
 include "BiosMSX.asm"
+include "Constantes.asm"
 include "Variaveis.asm"
 
 org romArea
@@ -21,14 +22,23 @@ org romArea
 ; =============================================================================
 startCode:
 	call LimpaMem					; Limpa a memoria a cada execucao
+	call DesenharTela			; Desenhar a tela do jogo
 	call PegarFrase				; Obtem a mensagem do usuario
 	call Sortear					; Sortear os numeros aleatorios
 	call Embaralhar				; Embaralha a frase
 	call PegarChute				; Pegar os chutes do jogador 2
 loopInfinito:
-	jp loopInfinito
-ret
+	ld h,2
+	ld l,20
+	call POSIT
+	ld hl,MsgUsuario11
+	call PrintString
+	call CHGET
+	cp 13
+	jp z,startCode
+jp loopInfinito
 
+include "DesenharTela.asm"
 include "PegarFrase.asm"
 include "Sortear.asm"
 include "Embaralhar.asm"

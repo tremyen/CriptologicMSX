@@ -23,6 +23,10 @@ MsgUsuario8:
 MsgUsuario9:
 	db "Erros:",13
 MsgUsuario10:
-		db "Chutes     :",13
-LimpaLinha:
-	db "                                ",13
+	db "Chutes     :",13
+MsgUsuario11:
+	db "Pressione <ENTER> para jogar",13
+MsgUsuario12:
+	db "Criptologic 1.0 para MSX",13
+LinhaApoio:
+	db "______________",13

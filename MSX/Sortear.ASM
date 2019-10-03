@@ -4,13 +4,12 @@
 ; Manoel Neto 2019-09-25
 ; Sortear X numeros aleatorios entre 1 e X
 ; X deve ser igual ao tamanho da frase do jogador 1
-; Validar se o numero sorteado nao eh maior que N 	=> (ValidarMaiorN)
-; Validar se o numero sorteado ja foi sorteado 	  	=> (ValidarJaFoi)
-; Jogar o resultado para a variavel NumAleatorio  	=> (9001)
-; Jogar o resultado para a matriz de numeros sorteados 	=> (NumerosSorteados)
-; Converter o numero em seu codigo Hexadeciaml 		=> (9002)
-; Imprimir o char convertido 				=> ImprimeChar
-; Somar um a cada elemento da matriz			=> Somar um
+; Validar se o numero sorteado nao eh maior que N 			=> (ValidarMaiorN)
+; Validar se o numero sorteado ja foi sorteado 	  			=> (ValidarJaFoi)
+; Jogar o resultado para a variavel NumAleatorio  			=> (NumAleatorio)
+; Jogar o resultado para a matriz de numeros sorteados 	=> (MatSorteados)
+; Converter o numero em seu codigo Hexadeciaml 					=> (ChaLetraAtual)
+; Somar um a cada elemento da matriz										=> Somar um
 ;==============================================================================
 Sortear:
 	xor a									; ld a,0 so que mais rapido
@@ -33,10 +32,6 @@ ValidadoJaFoi:
 	jp SortearDeNovo			; faz de novo
 FimSorteio:
 	call SomarUm					; soma um em cada elemento da matriz
-	call NovaLinha				; pula uma linha
-	ld hl,MsgUsuario3			; carrega mensagem para o usuario
-	Call PrintString			; Imprime mensagem para o usuario
-	call ImprimirMatriz		; Imprimir a Matriz
 ret
 
 AcharDivIdeal:
@@ -122,18 +117,4 @@ LoopSomarUm:
 	inc hl
 	jp LoopSomarUm
 FimSomarUm:
-ret
-
-ImprimirMatriz:
-	ld hl,MatSorteados
-LoopImprimirMatriz:
-	ld a,(hl)
-	cp 255
-	jp z,FimImprimirMatriz
-	call ConvNumChar 				; Converte o numero em digito 1-F
-	call CHPUT							; Imprime o caracter
-	;call ImprimeEspaco			; Imprime um espaco
-	inc hl
-	jp LoopImprimirMatriz
-FimImprimirMatriz:
 ret

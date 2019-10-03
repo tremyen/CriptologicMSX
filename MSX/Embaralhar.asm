@@ -3,11 +3,9 @@
 ; Pegar o numero sorteado
 ; Pegar letra relativa ao numero sorteado
 ; Gravar letra na frase embaralhada
+; Imprimir a Frase Embaralhada
 ;==============================================================================
 Embaralhar:
-	call NovaLinha
-	ld hl,MsgUsuario4				; Carrega a quarta mensagem para o usuario
-	call PrintString				; imprime a mensagem
 	ld a,0									; prepara primeira passada
 	ld (NumContEmb),a				; zera o contador de embaralhamento
 GravarProxima:
@@ -23,7 +21,7 @@ GravarProxima:
 	ld (NumContEmb),a				; e guardamos no contador
 	jp GravarProxima				; pega a proxima
 GravouTudo:
-	call ImpFrEmbaralhada		; imprime a FraseEmbaralhada
+	Call ImpFraseEmb				; Imprimir a frase embaralhada
 ret
 
 AcharPosSort:
@@ -73,7 +71,12 @@ AchouPosGravar:
 	ld (hl),13
 ret
 
-ImpFrEmbaralhada:
-	ld hl,StrEmbaralhada				; Carrega a frase embaralhada
-	call PrintString						; imprime
+ImpFraseEmb:
+	ld a,NumPosYEntrada1
+	call LimparLinha
+	ld h,NumPosXEntradas
+	ld l,NumPosYEntrada1
+	call POSIT
+	ld hl,StrEmbaralhada
+	call PrintString
 ret

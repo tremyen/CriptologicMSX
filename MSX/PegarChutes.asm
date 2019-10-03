@@ -1,16 +1,15 @@
 ; =============================================================================
 ; PegarChutes.asm
 ; =============================================================================
-; Manoel Neto 2019-0925
+; Manoel Neto 2019-09-25
 ; Pegar chute e gravar 												=> (CaracterTestar)
 ; Testar se o caracter esta na posicao atual 	=> (TestarCorreto)
 ; Imprimir os erros 													=> (ImprimirErros)
 ; =============================================================================
 PegarChute:
-	call NovaLinha
-	ld hl,MsgUsuario10
-	call PrintString
-	call NovaLinha
+	ld h,NumPosXEntradas
+	ld l,NumPosYEntrada2
+	call POSIT
 	xor a
 	ld (NumContTeste),a
 	ld (NumContErros),a
@@ -20,9 +19,9 @@ LoopPegaChar:
 EstaCorreto:
 	call CursorCorreto
 	ld a,(NumContTeste)
-	add a,13
+	add a,NumPosXEntradas
 	ld h,a
-	ld l,5
+	ld l,NumPosYEntrada2
 	call POSIT
 	ld a,(ChaTestar)
 	call CHPUT
@@ -40,16 +39,11 @@ Acertou:
 ret
 
 PegarEntrada:
-	ld h,1
-	ld l,6
+	ld a,(NumContTeste)
+	add a,NumPosXEntradas
+	ld h,a
+	ld l,NumPosYEntrada2
 	call POSIT
-	ld hl,LimpaLinha
-	call PrintString
-	ld h,1
-	ld l,6
-	call POSIT
-	ld hl,MsgUsuario5
-	call PrintString
 	call CHGET
 	ld (ChaTestar),a
 ret
@@ -76,40 +70,39 @@ AchouTeste:
 	jp LoopPegaChar
 
 ImprimirErros:
-	ld h,1
-	ld l,10
+	ld a,6
+	call LimparLinha
+	ld h,NumPosXMensagens
+	ld l,6
 	call POSIT
 	ld hl,MsgUsuario8
 	call PrintString
-	call NovaLinha
+	ld a,7
+	call LimparLinha
+	ld h,NumPosXMensagens
+	ld l,7
+	call POSIT
 	ld hl,MsgUsuario9
 	call PrintString
 	ld a,(NumContErros)
 	call PrintNumber
-	call NovaLinha
 ret
 
 CursorCorreto:
-		ld h,1
-		ld l,7
-		call POSIT
-		ld hl,LimpaLinha
-		call PrintString
-		ld h,1
-		ld l,7
+		ld a,4
+		call LimparLinha
+		ld h,NumPosXMensagens
+		ld l,4
 		call POSIT
 		ld hl,MsgUsuario6
 		call PrintString
 ret
 
 CursorErrado:
-		ld h,1
-		ld l,7
-		call POSIT
-		ld hl,LimpaLinha
-		call PrintString
-		ld h,1
-		ld l,7
+		ld a,4
+		call LimparLinha
+		ld h,NumPosXMensagens
+		ld l,4
 		call POSIT
 		ld hl,MsgUsuario7
 		call PrintString
