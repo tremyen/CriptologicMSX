@@ -28,8 +28,8 @@ startCode:
 	call Embaralhar				; Embaralha a frase
 	call PegarChute				; Pegar os chutes do jogador 2
 loopInfinito:
-	ld h,2
-	ld l,20
+	ld h,NumPosXMensagens
+	ld l,NumPosYMensagemFinal
 	call POSIT
 	ld hl,MsgUsuario11
 	call PrintString
