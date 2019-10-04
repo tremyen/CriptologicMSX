@@ -96,6 +96,8 @@ CursorCorreto:
 		call POSIT
 		ld hl,MsgUsuario6
 		call PrintString
+		call SndCorreto				; Toca som de letra correta
+		;call Mute
 ret
 
 CursorErrado:
@@ -106,4 +108,6 @@ CursorErrado:
 		call POSIT
 		ld hl,MsgUsuario7
 		call PrintString
+		call SndErrado				; Toca som de letra errada
+		;call Mute
 ret

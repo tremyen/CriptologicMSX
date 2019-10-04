@@ -43,6 +43,7 @@ include "PegarFrase.asm"
 include "Sortear.asm"
 include "Embaralhar.asm"
 include "PegarChutes.asm"
+include "AY38910.ASM"
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
