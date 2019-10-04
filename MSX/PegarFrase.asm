@@ -21,7 +21,10 @@ PegarFrase:
 LoopFrase:
 	call CHGET						; ler um caracter
 	ld (hl),a							; guarda o ascii desse caracter
+	cp 13
+	jp z,NaoImprime
 	call CHPUT						; imprime o caracter
+NaoImprime:
 	inc hl								; proximo endereco
 	inc b									; aumenta o contador de letras
 	cp 13									; compara o carcter entrado com o ENTER(13)

@@ -12,22 +12,32 @@
 DesenharTela:
   call INIT32
   call LimparTela
-  ld h,NumPosXMensagens
-  ld l,2
+
+  ld h,NumPosXCabecalho       ; posicionar o cabecalho
+  ld l,NumPosYCabecalho
   call POSIT
-  ld hl,MsgUsuario12
+  ld hl,MsgUsuario1           ; imprimir o cabecalho
   call PrintString
-  ld h,NumPosXLinhaApoio
+
+  ld h,NumPosXMensagens       ; posicionar mensagem inicial
+  ld l,NumPosYMensagens
+  call POSIT
+  ld hl,MsgUsuario2           ; imprimir mensagem inicial
+  call PrintString
+
+  ld h,NumPosXLinhaApoio      ; posicionar a linha de apoio 1
   ld l,NumPosYLinhaApoio1
   call POSIT
   ld hl,LinhaApoio
-  call PrintString
-  ld h,NumPosXLinhaApoio
+  call PrintString            ; imprimir a linha de apoio 1
+
+  ld h,NumPosXLinhaApoio      ; posicionar a linha de apoio 2
   ld l,NumPosYLinhaApoio2
   call POSIT
   ld hl,LinhaApoio
-  call PrintString
-  ld h,NumPosXEntradas
+  call PrintString            ; imprimir a linha de apoio 1
+
+  ld h,NumPosXEntradas        ; posicionar para a primeira entrada
   ld l,NumPosYEntrada1
   call POSIT
 ret

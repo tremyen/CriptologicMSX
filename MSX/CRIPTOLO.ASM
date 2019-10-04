@@ -31,7 +31,7 @@ loopInfinito:
 	ld h,NumPosXMensagens
 	ld l,NumPosYMensagemFinal
 	call POSIT
-	ld hl,MsgUsuario11
+	ld hl,MsgUsuario8
 	call PrintString
 	call CHGET
 	cp 13

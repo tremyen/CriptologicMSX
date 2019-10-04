@@ -294,7 +294,7 @@ ContaUnidades:
 
 ImprimeCentenas:
 	ld a,(NumCentenas)
-	cp &00
+	cp 0
 	jr z,ImprimeDezenas
 	add a,&30
 	call CHPUT
@@ -333,3 +333,18 @@ ret
 
 LinhaLimpa:
 	db "                                ",13
+
+; =============================================================================
+; Causar uma pausa em segundos
+; =============================================================================
+; BC => Tempo de parada
+; =============================================================================
+; Altera => A,C
+; =============================================================================
+Delay:
+  nop
+  dec BC
+  ld A,B
+  or C
+  ret Z
+jr Delay

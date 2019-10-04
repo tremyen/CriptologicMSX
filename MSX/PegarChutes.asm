@@ -70,44 +70,54 @@ AchouTeste:
 	jp LoopPegaChar
 
 ImprimirErros:
-	ld a,6
+	ld a,NumPosYMensagens
 	call LimparLinha
 	ld h,NumPosXMensagens
-	ld l,6
+	ld l,NumPosYMensagens
 	call POSIT
-	ld hl,MsgUsuario8
+	ld hl,MsgUsuario7
 	call PrintString
-	ld a,7
+	ld a,NumPosYErros
 	call LimparLinha
-	ld h,NumPosXMensagens
-	ld l,7
+	ld h,NumPosXErros
+	ld l,NumPosYErros
 	call POSIT
-	ld hl,MsgUsuario9
+	ld hl,MsgUsuario3
 	call PrintString
 	ld a,(NumContErros)
 	call PrintNumber
+	ld hl,MsgUsuario4
+	call PrintString
 ret
 
 CursorCorreto:
-		ld a,4
+		ld a,NumPosYMensagens
 		call LimparLinha
 		ld h,NumPosXMensagens
-		ld l,4
+		ld l,NumPosYMensagens
 		call POSIT
-		ld hl,MsgUsuario6
+		ld hl,MsgUsuario5
 		call PrintString
-		call SndCorreto				; Toca som de letra correta
-		;call Mute
+		ld a,%0000001					; NVPPPPP
+		call PlaySound				; Toca som de letra correta
+		LD BC,&AFFF						; define o tempo de espera
+		call Delay						; aguarda
+		ld a,0
+		call PlaySound				; Para de tocar o som
 ret
 
 CursorErrado:
-		ld a,4
+		ld a,NumPosYMensagens
 		call LimparLinha
 		ld h,NumPosXMensagens
-		ld l,4
+		ld l,NumPosYMensagens
 		call POSIT
-		ld hl,MsgUsuario7
+		ld hl,MsgUsuario6
 		call PrintString
-		call SndErrado				; Toca som de letra errada
-		;call Mute
+		ld a,%1101111					; NVPPPPP
+		call PlaySound				; Toca som de letra Errada
+		LD BC,&FFFF
+		call Delay
+		ld a,0
+		call PlaySound				; Para de tocar o som
 ret
