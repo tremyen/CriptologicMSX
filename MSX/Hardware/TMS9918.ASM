@@ -149,7 +149,7 @@ DoCopy:
     ld a,32
     di
       out (VDPCONTROL),a
-      ld a,17 + 128
+      ld a,17+128
       out (VDPCONTROL),a
       ld c,VDPDATA
 VDPready:
@@ -166,19 +166,7 @@ VDPready:
       ei
     out (VDPCONTROL),a          ; loop if vdp not ready (CE)
     jp c,VDPready
-    outi                        ; 15x OUTI
-    outi                        ; (faster than OTIR)
+  OutiToVram:
     outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
-    outi
+    jp nz,OutiToVram    
 ret
