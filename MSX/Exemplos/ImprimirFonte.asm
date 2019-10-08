@@ -21,13 +21,11 @@ org romArea
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
-org &8000
-
 startCode:
     xor a
-    ld hl,#8000       ;  to 1st byte of page 1...
+    ld hl,&8000       ;  to 1st byte of page 1...
     call SetVDP_Write
-    ld a,#88          ; use color 8 (red)
+    ld a,&88          ; use color 8 (red)
 FillL1:
     ld c,8            ; fill 1st 8 lines of page 1
 FillL2:
@@ -44,7 +42,7 @@ COPYBLOCK:
     db 0,0,0,1
     db 0,0,0,0
     db 8,0,8,0
-    db 0,0,#D0
+    db 0,0,&D0
 
 ; =============================================================================
 ; FIM PROGRAMA
