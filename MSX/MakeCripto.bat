@@ -1,6 +1,6 @@
 @echo off
 echo ====== Apagando a ROM antiga =====
-del ROMS\CRIPTOLO.ROM
+del ROMS\CRIPTO.ROM
 echo ======= Compilando nova ROM ======
-C:\Users\mneto\Documents\pasmo-0.5.4.beta2\pasmo CRIPTOLO.ASM ROMS\CRIPTO.ROM
+C:\Users\mneto\Documents\pasmo-0.5.4.beta2\pasmo CRIPTO.ASM ROMS\CRIPTO.ROM
 echo ============= Pronto =============
