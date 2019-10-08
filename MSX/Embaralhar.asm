@@ -21,7 +21,7 @@ GravarProxima:
 	ld (NumContEmb),a				; e guardamos no contador
 	jp GravarProxima				; pega a proxima
 GravouTudo:
-	Call ImpFraseEmb				; Imprimir a frase embaralhada
+	call ImpFraseEmb				; Imprimir a frase embaralhada
 ret
 
 AcharPosSort:
