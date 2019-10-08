@@ -6,8 +6,8 @@
 __VERSION:  equ 1
 __RELEASE:  equ 1
 include "Hardware\BiosMSX.asm"
-include "Constantes.asm"
-include "Variaveis.asm"
+include "Assets\Constantes.asm"
+include "Assets\Variaveis.asm"
 
 org romArea
 	db "AB"                     ; identifica como ROM
@@ -20,8 +20,8 @@ org romArea
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
-org &8000
-  
+startCode:
+
 ret
 ; =============================================================================
 ; FIM PROGRAMA
@@ -29,7 +29,7 @@ ret
 include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Library\Library.asm"
-include "Strings.asm"
+include "Assets\Strings.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================

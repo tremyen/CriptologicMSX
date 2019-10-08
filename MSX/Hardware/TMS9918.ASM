@@ -7,6 +7,50 @@
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
 ; =============================================================================
+; ScreenINIT - Inicializa os registradores do VDP
+; =============================================================================
+ScreenINIT:
+	ld a,%00000000		       ; [0][0][0][0][0][0][M3][EV]
+	out (VDPCONTROL),a
+	ld a,128+0		           ; Controla Modo de video
+	out (VDPCONTROL),a
+
+	ld a,&C0  	              ; [16K][BLK][IE][M1][M2][0][SPR][MAG]
+	out (VDPCONTROL),a
+	ld a,128+1		           ; Parametros do Modo de video
+	out (VDPCONTROL),a
+
+	ld a,&01                 ; [0][0][0][0][N][N][N][N]
+	out (VDPCONTROL),a       ; 0401(H)
+	ld a,128+2		           ; Localiza a tabela de nomes na VRAM
+	out (VDPCONTROL),a
+
+  ld a,&08                 ; [C][C][C][C][C][C][C][C]
+	out (VDPCONTROL),a       ; 0201(H)
+	ld a,128+3		           ; Localiza a tabela de cores na VRAM
+	out (VDPCONTROL),a
+
+  ld a,&01                 ; [0][0][0][0][0][F][F][F]
+	out (VDPCONTROL),a       ; 0801(H)
+	ld a,128+4		           ; Localiza a tabela de padroes na VRAM
+	out (VDPCONTROL),a
+
+	ld a,&02                 ; [0][0][0][0][0][F][F][F]
+	out (VDPCONTROL),a       ; 0101(H)
+	ld a,128+5		           ; Localiza a tabela de atributos dos sprites
+	out (VDPCONTROL),a
+
+  ld a,&00                 ; [0][0][0][0][0][F][F][F]
+	out (VDPCONTROL),a       ; 0000(H)
+	ld a,128+6		           ; Localiza a tabela de padroes dos sprites
+	out (VDPCONTROL),a
+
+	ld a,%11110110;          ; [T][T][T][T][B][B][B][B]
+	out (VDPCONTROL),a
+	ld a,128+7		           ; Cor dos bits no modo texto / Cor do Backdrop
+	out (VDPCONTROL),a
+
+; =============================================================================
 ; SetVDPReg - Seta um registrador do VDP
 ; =============================================================================
 ; Parametros: a=> Valor a ser colocado no registrador
@@ -25,14 +69,14 @@ ret
 ; SetVDP_Write - Seta o contador de endereco para escrever a partir de AHL
 ; =============================================================================
 SetVDP_Write:
-    rlc h
+    rlc h                     ; formata HL
     rla
     rlc h
     rla
     srl h
-    srl h
+    srl h                     ; formata HL
     di
-      out (VDPCONTROL),a
+      out (VDPCONTROL),a      ;
       ld a,14 + 128
       out (VDPCONTROL),a
       ld a,l

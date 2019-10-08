@@ -7,8 +7,8 @@
 __VERSION:  equ 1
 __RELEASE:  equ 1
 include "..\Hardware\BiosMSX.asm"
-include "Constantes.asm"
-include "Variaveis.asm"
+include "..\Assets\Constantes.asm"
+include "..\Assets\Variaveis.asm"
 
 org romArea
 	db "AB"                     ; identifica como ROM
@@ -22,27 +22,17 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-    xor a
-    ld hl,&8000       ;  to 1st byte of page 1...
-    call SetVDP_Write
-    ld a,&88          ; use color 8 (red)
-FillL1:
-    ld c,8            ; fill 1st 8 lines of page 1
-FillL2:
-  ld b,128
-  out (VDPDATA),a     ; could also have been done with
-  djnz FillL2         ; a vdp command (probably faster)
-  dec c               ; (and could also use a fast loop)
-  jp nz,FillL1
-  ld hl,COPYBLOCK     ; execute the copy
-  call DoCopy
+	call ScreenINIT
+	; Escrever no enredeco 1600(H) tabela de padroes de sprites
+	; ld a,%00010110
+	; ld h,%00000000
+	; ld l,%00000000
+	; call SetVDP_Write
+	; ld hl,Font
+	; call DoCopy
+LoopInfinito:
+	jr LoopInfinito
 ret
-
-COPYBLOCK:
-    db 0,0,0,1
-    db 0,0,0,0
-    db 8,0,8,0
-    db 0,0,&D0
 
 ; =============================================================================
 ; FIM PROGRAMA
@@ -50,7 +40,8 @@ COPYBLOCK:
 include "..\Hardware\AY38910.ASM"
 include "..\Hardware\TMS9918.ASM"
 include "..\Library\Library.asm"
-include "Strings.asm"
+include "..\Assets\Strings.asm"
+include "..\Assets\Sprites.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================
