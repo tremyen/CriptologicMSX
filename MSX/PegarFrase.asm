@@ -20,6 +20,14 @@ PegarFrase:
 	ld b,0								; Zera o contador de letras
 LoopFrase:
 	call CHGET						; ler um caracter
+	cp 17 								; valida seta
+	jp z,LoopFrase
+	cp 18 								; valida seta
+	jp z,LoopFrase
+	cp 19 								; valida seta
+	jp z,LoopFrase
+	cp 20 								; valida seta
+	jp z,LoopFrase
 	ld (hl),a							; guarda o ascii desse caracter
 	cp 13
 	jp z,NaoImprime

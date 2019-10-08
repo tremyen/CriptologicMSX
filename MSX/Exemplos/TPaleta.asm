@@ -1,11 +1,11 @@
 ; =============================================================================
-; Criptologic 1.0 para MSX
+; Teste de alteracao de paleta
 ; =============================================================================
 ; Manoel Neto 2019-10-02
 ; =============================================================================
 __VERSION:  equ 1
 __RELEASE:  equ 1
-include "Hardware\BiosMSX.asm"
+include "BiosMSX.asm"
 include "Constantes.asm"
 include "Variaveis.asm"
 
@@ -16,39 +16,29 @@ org romArea
   db __VERSION+48							; cria o identificador de versao
   db __RELEASE+65							; cria o identificador da release
   ds 6,0
-
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-	call LimpaMem					; Limpa a memoria a cada execucao
-	call DesenharTela			; Desenhar a tela do jogo
-	call PegarFrase				; Obtem a mensagem do usuario
-	call Sortear					; Sortear os numeros aleatorios
-	call Embaralhar				; Embaralha a frase
-	call PegarChute				; Pegar os chutes do jogador 2
+  call INIT32
+  call LimparTela
+  LD a,5                  ; Azul leve
+  LD (BAKCLR),a           ; Fundo
+  LD (BDRCLR),a           ; Borda
+  LD a,1                  ; Azul leve  
+  ld (FORCLR),a
+  CALL CHGCLR             ; Troca cor
+  ld hl,MsgUsuario1
+  call PrintString
 loopInfinito:
-	ld h,NumPosXMensagens
-	ld l,NumPosYMensagemFinal
-	call POSIT
-	ld hl,MsgUsuario8
-	call PrintString
-	call CHGET
-	cp 13
-	jp z,startCode
-jp loopInfinito
+  jp loopInfinito
 
-include "DesenharTela.asm"
-include "PegarFrase.asm"
-include "Sortear.asm"
-include "Embaralhar.asm"
-include "PegarChutes.asm"
+include "AY38910.ASM"
+include "TMS9918.ASM"
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
-include "Hardware\AY38910.ASM"
-include "Hardware\TMS9918.ASM"
-include "Library\Library.asm"
+include "Library.asm"
 include "Strings.asm"
 ; =============================================================================
 ; Padding

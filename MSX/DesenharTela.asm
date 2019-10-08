@@ -3,10 +3,11 @@
 ; =============================================================================
 ; Manoel Neto 2019-10-03
 ; =============================================================================
-; inicializar a tela em modo 32x24
+; Inicializar a tela em modo 32x24
+; Setar as cores de fundo e borda
+; Imprimir cabecalho do jogo
 ; Trocar a cor para roxo
-; Desenhar uma linha na posicao (9,11)
-; Desenhar uma linha na posicao (9,13)
+; Desenhar duas linhas
 ; posicionar o cursor na posicao (9,10)
 ; =============================================================================
 DesenharTela:
@@ -16,8 +17,8 @@ DesenharTela:
   ld h,NumPosXCabecalho       ; posicionar o cabecalho
   ld l,NumPosYCabecalho
   call POSIT
-  ld hl,MsgUsuario1           ; imprimir o cabecalho
-  call PrintString
+  ld hl,MsgUsuario1
+  call PrintString            ; imprimir o cabecalho
 
   ld h,NumPosXMensagens       ; posicionar mensagem inicial
   ld l,NumPosYMensagens
@@ -37,7 +38,7 @@ DesenharTela:
   ld hl,LinhaApoio
   call PrintString            ; imprimir a linha de apoio 1
 
-  ld h,NumPosXEntradas        ; posicionar para a primeira entrada
-  ld l,NumPosYEntrada1
-  call POSIT
+  ld h,NumPosXEntradas
+  ld l,NumPosYEntrada1        
+  call POSIT                  ; posicionar para a primeira entrada
 ret

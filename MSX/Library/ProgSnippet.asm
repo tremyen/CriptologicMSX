@@ -1,8 +1,8 @@
-; =============================================================================
-; Criptologic 1.0 para MSX
-; =============================================================================
-; Manoel Neto 2019-10-02
-; =============================================================================
+;==============================================================================
+; <Nome do Programa>
+; <Autor><Data>
+; <Descricao>
+;==============================================================================
 __VERSION:  equ 1
 __RELEASE:  equ 1
 include "Hardware\BiosMSX.asm"
@@ -20,29 +20,9 @@ org romArea
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
-startCode:
-	call LimpaMem					; Limpa a memoria a cada execucao
-	call DesenharTela			; Desenhar a tela do jogo
-	call PegarFrase				; Obtem a mensagem do usuario
-	call Sortear					; Sortear os numeros aleatorios
-	call Embaralhar				; Embaralha a frase
-	call PegarChute				; Pegar os chutes do jogador 2
-loopInfinito:
-	ld h,NumPosXMensagens
-	ld l,NumPosYMensagemFinal
-	call POSIT
-	ld hl,MsgUsuario8
-	call PrintString
-	call CHGET
-	cp 13
-	jp z,startCode
-jp loopInfinito
-
-include "DesenharTela.asm"
-include "PegarFrase.asm"
-include "Sortear.asm"
-include "Embaralhar.asm"
-include "PegarChutes.asm"
+org &8000
+  
+ret
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
