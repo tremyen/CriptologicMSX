@@ -2,7 +2,7 @@
 ; TMS9918.ASM
 ; =============================================================================
 ; Manoel Neto 2019-10-04
-; Biblioteca para uso do VDP do MSX1
+; Biblioteca para uso do VDP do MSX 1
 ;	Tabela de padrões 	=> 00000 e 06143 (&H000..&H17FF)
 ;	Tabela de nomes 		=> 06144 e 06911 (768 bytes)
 ; Tabela de atributos => 08192 e 14335 (&h2000..&h37FF)
@@ -51,18 +51,18 @@ ret
 ; ==========================================================================
 ; Carrega a Tabela de Atributos
 ; ==========================================================================
-LoadAttributeTable:
-	ld bc,2048              ; bytes a copiar
-	ld de,8192              ; tabela de atributos na VRAM
-	ld hl,charAttributes    ; localização na RAM
-	call LDIRVM             ; copio a tabela de atributos
-ret
+; LoadAttributeTable:
+; 	ld bc,2048              ; bytes a copiar
+; 	ld de,8192              ; tabela de atributos na VRAM
+; 	ld hl,charAttributes    ; localização na RAM
+; 	call LDIRVM             ; copio a tabela de atributos
+; ret
 ; ==========================================================================
 ; Carrega a Tabela de sprites
 ; ==========================================================================
-LoadSpritesTable:
-	ld bc,8               	; bytes a copiar
-  ld de,14336             ; tabela de sprites na VRAM
-  ld hl,spritePatterns    ; localização na RAM
-  call LDIRVM             ; copio a tabela de sprites
-ret
+; LoadSpritesTable:
+; 	ld bc,8               	; bytes a copiar
+;   ld de,14336             ; tabela de sprites na VRAM
+;   ld hl,spritePatterns    ; localização na RAM
+;   call LDIRVM             ; copio a tabela de sprites
+; ret

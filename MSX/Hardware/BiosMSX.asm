@@ -208,7 +208,7 @@ VARTAB:		equ 0xF6C2			; área de armazenamento de variáveis (BASIC)
 ARYTAB:		equ 0xF6C4			; área de armazenamente de arrays (BASIC)
 STREND:		equ 0xF6C6			; byte seguinte à área de ARYTAB (BASIC)
 DATPTR:		equ 0xF6C8			; Aponta para item DATA atual (BASIC)
-DEFTBL:		equ 0xF6CA			; Tipos de variável, por letra (BASIC), definidos por DEFINT, DEFSTR, etc
+DEFTBL:		equ 0xF6CA			; Tp de variavel,por letra (BASIC),DEFINT,DEFSTR,...
 PRMSTK:		equ 0xF6E4			; Usada pelo interpretador BASIC
 PRMLEN:		equ 0xF6E6			; Usada pelo interpretador BASIC
 PARM1:		equ 0xF6E8			; Usada pelo interpretador BASIC (buffer do FN)
@@ -231,7 +231,7 @@ HOLD8:		equ 0xF806			; Buffer temporário de multiplicação (BASIC)
 ARG:		  equ 0xF847			; Buffer de avaliação de expressão do BASIC
 RNDX:		  equ 0xF857			; Contém o último número aleatório (precisão dupla)
 MAXFIL:		equ 0xF85F			; Número de buffers de E/S alocados (BASIC)
-FILTAB:		equ 0xF860			; Aponta para a tabela de FCBs dos buffers de E/S (BASIC)
+FILTAB:		equ 0xF860			; Aponta tabela de FCBs dos buffers de E/S (BASIC)
 NULBUF:		equ 0xF862			; Aponta para o buffer de E/S
 PTRFIL:		equ 0xF864			; Aponta para o FCB do buffer de E/S ativo
 FILNAM:		equ 0xF866			; Buffer de nome de arquivo. (BASIC)
@@ -239,10 +239,10 @@ FILNM2:		equ 0xF871			; Buffer de nome de arquivo. (BASIC)
 NLONLY:		equ 0xF87C			; Usada pelo interpretador BASIC
 SAVEND:		equ 0xF87D			; Usada pelo interpretador BASIC
 FNKSTR:		equ 0xF87F			; Buffer com strings das teclas de função
-CGPNT:		equ 0xF91F			; Aponta para a tabela de caracteres em ROM (Slot ID 0 seguido do endereço 0x1BBF)
-NAMBAS:		equ 0xF922			; Base da tabela de nomes no modo de ví deo atual
-CGPBAS:		equ 0xF924			; Base da tabela de caracteres no modo de ví deo atual
-PATBAS:		equ 0xF926			; Base da tabela de imagens de sprites no modo de ví deo atual
+CGPNT:		equ 0xF91F			; Tabela de caract. em ROM (Slot ID 0,endereço 0x1BBF)
+NAMBAS:		equ 0xF922			; Base da tabela de nomes no modo de video atual
+CGPBAS:		equ 0xF924			; Base da tabela de caracteres no modo de video atual
+PATBAS:		equ 0xF926			; Base da tabela de imagens de sprites no modo de video atual
 ATRBAS:		equ 0xF928			; Base da tabela de atributos de sprites no modo de ví deo atual
 CLOC:		  equ 0xF92A			; Endereço do pixel atual (funções gráficas da BIOS)
 CMASK:		equ 0xF92C			; Máscara do pixel atual
