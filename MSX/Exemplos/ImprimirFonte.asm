@@ -31,9 +31,9 @@ startCode:
 	; ==========================================================================
 	; Carrega Tabela de nomes
 	; ==========================================================================
-	ld bc,14                ; bytes a copiar
-  ld de,6144+7	          ; posição na tela
-  ld hl,LinhaReta14	      ; padrão da string
+	ld bc,11                ; bytes a copiar
+  ld de,6144+1	          ; posição na tela
+  ld hl,TodosOsChar	      ; padrão da string
   call LDIRVM             ; copio na VRAM
 	; ==========================================================================
   call ENASCR             ; religo a tela
@@ -41,9 +41,8 @@ LoopInfinito:
 	jr LoopInfinito
 ret
 
-LinhaReta14:
-  db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
-
+TodosOsChar:
+	db 0,1,2,3,4,5,6,7,8,9,10
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
