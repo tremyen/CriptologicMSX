@@ -50,6 +50,7 @@ include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Library\Library.asm"
 include "Assets\Strings.asm"
+include "Assets\Sprites.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================
