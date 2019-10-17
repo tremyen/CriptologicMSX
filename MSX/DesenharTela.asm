@@ -11,7 +11,8 @@
 ; posicionar o cursor na posicao (9,10)
 ; =============================================================================
 DesenharTela:
-  call INIT32
+  call ERAFNK
+  call INIT32  
   call LimparTela
 
   ld h,NumPosXCabecalho       ; posicionar o cabecalho
@@ -39,6 +40,6 @@ DesenharTela:
   call PrintString            ; imprimir a linha de apoio 1
 
   ld h,NumPosXEntradas
-  ld l,NumPosYEntrada1        
+  ld l,NumPosYEntrada1
   call POSIT                  ; posicionar para a primeira entrada
 ret

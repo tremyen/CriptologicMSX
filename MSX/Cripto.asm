@@ -4,19 +4,20 @@
 ; Manoel Neto 2019-10-02
 ; =============================================================================
 __VERSION:  equ 1
-__RELEASE:  equ 1
+__RELEASE:  equ 0
 include "Hardware\BiosMSX.asm"
 include "Assets\Constantes.asm"
 include "Assets\Variaveis.asm"
 
-org romArea
-	db "AB"                     ; identifica como ROM
-  dw startCode                ; endereço de execução
-  db "CW01"                   ; string de identificação
-  db __VERSION+48							; cria o identificador de versao
-  db __RELEASE+65							; cria o identificador da release
-  ds 6,0
+; org romArea
+; 	db "AB"                     ; identifica como ROM
+;   dw startCode                ; endereço de execução
+;   db "CW01"                   ; string de identificação
+;   db __VERSION+48							; cria o identificador de versao
+;   db __RELEASE+65							; cria o identificador da release
+;   ds 6,0
 
+org &810A
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
@@ -54,6 +55,6 @@ include "Assets\Sprites.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================
-romPad:
-  ds romSize-(romPad-romArea),0
-end
+; romPad:
+;   ds romSize-(romPad-romArea),0
+; end

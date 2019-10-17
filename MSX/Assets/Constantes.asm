@@ -6,9 +6,9 @@
 ; =============================================================================
 NumPosXCabecalho:     equ 3
 NumPosYCabecalho:     equ 2
-NumPosXMensagens:     equ 1
+NumPosXMensagens:     equ 3
 NumPosYMensagens:     equ 6
-NumPosXErros:         equ 1
+NumPosXErros:         equ 3
 NumPosYErros:         equ 7
 NumPosXEntradas:      equ 7
 NumPosYEntrada1:      equ 13

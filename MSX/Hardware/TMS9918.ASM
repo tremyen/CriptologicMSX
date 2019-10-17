@@ -43,7 +43,7 @@ ret
 ; Carrega a Tabela de padroes
 ; ==========================================================================
 LoadPatternTable:
-	ld bc,24             		; bytes a copiar
+	ld bc,200            		; bytes a copiar
   ld de,0                 ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
