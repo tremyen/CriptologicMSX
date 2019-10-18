@@ -11,5 +11,9 @@ NumDivIdeal 		equ &9003	; Variavel => Divisor ideal de acordo com a frase
 NumPosSort		equ &9005	; Variavel => PosicaoSorteada
 ChaLetraAtual		equ &9006	; Variavel => Letra na posicao sorteada
 NumContEmb		equ &9007	; Variavel => Contador de embaralhamento
+ChaTestar		equ &9008	; Variavel => Guarda o caracter para testar
+NumContTeste		equ &9009	; Variavel => Conta o teste atual
+NumContErros		equ &900A 	; Variavel => Conta os erros (Nao e 9010)!		
+
 
 

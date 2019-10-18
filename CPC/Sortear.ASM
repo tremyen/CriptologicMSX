@@ -4,7 +4,6 @@
 ; Manoel Neto 2019-09-25
 ; Sortear X numeros aleatorios entre 1 e X 
 ; X deve ser igual ao tamanho da frase do jogador 1
-;=========================================================================================
 ; Validar se o numero sorteado nao eh maior que N 	=> (ValidarMaiorN)
 ; Validar se o numero sorteado ja foi sorteado 	  	=> (ValidarJaFoi)
 ; Jogar o resultado para a variavel NumAleatorio  	=> (9001)

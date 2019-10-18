@@ -1,11 +1,14 @@
-;=========================================================================================
+; =========================================================================================
+; Embaralhar.asm
+; =========================================================================================
+; Manoel Neto 2019-09-25
 ; Embaralhar Frase
 ; Achar a posicao sorteada na matriz			=> AcharPosSort
 ; Achar a letra nessa posicao da matriz			=> AcharLetra
 ; Gravar a letra encontrada em sua posicao embaralhada	=> GravarLetra
 ; Imprimir a frase inicial 				=> StrFrase
 ; Imprimir a frase Embaralhada 				=> StrFraseEmb
-;=========================================================================================
+; =========================================================================================
 Embaralhar:
 	xor a				; prepara primeira passada
 	ld (NumContEmb),a		; zera o contador de embaralhamento

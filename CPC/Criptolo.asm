@@ -14,11 +14,13 @@ org &8000
 	call PegarFrase		; Obtem a mensagem do usuario
 	call Sortear		; Sortear os numeros para embaralhar a frase
 	call Embaralhar		; Embaralha a frase
+	call PegarChutes	; Embaralha a frase
 ret
 
 read "PegarFrase.asm"
 read "Sortear.asm"
 read "Embaralhar.asm"
+read "PegarChutes.asm"
 
 ; =========================================================================================
 ; FIM DO PROGRAMA
