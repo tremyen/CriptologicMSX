@@ -28,7 +28,7 @@ startCode:
 	ld a,32
   ld (LINL32),a           		; largura da tela em 32 colunas
 	call LoadPatternTable				; CARREGO A TABELA DE PADROES
-	;call LoadAttributeTable			; CARREGO A TABELA DE ATRIBUTOS
+	;call LoadAttributeTable		; CARREGO A TABELA DE ATRIBUTOS
 	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
 
 	ld bc,3		              		; bytes a copiar
@@ -46,17 +46,17 @@ startCode:
 	; ==========================================================================
   call ENASCR             		; religo a tela
 LoopInfinito:
-	ld bc,3		              		; bytes a copiar
+	ld bc,5		              		; bytes a copiar
 	ld de,8192              		; tabela de atributos na VRAM
 	ld hl,CorAzul				    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
 
-	ld bc,2		              		; bytes a copiar
+	ld bc,4		              		; bytes a copiar
 	ld de,8192              		; tabela de atributos na VRAM
 	ld hl,CorAmarelo		    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
 
-	ld bc,1		              		; bytes a copiar
+	ld bc,3		              		; bytes a copiar
 	ld de,8192              		; tabela de atributos na VRAM
 	ld hl,CorVermelho		    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
