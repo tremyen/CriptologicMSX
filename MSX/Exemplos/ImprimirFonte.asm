@@ -21,22 +21,22 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-	call DISSCR             ; desligo a exibição da tela
+	call DISSCR             		; desligo a exibição da tela
 	call LimparTela
 	call ScreenINIT
-	call ERAFNK             ; desligo as teclas de função
+	call ERAFNK             		; desligo as teclas de função
 	ld a,32
-  ld (LINL32),a           ; largura da tela em 32 colunas
+  ld (LINL32),a           		; largura da tela em 32 colunas
 	call LoadPatternTable
 	; ==========================================================================
 	; Carrega Tabela de nomes
 	; ==========================================================================
-	ld bc,11                ; bytes a copiar
-  ld de,6144+1	          ; posição na tela
-  ld hl,TodosOsChar	      ; padrão da string
-  call LDIRVM             ; copio na VRAM
+	ld bc,11                		; bytes a copiar
+  ld de,6144+1	          		; posição na tela
+  ld hl,TodosOsChar	      		; padrão da string
+  call LDIRVM             		; copio na VRAM
 	; ==========================================================================
-  call ENASCR             ; religo a tela
+  call ENASCR             		; religo a tela
 LoopInfinito:
 	jr LoopInfinito
 ret
