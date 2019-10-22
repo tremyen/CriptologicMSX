@@ -27,6 +27,22 @@ startCode:
 	call Embaralhar				; Embaralha a frase
 	call PegarChute				; Pegar os chutes do jogador 2
 loopInfinito:
+
+	ld bc,3		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorAzul				    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
+	ld bc,3		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorAmarelo		    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
+	ld bc,3		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorVermelho		    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
 	ld h,NumPosXMensagens
 	ld l,NumPosYMensagemFinal
 	call POSIT

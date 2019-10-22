@@ -37,4 +37,11 @@ CorLinhaApoio:
   db %01010001
   db %01010001
   db %01010001
-  
+CorAzul:
+	db %01010001
+CorAmarelo:
+	db %10110001
+CorVermelho:
+	db %10010001
+CorBranco:
+	db %11110001

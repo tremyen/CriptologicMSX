@@ -27,7 +27,15 @@ startCode:
 	call ERAFNK             		; desligo as teclas de função
 	ld a,32
   ld (LINL32),a           		; largura da tela em 32 colunas
-	call LoadPatternTable
+	call LoadPatternTable				; CARREGO A TABELA DE PADROES
+	;call LoadAttributeTable			; CARREGO A TABELA DE ATRIBUTOS
+	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
+
+	ld bc,3		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorAzul				    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
 	; ==========================================================================
 	; Carrega Tabela de nomes
 	; ==========================================================================
@@ -38,11 +46,26 @@ startCode:
 	; ==========================================================================
   call ENASCR             		; religo a tela
 LoopInfinito:
-	jr LoopInfinito
-ret
+	ld bc,3		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorAzul				    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
+	ld bc,2		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorAmarelo		    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
+	ld bc,1		              		; bytes a copiar
+	ld de,8192              		; tabela de atributos na VRAM
+	ld hl,CorVermelho		    		; localização na RAM
+	call LDIRVM             		; copio a tabela de atributos
+
+jr LoopInfinito
 
 TodosOsChar:
 	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
