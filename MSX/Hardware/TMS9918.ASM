@@ -41,46 +41,48 @@ ScreenINIT:
 	ld a,128+7
 	out (VDPCONTROL),a
 ret
+; =============================================================================
 
-; ==========================================================================
+; =============================================================================
 ; Carrega a Tabela de padroes
-; ==========================================================================
+; =============================================================================
 ; Nos calculamos o endereco de memoria multiplicando o numero do tile por 8
-; ==========================================================================
+; =============================================================================
 LoadPatternTable:
 	ld bc,120            		; bytes a copiar
   ld de,0                 ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
 ret
+; =============================================================================
 
-; ==========================================================================
+; =============================================================================
 ; Carrega a Tabela de Atributos
-; ==========================================================================
-; LoadAttributeTable:
-; 	ld bc,2048              ; bytes a copiar
-; 	ld de,8192              ; tabela de atributos na VRAM
-; 	ld hl,charAttributes    ; localização na RAM
-; 	call LDIRVM             ; copio a tabela de atributos
-; ret
-; ==========================================================================
+; =============================================================================
+LoadAttributeTable:
+ 	ld bc,14	              ; bytes a copiar
+ 	ld de,8192              ; tabela de atributos na VRAM
+ 	ld hl,CorLinhaApoio	    ; localização na RAM
+ 	call LDIRVM             ; copio a tabela de atributos
+ret
+; =============================================================================
 ; Carrega a Tabela de sprites
-; ==========================================================================
-; LoadSpritesTable:
-; 	ld bc,8               	; bytes a copiar
-;   ld de,14336             ; tabela de sprites na VRAM
-;   ld hl,spritePatterns    ; localização na RAM
-;   call LDIRVM             ; copio a tabela de sprites
-; ret
+; =============================================================================
+LoadSpritesTable:
+	ld bc,1               	; bytes a copiar
+  ld de,14336             ; tabela de sprites na VRAM
+  ld hl,CriptoFont		    ; localização na RAM
+  call LDIRVM             ; copio a tabela de sprites
+ret
 
-; ==========================================================================
+; =============================================================================
 ; Pegar a posicao de memoria de uma coordenada XY
-; ==========================================================================
+; =============================================================================
 ; B	=> posicao X
 ; C => posicao X
-; ==========================================================================
+; =============================================================================
 ; Altera => HL (endereco de memoria da coordenada xy),A
-; ==========================================================================
+; =============================================================================
 GetVDPScreenPos:
 	push bc
 		ld h,0
@@ -104,3 +106,37 @@ GetVDPScreenPos:
 		ld h,a
 	pop bc
 ret
+; =============================================================================
+
+; =============================================================================
+; Pegar a posicao da tabela de cores da coordenada xy
+; =============================================================================
+; As coores pode ser setadas para uma area 8x1
+; um byte define cor da frente e cor do background (&FB)
+; B	=> posicao x (0-32)
+; C => posicao y (0-191)
+; =============================================================================
+; Altera => HL (endereco de memoria da cor da coordenada xy),A
+; =============================================================================
+GetColorMemPos:
+	push bc
+		ld a,c
+		and %11111000
+		rrca
+		rrca
+		rrca
+		or &20					; a tabela de cores comeca em &2000
+		ld h,a
+		ld a,b
+		and %00011111
+		rlca
+		rlca
+		rlca
+		ld b,a
+		ld a,c
+		and %00000111
+		or b
+		ld l,a
+	pop bc
+ret
+; =============================================================================

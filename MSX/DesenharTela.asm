@@ -17,10 +17,10 @@
 DesenharTela:
 	call DISSCR             		; desligo a exibição da tela
 	call LimparTela             ; limpo a tela
-	call ScreenINIT             ; inicializo a tela
+	call INIT32		              ; inicializo a tela
   ld a,15
   ld (FORCLR),a               ; seto a cor da fonte
-  ld a,5
+  ld a,1
   ld (BAKCLR),a               ; seto a cor do background
   ld a,1
   ld (BDRCLR),a               ; seto a cor da borda
@@ -29,20 +29,25 @@ DesenharTela:
 	ld a,32                     ; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas
 	call LoadPatternTable       ; CARREGO A TABELA DE PADROES
+	call LoadAttributeTable			; CARREGO A TABELA DE ATRIBUTOS
+	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
 
-  ld h,NumPosXCabecalho       ; Coordenada X
+	; Imprimir o Cabecalho
+	ld h,NumPosXCabecalho       ; Coordenada X
   ld l,NumPosYCabecalho       ; Coordenada Y
   call POSIT                  ; posicionar o cabecalho
   ld hl,MsgUsuario1           ; Cabecalho
   call PrintString            ; imprimir o cabecalho
 
+	; Imprimir a Mensagem Inicial
   ld h,NumPosXMensagens       ; Coordenada X
   ld l,NumPosYMensagens       ; Coordenada Y
   call POSIT                  ; posicionar mensagem inicial
   ld hl,MsgUsuario2           ; mensagem inicial
   call PrintString            ; imprimir mensagem inicial
 
-  ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 1 x
+	; Imprimir linha da apoio 1
+	ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 1 x
   ld c,NumPosYLinhaApoio1     ; posicionar a linha de apoio 1 y
   call GetVDPScreenPos        ; pegar a area de memoria da posicao BC em HL
   ld d,h                      ; posição na tela
@@ -51,13 +56,14 @@ DesenharTela:
   ld hl,LinhaReta	      			; tabela de nomes
   call LDIRVM             		; copio na VRAM
 
-  ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 2 x
+	; Imprimir linha da apoio 2
+	ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 2 x
   ld c,NumPosYLinhaApoio2     ; posicionar a linha de apoio 2 y
   call GetVDPScreenPos        ; pegar a area de memoria da posicao BC em HL
   ld d,h                      ; posição na tela
   ld e,l                      ; posição na tela
   ld bc,14                		; bytes a copiar
-  ld hl,LinhaReta	      			; tabela de nomes
+  ld hl,LinhaReta	      			; Padrao da tabela de nomes
   call LDIRVM             		; copio na VRAM
 
   ld h,NumPosXEntradas        ; Coordenada X

@@ -28,6 +28,8 @@ LoopFrase:
 	jp z,LoopFrase
 	cp 20 								; valida seta
 	jp z,LoopFrase
+	cp 8 									; valida backspace
+	jp z,LoopFrase
 	ld (hl),a							; guarda o ascii desse caracter
 	cp 13
 	jp z,NaoImprime
@@ -49,4 +51,6 @@ ValidaDuasLetras:
 	call LimpaString			; senao limpa a string
 	jp PegarFrase					; e pega a mensagem novamente
 AcabouFrase:
+	inc hl								; vai para o proximo espaco
+	ld (hl),13						; adiciona o fim da string
 ret
