@@ -3,10 +3,13 @@
 ; =============================================================================
 ; Manoel Neto 2019-10-04
 ; Biblioteca para uso do VDP do MSX 1
-;	Tabela de padrões 	=> 00000 e 06143 (&H0000..&H17FF)
-;	Tabela de nomes 		=> 06144 e 06911 (&H1800..&H1AFF) => 768 bytes
-; Tabela de atributos => 08192 e 14335 (&h2000..&h37FF)
-; Tabela de Sprites 	=> 14336
+; =============================================================================
+; VDP MODO GRAFICO I (SCREEN 1)
+; =============================================================================
+;	Tabela de padrões 	=> 00000 ate 06143 (&H0000..&H17FF)
+;	Tabela de nomes 		=> 06144 ate 06911 (&H1800..&H1AFF) => 768 bytes
+; Tabela de atributos => 08192 ate 14335 (&H2000..&h37FF)
+; Tabela de Sprites 	=> 14336 ate 16384 (&H3800..&H4000)
 ; =============================================================================
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
@@ -45,7 +48,7 @@ ret
 ; Nos calculamos o endereco de memoria multiplicando o numero do tile por 8
 ; ==========================================================================
 LoadPatternTable:
-	ld bc,200            		; bytes a copiar
+	ld bc,120            		; bytes a copiar
   ld de,0                 ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
