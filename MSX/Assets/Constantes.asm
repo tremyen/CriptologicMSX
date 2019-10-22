@@ -11,9 +11,9 @@ NumPosYMensagens:     equ 6
 NumPosXErros:         equ 3
 NumPosYErros:         equ 7
 NumPosXEntradas:      equ 7
-NumPosYEntrada1:      equ 13
+NumPosYEntrada1:      equ 11
 NumPosYEntrada2:      equ 15
-NumPosXLinhaApoio:    equ 7
-NumPosYLinhaApoio1:   equ 14
-NumPosYLinhaApoio2:   equ 16
+NumPosXLinhaApoio:    equ 8
+NumPosYLinhaApoio1:   equ 11
+NumPosYLinhaApoio2:   equ 15
 NumPosYMensagemFinal: equ 23

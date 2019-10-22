@@ -20,5 +20,5 @@ MsgUsuario7:
 	db "Parabens! Acertou tudo!",13
 MsgUsuario8:
 	db "Aperte <ENTER> para jogar",13
-LinhaApoio:
-	db "______________",13
+LinhaReta:
+	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0

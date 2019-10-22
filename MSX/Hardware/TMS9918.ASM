@@ -3,8 +3,8 @@
 ; =============================================================================
 ; Manoel Neto 2019-10-04
 ; Biblioteca para uso do VDP do MSX 1
-;	Tabela de padrões 	=> 00000 e 06143 (&H000..&H17FF)
-;	Tabela de nomes 		=> 06144 e 06911 (768 bytes)
+;	Tabela de padrões 	=> 00000 e 06143 (&H0000..&H17FF)
+;	Tabela de nomes 		=> 06144 e 06911 (&H1800..&H1AFF) => 768 bytes
 ; Tabela de atributos => 08192 e 14335 (&h2000..&h37FF)
 ; Tabela de Sprites 	=> 14336
 ; =============================================================================
@@ -42,26 +42,14 @@ ret
 ; ==========================================================================
 ; Carrega a Tabela de padroes
 ; ==========================================================================
+; Nos calculamos o endereco de memoria multiplicando o numero do tile por 8
+; ==========================================================================
 LoadPatternTable:
 	ld bc,200            		; bytes a copiar
   ld de,0                 ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
 ret
-
-; ==========================================================================
-; Carrega Tabela de nomes
-; ==========================================================================
-LoadNamesTable:
-	ld bc,11                		; bytes a copiar
-	ld de,6144+32	          		; posição na tela
-	ld hl,LinhaReta	      			; padrão da string
-	call LDIRVM             		; copio na VRAM
-ret
-
-LinhaReta:
-	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
-; ==========================================================================
 
 ; ==========================================================================
 ; Carrega a Tabela de Atributos
@@ -81,3 +69,35 @@ LinhaReta:
 ;   ld hl,spritePatterns    ; localização na RAM
 ;   call LDIRVM             ; copio a tabela de sprites
 ; ret
+
+; ==========================================================================
+; Pegar a posicao de memoria de uma coordenada XY
+; ==========================================================================
+; B	=> posicao X
+; C => posicao X
+; ==========================================================================
+; Altera => HL (endereco de memoria da coordenada xy),A
+; ==========================================================================
+GetVDPScreenPos:
+	push bc
+		ld h,0
+		ld l,c
+		or a
+		rl l
+		rl h
+		rl l
+		rl h
+		rl l
+		rl h
+		rl l
+		rl h
+		rl l
+		rl h
+		ld a,l
+		or b			; or na coordenada x
+		ld l,a
+		ld a,h
+		or &18		; mapa de azulejos começa em &1800
+		ld h,a
+	pop bc
+ret
