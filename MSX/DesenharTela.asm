@@ -11,9 +11,14 @@
 ; posicionar o cursor na posicao (9,10)
 ; =============================================================================
 DesenharTela:
-  call ERAFNK
-  call INIT32  
-  call LimparTela
+	call DISSCR             		; desligo a exibição da tela
+	call LimparTela             ; limpo a tela
+	call ScreenINIT             ; inicializo a tela
+	call ERAFNK             		; desligo as teclas de função
+	ld a,32
+  ld (LINL32),a           		; largura da tela em 32 colunas
+	call LoadPatternTable       ; CARREGO A TABELA DE PADROES
+  call LoadNamesTable	        ; CARREGO A TABELA DE NOME
 
   ld h,NumPosXCabecalho       ; posicionar o cabecalho
   ld l,NumPosYCabecalho
@@ -42,4 +47,6 @@ DesenharTela:
   ld h,NumPosXEntradas
   ld l,NumPosYEntrada1
   call POSIT                  ; posicionar para a primeira entrada
+
+  call ENASCR             		; religo a tela
 ret

@@ -48,6 +48,21 @@ LoadPatternTable:
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
 ret
+
+; ==========================================================================
+; Carrega Tabela de nomes
+; ==========================================================================
+LoadNamesTable:
+	ld bc,11                		; bytes a copiar
+	ld de,6144+32	          		; posição na tela
+	ld hl,LinhaReta	      			; padrão da string
+	call LDIRVM             		; copio na VRAM
+ret
+
+LinhaReta:
+	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
+; ==========================================================================
+
 ; ==========================================================================
 ; Carrega a Tabela de Atributos
 ; ==========================================================================
