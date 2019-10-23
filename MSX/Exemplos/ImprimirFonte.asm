@@ -22,49 +22,55 @@ org romArea
 ; =============================================================================
 startCode:
 	call DISSCR             		; desligo a exibição da tela
-	call LimparTela
-	call ScreenINIT
+	call LimparTela							; limpo a tela
+	call ScreenINIT							; inicializo pelos registradores VDP #0/#1
 	call ERAFNK             		; desligo as teclas de função
-	ld a,32
+	ld a,32											; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas
 	call LoadPatternTable				; CARREGO A TABELA DE PADROES
-	;call LoadAttributeTable		; CARREGO A TABELA DE ATRIBUTOS
 	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
-
-	ld bc,3		              		; bytes a copiar
-	ld de,8192              		; tabela de atributos na VRAM
-	ld hl,CorAzul				    		; localização na RAM
-	call LDIRVM             		; copio a tabela de atributos
 
 	; ==========================================================================
 	; Carrega Tabela de nomes
 	; ==========================================================================
 	ld bc,15                		; bytes a copiar
-  ld de,6144+1	          		; posição na tela
+  ld de,ADRNAMESTBL        		; posição na tela
   ld hl,TodosOsChar	      		; padrão da string
   call LDIRVM             		; copio na VRAM
 	; ==========================================================================
+
+	; ==========================================================================
+	; Carrega tabela de atributos
+	; ==========================================================================
+	ld bc,56
+	ld a,0
+	call CALATR
+	ld d,h
+	ld e,l
+	ld hl,SpriteLinha
+	call LDIRVM             		; copio na VRAM
+	; ==========================================================================
+
   call ENASCR             		; religo a tela
+	; ==========================================================================
+
 LoopInfinito:
 	ld bc,5		              		; bytes a copiar
-	ld de,8192              		; tabela de atributos na VRAM
+	ld de,8192              		;
 	ld hl,CorAzul				    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
 
 	ld bc,4		              		; bytes a copiar
-	ld de,8192              		; tabela de atributos na VRAM
+	ld de,8192              		;
 	ld hl,CorAmarelo		    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
 
 	ld bc,3		              		; bytes a copiar
-	ld de,8192              		; tabela de atributos na VRAM
+	ld de,8192              		;
 	ld hl,CorVermelho		    		; localização na RAM
 	call LDIRVM             		; copio a tabela de atributos
 
 jr LoopInfinito
-
-TodosOsChar:
-	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
 
 ; =============================================================================
 ; FIM PROGRAMA

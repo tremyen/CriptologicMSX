@@ -8,11 +8,15 @@
 ; =============================================================================
 ;	Tabela de padrões 	=> 00000 ate 06143 (&H0000..&H17FF)
 ;	Tabela de nomes 		=> 06144 ate 06911 (&H1800..&H1AFF) => 768 bytes
-; Tabela de atributos => 08192 ate 14335 (&H2000..&h37FF)
+; Tabela de atributos => 06912 ate 14335 (&H1B00..&h37FF)
 ; Tabela de Sprites 	=> 14336 ate 16384 (&H3800..&H4000)
 ; =============================================================================
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
+ADRPATTERNTBL:				equ 0
+ADRNAMESTBL:					equ 6144
+ADRATRIBUTETBL:				equ 6912
+ADRSPRITETBL:					equ 14336
 ; =============================================================================
 ; ScreenINIT - Inicializa os registradores do VDP
 ; =============================================================================
@@ -22,7 +26,7 @@ ScreenINIT:
 	ld a,128+0
 	out (VDPCONTROL),a
 
-	ld a,%11000000           	; [16K][BLK][IE][M1][M2][0][SPR][MAG]
+	ld a,%10000000           	; [16K][BLK][IE][M1][M2][0][SPR][MAG]
 	out (VDPCONTROL),a				; Parametros do Modo de video
 	ld a,128+1
 	out (VDPCONTROL),a
@@ -50,30 +54,22 @@ ret
 ; =============================================================================
 LoadPatternTable:
 	ld bc,120            		; bytes a copiar
-  ld de,0                 ; tabela de padrões na VRAM
+  ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
 ret
 ; =============================================================================
 
 ; =============================================================================
-; Carrega a Tabela de Atributos
-; =============================================================================
-LoadAttributeTable:
- 	ld bc,14	              ; bytes a copiar
- 	ld de,8192              ; tabela de atributos na VRAM
- 	ld hl,CorLinhaApoio	    ; localização na RAM
- 	call LDIRVM             ; copio a tabela de atributos
-ret
-; =============================================================================
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,1               	; bytes a copiar
-  ld de,14336             ; tabela de sprites na VRAM
+	ld bc,120              	; bytes a copiar
+  ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,CriptoFont		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Pegar a posicao de memoria de uma coordenada XY
@@ -140,3 +136,55 @@ GetColorMemPos:
 	pop bc
 ret
 ; =============================================================================
+
+; =============================================================================
+; Pegar a posicao do sprite na VRAM
+; =============================================================================
+; Achamos a posicao multiplicando o numero do sprite por 4
+; Cada Sprite e definido por quatro bytes consecutivos na tabela de atributos
+; (6912 = &1800)
+; Endereco	Sprite 	Padrao		Conteudo
+; &6912			0				XXXXXXXX	Posicao X
+; &6913			0				YYYYYYYY	Posicao Y
+; &6914	 		0				PPPPPPPP	Numero do azulejo na tabela de padroes
+; &6915			0				E---CCCC	E=Extendido---C=Cor
+; =============================================================================
+;	B	 => Numero do Sprite
+; =============================================================================
+; Altera => A,B,HL (Endereco para carregar os atributos do sprite)
+; =============================================================================
+GetSpriteAdress:
+	ld c,4									; Multiplicador
+	ld a,b									;	Multiplicacao e feita por um loop
+	cp 0										; Caso b seja zero, nao precisamos multiplicar
+	jr z,PegouValorSoma 		; Vai para a soma do endereco base
+	xor a										; limpa o acumulador para inicar o loop
+MATHMULTAGAIN:
+	add a,c									; soma o valor
+	djnz MATHMULTAGAIN			; se ainda temos multiplicador continuamos no loop
+PegouValorSoma:
+	ld hl,6912							; Endereco base da tabela de atributos
+IncrementarPonteiro:
+	cp 0										; testa se temos de incrementar
+	jp z,AcheiEndereco			; Se nao temos que incrementar, esse e o endereco
+	inc hl									; incrementa ponteiro
+	dec a										; decrementa contador
+	jp IncrementarPonteiro	; vai para o proximo
+AcheiEndereco:
+ret
+
+; =============================================================================
+; Ligar os Sprites por Hardware
+; =============================================================================
+; Nenhum
+; =============================================================================
+; Nada
+; =============================================================================
+SpritesOn:
+	push af
+		ld a,%00001000
+		out (VDPCONTROL),a
+		ld a,128+8
+		out (VDPCONTROL),a
+	pop af
+ret
