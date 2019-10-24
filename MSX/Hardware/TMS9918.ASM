@@ -110,13 +110,14 @@ ret
 ; Pegar a posicao da tabela de cores da coordenada xy
 ; =============================================================================
 ; As coores pode ser setadas para uma area 8x1
-; um byte define cor da frente e cor do background (&FB)
+; um byte define cor da frente e cor do background (%FFFFBBBB)
 ; B	=> posicao x (0-32)
 ; C => posicao y (0-191)
 ; =============================================================================
-; Altera => HL (endereco de memoria da cor da coordenada xy),A
+; Altera => HL (endereco de memoria da cor da coordenada xy)
 ; =============================================================================
 GetColorMemPos:
+	push af
 	push bc
 		ld a,c
 		and %11111000
@@ -136,5 +137,6 @@ GetColorMemPos:
 		or b
 		ld l,a
 	pop bc
+	pop af
 ret
 ; =============================================================================

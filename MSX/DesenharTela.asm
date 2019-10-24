@@ -15,21 +15,7 @@
 ; Religar a tela
 ; =============================================================================
 DesenharTela:
-	call DISSCR             		; desligo a exibição da tela
 	call LimparTela             ; limpo a tela
-	call ScreenInit             ; inicializo a tela
-  ld a,15
-  ld (FORCLR),a               ; seto a cor da fonte
-  ld a,1
-  ld (BAKCLR),a               ; seto a cor do background
-  ld a,1
-  ld (BDRCLR),a               ; seto a cor da borda
-  call CHGCLR                 ; uso a bios para alterar as cores
-	call ERAFNK             		; desligo as teclas de função
-	ld a,32                     ; preparo a largura da tela
-  ld (LINL32),a           		; largura da tela em 32 colunas
-	call LoadPatternTable       ; CARREGO A TABELA DE PADROES
-	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
 
 	; Imprimir o Cabecalho
 	ld h,NumPosXCabecalho       ; Coordenada X
@@ -37,13 +23,6 @@ DesenharTela:
   call POSIT                  ; posicionar o cabecalho
   ld hl,MsgUsuario1           ; Cabecalho
   call PrintString            ; imprimir o cabecalho
-
-	; Imprimir a Mensagem Inicial
-  ld h,NumPosXMensagens       ; Coordenada X
-  ld l,NumPosYMensagens       ; Coordenada Y
-  call POSIT                  ; posicionar mensagem inicial
-  ld hl,MsgUsuario2           ; mensagem inicial
-  call PrintString            ; imprimir mensagem inicial
 
 	; Imprimir linha da apoio 1
 	ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 1 x
@@ -73,7 +52,5 @@ DesenharTela:
   ld e,l                      ; posição na tela
   ld bc,14                		; bytes a copiar
   ld hl,LinhaReta	      			; Padrao da tabela de nomes
-  call LDIRVM             		; copio na VRAM
-
-  call ENASCR             		; religo a tela
+  call LDIRVM             		; copio na VRAM  
 ret

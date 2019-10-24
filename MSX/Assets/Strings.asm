@@ -20,27 +20,10 @@ MsgUsuario7:
 	db "Parabens! Acertou tudo!",13
 MsgUsuario8:
 	db "Aperte <ENTER> para jogar",13
+MsgUsuario9:
+	db "Um jogo de Manoel Neto",13
 LinhaReta:
 	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
-CorLinhaApoio:
-	; =======================================================================
-	; Cor do Foregroung / Cor do Background
-	; [F][F][F][F][B][B][B][B]
-	; =======================================================================
-	db %01010001
-  db %01010001
-  db %01010001
-  db %01010001
-  db %01010001
-  db %01000001
-  db %01000001
-  db %01000001
-  db %01000001
-	db %01010001
-  db %01010001
-  db %01010001
-  db %01010001
-  db %01010001
 CorAzul:
 	; =======================================================================
 	; Cor do Foregroung / Cor do Background
@@ -86,3 +69,5 @@ SpriteLinha:
 TodosOsChar:
 	; Padrao para imprimir todas as fontes
 	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+TituloPattern:
+	db 3,18,9,16,20,15,12,15,7,9,3

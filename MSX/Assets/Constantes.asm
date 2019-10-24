@@ -4,6 +4,10 @@
 ; Manoel Neto 2019-10-3
 ; Constantes utilizadas no Criptologic Z80
 ; =============================================================================
+NumPosXTituloJogo:    equ 4
+NumPosYTituloJogo:    equ 10
+NumPosXCopyright:     equ 4
+NumPosYCopyright:     equ 14
 NumPosXCabecalho:     equ 3
 NumPosYCabecalho:     equ 2
 NumPosXMensagens:     equ 3

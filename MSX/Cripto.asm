@@ -24,6 +24,7 @@ org romArea
 ; =============================================================================
 startCode:
 	call LimpaMem					; Limpa a memoria a cada execucao
+	call TelaIntroducao		; Desenhar a tela do jogo
 	call DesenharTela			; Desenhar a tela do jogo
 	call PegarFrase				; Obtem a mensagem do usuario
 	call Sortear					; Sortear os numeros aleatorios
@@ -40,6 +41,7 @@ loopInfinito:
 	jp z,startCode
 jp loopInfinito
 
+include "TelaIntroducao.asm"
 include "DesenharTela.asm"
 include "PegarFrase.asm"
 include "Sortear.asm"
