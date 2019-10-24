@@ -16,6 +16,9 @@ org romArea
  	db __VERSION+48							; cria o identificador de versao
  	db __RELEASE+65							; cria o identificador da release
  	ds 6,0
+
+;org &810A - Descomente para versao disquete
+
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
@@ -50,6 +53,7 @@ include "Hardware\TMS9918.ASM"
 include "Library\Library.asm"
 include "Assets\Strings.asm"
 include "Assets\Sprites.asm"
+
 ; =============================================================================
 ; Padding
 ; =============================================================================
