@@ -17,7 +17,7 @@
 DesenharTela:
 	call DISSCR             		; desligo a exibição da tela
 	call LimparTela             ; limpo a tela
-	call INIT32		              ; inicializo a tela
+	call ScreenInit             ; inicializo a tela
   ld a,15
   ld (FORCLR),a               ; seto a cor da fonte
   ld a,1
@@ -29,7 +29,6 @@ DesenharTela:
 	ld a,32                     ; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas
 	call LoadPatternTable       ; CARREGO A TABELA DE PADROES
-	call LoadAttributeTable			; CARREGO A TABELA DE ATRIBUTOS
 	call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
 
 	; Imprimir o Cabecalho
@@ -56,6 +55,16 @@ DesenharTela:
   ld hl,LinhaReta	      			; tabela de nomes
   call LDIRVM             		; copio na VRAM
 
+	; Mudar cor da Linha de apoio 1
+	ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 1 x
+  ld c,NumPosYLinhaApoio1     ; posicionar a linha de apoio 1 y
+  call GetColorMemPos	        ; pegar a area de memoria da tabela de cores
+  ld d,h                      ; posição na tela
+  ld e,l                      ; posição na tela
+  ld bc,2	                		; bytes a copiar
+  ld hl,CorAzul	      				; tabela de nomes
+  call LDIRVM             		; copio na VRAM
+
 	; Imprimir linha da apoio 2
 	ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 2 x
   ld c,NumPosYLinhaApoio2     ; posicionar a linha de apoio 2 y
@@ -65,10 +74,6 @@ DesenharTela:
   ld bc,14                		; bytes a copiar
   ld hl,LinhaReta	      			; Padrao da tabela de nomes
   call LDIRVM             		; copio na VRAM
-
-  ld h,NumPosXEntradas        ; Coordenada X
-  ld l,NumPosYEntrada1        ; Coordenada Y
-  call POSIT                  ; posicionar para a primeira entrada
 
   call ENASCR             		; religo a tela
 ret

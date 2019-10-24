@@ -23,6 +23,10 @@ MsgUsuario8:
 LinhaReta:
 	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
 CorLinhaApoio:
+	; =======================================================================
+	; Cor do Foregroung / Cor do Background
+	; [F][F][F][F][B][B][B][B]
+	; =======================================================================
 	db %01010001
   db %01010001
   db %01010001
@@ -38,6 +42,11 @@ CorLinhaApoio:
   db %01010001
   db %01010001
 CorAzul:
+	; =======================================================================
+	; Cor do Foregroung / Cor do Background
+	; [F][F][F][F][B][B][B][B]
+	; =======================================================================
+	db %01010001
 	db %01010001
 CorAmarelo:
 	db %10110001
@@ -49,6 +58,8 @@ CorVerde:
 	db %00110001
 SpriteLinha:
 	; =======================================================================
+	; Achamos a posicao multiplicando o numero do sprite por 4 e somando ao
+	; endereco base da tabela de
 	; Sprite 	Padrao		Conteudo
 	; 0				XXXXXXXX	Posicao X
 	; 0				YYYYYYYY	Posicao Y
@@ -73,4 +84,5 @@ SpriteLinha:
 	db 27,27,0,%00000101
 	db 28,28,0,%00000101
 TodosOsChar:
-	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+	; Padrao para imprimir todas as fontes
+	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
