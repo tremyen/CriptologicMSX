@@ -24,14 +24,11 @@ MsgUsuario9:
 	db "Um jogo de Manoel Neto",13
 LinhaReta:
 	db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
-CorAzul:
+CorAmarelo:
 	; =======================================================================
 	; Cor do Foregroung / Cor do Background
 	; [F][F][F][F][B][B][B][B]
 	; =======================================================================
-	db %01010001
-	db %01010001
-CorAmarelo:
 	db %10110001
 CorVermelho:
 	db %10010001
@@ -39,6 +36,15 @@ CorBranco:
 	db %11110001
 CorVerde:
 	db %00110001
+CorAzul:
+	db %01010001
+CorCyan:
+	db %01110001
+CorMagenta:
+	db %11010001
+CorLinhaApoio:
+	db %01010001
+	db %01010001
 SpriteLinha:
 	; =======================================================================
 	; Achamos a posicao multiplicando o numero do sprite por 4 e somando ao
@@ -69,5 +75,37 @@ SpriteLinha:
 TodosOsChar:
 	; Padrao para imprimir todas as fontes
 	db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+MSXPattern:
+	; Portado para MSX
+	db 16,15,18,20,1,4,15,26,16,1,18,1,26,13,19,23
 TituloPattern:
+	; Criptologic
 	db 3,18,9,16,20,15,12,15,7,9,3
+ManoelNetoPattern:
+	; Manoel Neto
+	db 13,1,14,15,5,12,26,14,5,20,15
+AttributePattern:
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001
+	db %01010001

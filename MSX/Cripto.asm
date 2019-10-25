@@ -23,13 +23,15 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-	call LimpaMem					; Limpa a memoria a cada execucao
-	call TelaIntroducao		; Desenhar a tela do jogo
-	call DesenharTela			; Desenhar a tela do jogo
-	call PegarFrase				; Obtem a mensagem do usuario
-	call Sortear					; Sortear os numeros aleatorios
-	call Embaralhar				; Embaralha a frase
-	call PegarChute				; Pegar os chutes do jogador 2
+	call LimpaMem							; Limpa a memoria a cada execucao
+	call TelaIntroducao				; Desenhar a tela de introducao
+	call DesenharTela					; Desenhar a tela do jogo
+	call PegarFrase						; Obtem a mensagem do usuario
+	call Sortear							; Sortear os numeros aleatorios
+	call Embaralhar						; Embaralha a frase
+	call PegarChute						; Pegar os chutes do jogador 2
+	ld a,1
+	ld (CSRSW),a              ; Desliga o cursor
 loopInfinito:
 	ld h,NumPosXMensagens
 	ld l,NumPosYMensagemFinal

@@ -30,7 +30,7 @@ ScreenInit:
 	ld a,128+0								; Registrador 0
 	out (VDPCONTROL),a
 
-	ld a,%10000000           	; [16K][BLK][IE][M1][M2][0][SPR][MAG]
+	ld a,%10000010           	; [16K][BLK][IE][M1][M2][0][SPR][MAG]
 	out (VDPCONTROL),a				; Parametros do Modo de video
 	ld a,128+1								; Registrador 1
 	out (VDPCONTROL),a
@@ -55,7 +55,7 @@ ret
 ; Carrega a Tabela de padroes
 ; =============================================================================
 LoadPatternTable:
-	ld bc,208            		; bytes a copiar
+	ld bc,216            		; bytes a copiar
   ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
   ld hl,CriptoFont 				; localização na RAM
   call LDIRVM             ; copio a tabela de padrões
@@ -63,10 +63,22 @@ ret
 ; =============================================================================
 
 ; =============================================================================
+; Carrega a Tabela de Atributos
+; =============================================================================
+LoadAtributteTable:
+	ld bc,32            		; bytes a copiar
+  ld de,ADRATRIBUTETBL    ; tabela de padrões na VRAM
+  ld hl,AttributePattern  ; localização na RAM
+  call LDIRVM             ; copio a tabela de padrões
+ret
+; =============================================================================
+
+
+; =============================================================================
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,208              	; bytes a copiar
+	ld bc,216              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,CriptoFont		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
@@ -77,7 +89,7 @@ ret
 ; Pegar a posicao de memoria de uma coordenada XY
 ; =============================================================================
 ; B	=> posicao X
-; C => posicao X
+; C => posicao Y
 ; =============================================================================
 ; Altera => HL (endereco de memoria da coordenada xy),A
 ; =============================================================================

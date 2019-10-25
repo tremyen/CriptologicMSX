@@ -23,7 +23,7 @@ org romArea
 startCode:
 	call DISSCR             		; desligo a exibição da tela
 	call LimparTela							; limpo a tela
-	call ScreenINIT							; inicializo pelos registradores VDP #0/#1
+	call ScreenInit						; inicializo pelos registradores VDP #0/#1
 	call ERAFNK             		; desligo as teclas de função
 	ld a,32											; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas

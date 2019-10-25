@@ -4,8 +4,11 @@
 ; Manoel Neto 2019-10-24
 ; =============================================================================
 TelaIntroducao:
+  call DISSCR             		; desligo a exibição da tela
   call LimparTela             ; limpo a tela
   call ScreenInit             ; inicializo a tela
+  ld a,1
+  ld (CSRSW),a                ; Apaga o cursor
   ld a,15
   ld (FORCLR),a               ; seto a cor da fonte
   ld a,1
@@ -17,10 +20,10 @@ TelaIntroducao:
   ld a,32                     ; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas
   call LoadPatternTable       ; CARREGO A TABELA DE PADROES
-  call LoadSpritesTable				; CARREGO A TABELA DE SPRITES
+  call LoadAtributteTable     ; CARREGO A TABELA DE ATRIBUTOS
 
   ; ==========================================================================
-  ; Carrega Tabela de nomes para escrever as fontes
+  ; Escreve Titulo
   ; ==========================================================================
   ld b,NumPosXTituloJogo
   ld c,NumPosYTituloJogo
@@ -32,25 +35,48 @@ TelaIntroducao:
   call LDIRVM             		; copio na VRAM
   ; ==========================================================================
 
-LoopEfeitoCor:
+  ; ==========================================================================
+  ; Escreve Portado para MSX
+  ; ==========================================================================
+  ld b,NumPosXPortadoMsx
+  ld c,NumPosYPortadoMsx
+  call GetVDPScreenPos
+  ld d,h
+  ld e,l
+  ld bc,16                		; bytes a copiar
+  ld hl,MSXPattern        		; padrão da string
+  call LDIRVM             		; copio na VRAM
+  ; ==========================================================================
+
+  ; ==========================================================================
+  ; Escreve Manoel Neto
+  ; ==========================================================================
+  ld b,NumPosXManoelNeto
+  ld c,NumPosYManoelNeto
+  call GetVDPScreenPos
+  ld d,h
+  ld e,l
+  ld bc,11                		; bytes a copiar
+  ld hl,ManoelNetoPattern  		; padrão da string
+  call LDIRVM             		; copio na VRAM
+  ; ==========================================================================
+
+  ; ==========================================================================
   ; Mudar cor do titulo do jogo
-  ld b,NumPosXTituloJogo      ; posicionar a linha de apoio 1 x
-  ld c,NumPosYTituloJogo      ; posicionar a linha de apoio 1 y
-  call GetColorMemPos	        ; pegar a area de memoria da tabela de cores
-  ld d,h                      ; posição na tela
-  ld e,l                      ; posição na tela
-  ld bc,4	                		; bytes a copiar
+  ; ==========================================================================
+  ld de,ADRCOLORTBL           ; posição tabela de cores
+  ld bc,7	                		; bytes a copiar
   ld hl,CorAmarelo     				; tabela de nomes
   call LDIRVM             		; copio na VRAM
-  dec a
-  cp 0
-  jr z,FimEfeitoCor
-  jr LoopEfeitoCor
-FimEfeitoCor:
+  ; ==========================================================================
+
+  call ENASCR             		; religo a tela
 LoopAguardarEnter:
   call CHGET
   cp 13
   jr z,FimTelaIntro
   jr LoopAguardarEnter
 FimTelaIntro:
+  xor a
+  ld (CSRSW),a                ; Liga o cursor
 ret
