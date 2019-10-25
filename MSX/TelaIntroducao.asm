@@ -5,6 +5,7 @@
 ; =============================================================================
 TelaIntroducao:
   call DISSCR             		; desligo a exibição da tela
+
   call LimparTela             ; limpo a tela
   call ScreenInit             ; inicializo a tela
   ld a,1
@@ -65,8 +66,8 @@ TelaIntroducao:
   ; Mudar cor do titulo do jogo
   ; ==========================================================================
   ld de,ADRCOLORTBL           ; posição tabela de cores
-  ld bc,7	                		; bytes a copiar
-  ld hl,CorAmarelo     				; tabela de nomes
+  ld bc,32                		; bytes a copiar
+  ld hl,PadraoCores    				; padrao de cores
   call LDIRVM             		; copio na VRAM
   ; ==========================================================================
 
