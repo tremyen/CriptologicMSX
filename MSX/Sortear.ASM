@@ -1,7 +1,8 @@
-;==============================================================================
+; =============================================================================
 ; Sortear.asm
-;==============================================================================
+; =============================================================================
 ; Manoel Neto 2019-09-25
+; =============================================================================
 ; Sortear X numeros aleatorios entre 1 e X
 ; X deve ser igual ao tamanho da frase do jogador 1
 ; Validar se o numero sorteado nao eh maior que N 			=> (ValidarMaiorN)
@@ -10,7 +11,7 @@
 ; Jogar o resultado para a matriz de numeros sorteados 	=> (MatSorteados)
 ; Converter o numero em seu codigo Hexadeciaml 					=> (ChaLetraAtual)
 ; Somar um a cada elemento da matriz										=> Somar um
-;==============================================================================
+; =============================================================================
 Sortear:
 	xor a									; ld a,0 so que mais rapido
 	ld (NumSorteios),a		; zera contador de sorteios

@@ -1,45 +1,43 @@
 ; =============================================================================
 ; DesenharTela.asm
 ; =============================================================================
-; Manoel Neto 2019-10-03
+; Manoel Neto 2019-10-22
 ; =============================================================================
+; Desligar a tela
+; Limpar a tela
 ; Inicializar a tela em modo 32x24
 ; Setar as cores de fundo e borda
+; Apagar as teclas de funcao
 ; Imprimir cabecalho do jogo
-; Trocar a cor para roxo
+; Imprimir mesagem inicial
 ; Desenhar duas linhas
-; posicionar o cursor na posicao (9,10)
+; Posicionar o cursor na posicao da entrada do jogador 1
+; Religar a tela
 ; =============================================================================
 DesenharTela:
-  call ERAFNK
-  call INIT32  
-  call LimparTela
+	call DISSCR
 
-  ld h,NumPosXCabecalho       ; posicionar o cabecalho
-  ld l,NumPosYCabecalho
-  call POSIT
-  ld hl,MsgUsuario1
-  call PrintString            ; imprimir o cabecalho
+		call LimparTela             ; limpo a tela
 
-  ld h,NumPosXMensagens       ; posicionar mensagem inicial
-  ld l,NumPosYMensagens
-  call POSIT
-  ld hl,MsgUsuario2           ; imprimir mensagem inicial
-  call PrintString
+		; Imprimir linha da apoio 1
+		ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 1 x
+	  ld c,NumPosYLinhaApoio1     ; posicionar a linha de apoio 1 y
+	  call GetVDPScreenPos        ; pegar a area de memoria da posicao BC em HL
+	  ld d,h                      ; posição na tela
+	  ld e,l                      ; posição na tela
+	  ld bc,14                		; bytes a copiar
+	  ld hl,LinhaReta	      			; tabela de nomes
+	  call LDIRVM             		; copio na VRAM
 
-  ld h,NumPosXLinhaApoio      ; posicionar a linha de apoio 1
-  ld l,NumPosYLinhaApoio1
-  call POSIT
-  ld hl,LinhaApoio
-  call PrintString            ; imprimir a linha de apoio 1
+		; Imprimir linha da apoio 2
+		ld b,NumPosXLinhaApoio      ; posicionar a linha de apoio 2 x
+	  ld c,NumPosYLinhaApoio2     ; posicionar a linha de apoio 2 y
+	  call GetVDPScreenPos        ; pegar a area de memoria da posicao BC em HL
+	  ld d,h                      ; posição na tela
+	  ld e,l                      ; posição na tela
+	  ld bc,14                		; bytes a copiar
+	  ld hl,LinhaReta	      			; Padrao da tabela de nomes
+	  call LDIRVM             		; copio na VRAM
 
-  ld h,NumPosXLinhaApoio      ; posicionar a linha de apoio 2
-  ld l,NumPosYLinhaApoio2
-  call POSIT
-  ld hl,LinhaApoio
-  call PrintString            ; imprimir a linha de apoio 1
-
-  ld h,NumPosXEntradas
-  ld l,NumPosYEntrada1
-  call POSIT                  ; posicionar para a primeira entrada
+	call ENASCR
 ret

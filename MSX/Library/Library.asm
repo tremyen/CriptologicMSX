@@ -45,10 +45,11 @@ LimpaMem:
 	ld (ChaLetraAtual),a
 	ld (ChaTestar),a
 	; ========== Zera Strings ==========
+	ld a,14
 	ld hl,StrFrase
-	call LimpaString
+	call CleanBytes
 	ld hl,StrEmbaralhada
-	call LimpaString
+	call CleanBytes
 	; ========== Zera Matrizes ==========
 	ld hl,MatSorteados
 	call ZerarMatriz
@@ -375,4 +376,23 @@ DvPIdeal:
 	jr nc, DvPIdeal 			; repete enquanto nao tem "vai um"
 	dec d									; elimina o resto
 	ld a,d								; Retorna o numero aleatorio
+ret
+
+; =============================================================================
+; Limpar um espaco de memoria
+; =============================================================================
+; HL => Inicio da memoria
+; A	 => bytes a limpar
+; =============================================================================
+; Altera => A, Todos os bytes a partir de HL ate HL+D
+; =============================================================================
+CleanBytes:
+	ld a,d
+CleanByteAgain:
+	ld (hl),32
+	cp 0
+	jr z,CleanedBytes
+	dec a
+	jp CleanByteAgain
+CleanedBytes:
 ret
