@@ -15,7 +15,7 @@ org romArea
  	db "CW01"                   ; string de identificação
  	ds 6,0
 
-;org &810A - Descomente para versao disquete
+;org &810A
 
 ; =============================================================================
 ; INICIO PROGRAMA
