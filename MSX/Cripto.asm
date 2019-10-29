@@ -59,6 +59,6 @@ include "Assets\Sprites.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================
-romPad:
- ds romSize-(romPad-romArea),0
-end
+; romPad:
+;  ds romSize-(romPad-romArea),0
+; end
