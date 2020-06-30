@@ -1,6 +1,6 @@
 @echo off
 echo ====== Apagando a ROM antiga =====
-del DSK\CRIPTO.DAT
+del DSK\CRIPTDSK.BIN
 echo ======= Compilando nova ROM ======
-C:\Users\mneto\Documents\pasmo-0.5.4.beta2\pasmo -msx CRIPTO.ASM DSK\CRIPTO.DAT
+pasmo --msx CRIPTDSK.ASM DSK\CRIPTDSK.BIN
 echo ============= Pronto =============
