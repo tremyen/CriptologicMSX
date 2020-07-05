@@ -5,9 +5,7 @@
 ; =============================================================================
 TelaIntroducao:
   call DISSCR             		; desligo a exibição da tela
-
-  call LimparTela             ; limpo a tela
-  call ScreenInit             ; inicializo a tela
+  call LimparTela             ; limpo a tela  
   ld a,1
   ld (CSRSW),a                ; Apaga o cursor
   ld a,15
@@ -20,6 +18,7 @@ TelaIntroducao:
   call ERAFNK             		; desligo as teclas de função
   ld a,32                     ; preparo a largura da tela
   ld (LINL32),a           		; largura da tela em 32 colunas
+  call INIT32                 ; inicializo a tela
   call LoadPatternTable       ; CARREGO A TABELA DE PADROES
   call LoadAtributteTable     ; CARREGO A TABELA DE ATRIBUTOS
 

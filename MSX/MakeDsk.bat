@@ -1,6 +1,6 @@
 @echo off
-echo ====== Apagando a ROM antiga =====
+echo ====== Apagando a BIN antiga =====
 del DSK\CRIPTDSK.BIN
-echo ======= Compilando nova ROM ======
+echo ======= Compilando nova BIN ======
 pasmo --msx CRIPTDSK.ASM DSK\CRIPTDSK.BIN
 echo ============= Pronto =============
