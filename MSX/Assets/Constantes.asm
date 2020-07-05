@@ -16,7 +16,7 @@ NumPosXMensagens:     equ 3
 NumPosYMensagens:     equ 1
 NumPosXErros:         equ 3
 NumPosYErros:         equ 2
-NumPosXEntradas:      equ 8
+NumPosXEntradas:      equ 10
 NumPosYEntrada1:      equ 8
 NumPosYEntrada2:      equ 13
 NumPosXLinhaApoio:    equ 9
