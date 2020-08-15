@@ -387,7 +387,6 @@ ret
 ; Altera => A, Todos os bytes a partir de HL ate HL+D
 ; =============================================================================
 CleanBytes:
-	ld a,d
 CleanByteAgain:
 	ld (hl),32
 	cp 0
