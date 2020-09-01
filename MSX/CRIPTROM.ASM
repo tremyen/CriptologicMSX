@@ -10,26 +10,24 @@ include "Assets\Constantes.asm"
 include "Assets\Variaveis.asm"
 
 org romArea
-	db "AB"                     ; identifica como ROM
- 	dw startCode                ; endereço de execução
- 	db "CW01"                   ; string de identificação
+	db "AB"                     			; identifica como ROM
+ 	dw startCode                			; endereço de execução
+ 	db "CW01"                   			; string de identificação
  	ds 6,0
 
-;org &810A
-
-; ============== ===============================================================
+; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
 	call LimpaMem							; Limpa a memoria a cada execucao
-	call TelaIntroducao				; Desenhar a tela de introducao
-	call DesenharTela					; Desenhar a tela do jogo
-	call PegarFrase						; Obtem a mensagem do usuario
+	call TelaIntroducao						; Desenhar a tela de introducao
+	call DesenharTela						; Desenhar a tela do jogo
+	call PegarFrase							; Obtem a mensagem do usuario
 	call Sortear							; Sortear os numeros aleatorios
-	call Embaralhar						; Embaralha a frase
-	call PegarChute						; Pegar os chutes do jogador 2
+	call Embaralhar							; Embaralha a frase
+	call PegarChute							; Pegar os chutes do jogador 2
 	ld a,1
-	ld (CSRSW),a              ; Desliga o cursor
+	ld (CSRSW),a              				; Desliga o cursor
 loopInfinito:
 	ld h,NumPosXMensagens
 	ld l,NumPosYMensagemFinal

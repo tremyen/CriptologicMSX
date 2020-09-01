@@ -8,31 +8,31 @@
 ; Validar se o numero sorteado nao eh maior que N 			=> (ValidarMaiorN)
 ; Validar se o numero sorteado ja foi sorteado 	  			=> (ValidarJaFoi)
 ; Jogar o resultado para a variavel NumAleatorio  			=> (NumAleatorio)
-; Jogar o resultado para a matriz de numeros sorteados 	=> (MatSorteados)
-; Converter o numero em seu codigo Hexadeciaml 					=> (ChaLetraAtual)
-; Somar um a cada elemento da matriz										=> Somar um
+; Jogar o resultado para a matriz de numeros sorteados 		=> (MatSorteados)
+; Converter o numero em seu codigo Hexadeciaml 				=> (ChaLetraAtual)
+; Somar um a cada elemento da matriz						=> Somar um
 ; =============================================================================
 Sortear:
-	xor a									; ld a,0 so que mais rapido
+	xor a					; ld a,0 so que mais rapido
 	ld (NumSorteios),a		; zera contador de sorteios
 	call AcharDivIdeal		; achar o divisor ideal
 SortearDeNovo:
 	call SortearNumero		; Sorteei o numero em NumAleatorio
-	jp ValidarMaiorN			; O numero nao pode ser maior que a entrada
+	jp ValidarMaiorN		; O numero nao pode ser maior que a entrada
 ValidadoMaiorN:
-	jp ValidarJafoi				; O Numero nao pode se repetir
+	jp ValidarJafoi			; O Numero nao pode se repetir
 ValidadoJaFoi:
 	call GravarNaMatriz		; Grava o sorteio na matriz
 	ld a,(NumTamFrase)		; carrega o contador de sorteios
-	ld c,a								; so irei sortear de acordo com a entrada
+	ld c,a					; so irei sortear de acordo com a entrada
 	ld a,(NumSorteios)		; Pega o numero de sorteios
-	inc a									; Aumenta numero de sorteios
-	cp c									; testa se eh ultimo sorteio
-	jp z,FimSorteio				; Acabou
+	inc a					; Aumenta numero de sorteios
+	cp c					; testa se eh ultimo sorteio
+	jp z,FimSorteio			; Acabou
 	ld (NumSorteios),a		; Grava o numero de sorteios
-	jp SortearDeNovo			; faz de novo
+	jp SortearDeNovo		; faz de novo
 FimSorteio:
-	call SomarUm					; soma um em cada elemento da matriz
+	call SomarUm			; soma um em cada elemento da matriz
 ret
 
 AcharDivIdeal:
